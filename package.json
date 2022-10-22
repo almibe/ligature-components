@@ -34,7 +34,12 @@
 	},
 	"type": "module",
 	"dependencies": {
+		"@codemirror/lang-javascript": "^6.1.0",
 		"a11y-dialog": "^7.5.2",
-		"bulma": "^0.9.4"
+		"bulma": "^0.9.4",
+		"codemirror": "^6.0.1",
+		"cytoscape": "^3.23.0",
+		"tabbyjs": "^12.0.3",
+		"tabulator-tables": "^5.4.2"
 	}
 }

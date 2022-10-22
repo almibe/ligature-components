@@ -1,13 +1,19 @@
 <script lang="ts">
+import "bulma/css/bulma.css";
 import {TabulatorFull as Tabulator} from 'tabulator-tables';
-import  "tabulator-tables/dist/css/tabulator.min.css";
-import "blueprint-css/dist/blueprint.css";
+import "tabulator-tables/dist/css/tabulator.min.css";
 import "tabbyjs/dist/css/tabby-ui.css";
-import "codemirror/lib/codemirror.css";
 import { page } from '$app/stores';
-import { onMount, onDestroy } from 'svelte';
-import { wanderResultToPresentation } from '../../lib/presentation';
+import { onMount, createEventDispatcher } from 'svelte';
+import { wanderResultToPresentation } from './presentation';
 import cytoscape from 'cytoscape';
+
+import {EditorView, basicSetup} from "codemirror";
+import {javascript} from "@codemirror/lang-javascript";
+
+export let datasetName = "";
+export let resultText = "";
+let dispatch = createEventDispatcher();
 
 let inputEditor = null;
 let text = {
@@ -22,7 +28,6 @@ let tabs = null;
 let table = null;
 let cy = null;
 let currentTab = "query";
-let resultText = "";
 
 function initGraph() {
     cy = cytoscape({
@@ -65,9 +70,9 @@ function updateGraph(elements) {
 
 onMount(async () => {
     const Tabby = (await import('tabbyjs')).default;
-    const CodeMirror = (await import('codemirror')).default;
+    // const CodeMirror = (await import('codemirror')).default;
     tabs = new Tabby('[data-tabs]');
-    inputEditor = CodeMirror.fromTextArea(document.getElementById("editorTextArea"), {lineNumbers: true});
+    // inputEditor = CodeMirror.fromTextArea(document.getElementById("editorTextArea"), {lineNumbers: true});
     document.addEventListener('tabby', onTabChange, false);
 
     table = new Tabulator("#table", {
@@ -78,6 +83,11 @@ onMount(async () => {
 
     initGraph();
 
+    inputEditor = new EditorView({
+        extensions: [basicSetup, javascript()],
+        parent: document.getElementById("textEditor")
+    });
+
     //clean up
     return () => {
         document.removeEventListener('tabby', onTabChange);
@@ -86,19 +96,17 @@ onMount(async () => {
 
 function onTabChange(event) {
     var tab = event.target.href.split("#")[1];
-    text[currentTab] = inputEditor.getValue();
+    text[currentTab] = inputEditor.state.doc.toString();
     text[currentTab + "Results"] = resultText;
-    inputEditor.setValue(text[tab]);
+    inputEditor.dispatch({
+        changes: {from: 0, to: inputEditor.state.doc.length, insert: text[tab]}
+    })
     resultText = text[tab + "Results"];
     currentTab = tab;
 }
 
 async function runQuery() {
-    let result = await fetch(`/datasets/${$page.params.datasetName}/wander`, {
-        method: 'POST',
-        body: inputEditor.getValue()
-    });
-    resultText = await result.text();
+    dispatch('runQuery', inputEditor.state.doc.toString());
 
     let presentation = wanderResultToPresentation(resultText);
     if ('error' in presentation) {
@@ -115,25 +123,17 @@ async function runQuery() {
 }
 
 async function runInsert() {
-    let result = await fetch(`/datasets/${$page.params.datasetName}/statements`, {
-        method: 'POST',
-        body: inputEditor.getValue()
-    })
-    resultText = await result.text();
+    dispatch("runInsert", inputEditor.state.doc.toString());
     text["insertResults"] = resultText;
 }
 
 async function runRemove() {
-    let result = await fetch(`/datasets/${$page.params.datasetName}/statements`, {
-        method: 'DELETE',
-        body: inputEditor.getValue()
-    })
-    resultText = await result.text();
+    dispatch("runRemove", inputEditor.state.doc.toString());
     text["removeResults"] = resultText;
 }
 
 function clear() {
-    inputEditor.setValue("");
+    inputEditor.setState(EditorState.create({doc: "", extensions: [basicSetup, javascript()]}))
     inputEditor.clearHistory();
     text[currentTab] = "";
     text[currentTab + "Results"] = "";
@@ -184,9 +184,7 @@ function resultDisplay(selectedResultTab: string) {
     <button class="button" on:click={() => clear()}>Clear</button>
 </div>
 
-<div id="textEditor">
-    <textarea id="editorTextArea"></textarea>
-</div>
+<div id="textEditor"></div>
 
 <div id="results">
     <div class="tabs">
@@ -202,6 +200,10 @@ function resultDisplay(selectedResultTab: string) {
 </div>
 
 <style>
+    #textEditor {
+        height:500px;
+        overflow:scroll;
+    }
     #cy {
         width: 1000px;
         height: 500px;
