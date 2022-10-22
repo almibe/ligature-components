@@ -2,6 +2,7 @@
   import A11yDialog from 'a11y-dialog';
   import { onMount, createEventDispatcher } from 'svelte';
   import "bulma/css/bulma.css";
+  import "./dialog.css";
 
   export let datasets = [];
   let dispatch = createEventDispatcher();
@@ -23,7 +24,6 @@
     addDialog.on('hide', function(element) {
       document.removeEventListener("keyup", addDatasetEnterKeyHandler)
     })
-    refreshDatasets();
   })
 
   function addDatasetEnterKeyHandler(event) {
@@ -40,12 +40,7 @@
 
   async function addDataset() {
     let datasetName = document.getElementById("datasetName").value;
-    console.log(datasetName);
-    //let response = await fetch(`/datasets/${datasetName}`, {method: 'POST'});
     dispatch("addDataset", datasetName);
-    refreshDatasets();
-    console.log(response);
-    // datasets = [...datasets, datasetName];
     addDialog.hide();
   }
 
@@ -57,21 +52,8 @@
 
   async function removeDataset() {
     document.removeEventListener("keyup", removeDatasetEnterKeyHandler)
-    console.log(`in remove dataset ${datasetToRemove}`);
-    //let response = await fetch(`/datasets/${datasetToRemove}`, {method: 'DELETE'});
     dispatch('removeDataset', datasetToRemove);
-    refreshDatasets();
     removeDialog.hide();
-  }
-
-  async function refreshDatasets() {
-    dispatch('refeshDatasets');
-    // try {
-    //   const response = await fetch('/datasets');
-    //   datasets = await (await response.text()).trim().split("\n");
-    // } catch (error) {
-    //   console.error(error);
-    // }
   }
 </script>
 
