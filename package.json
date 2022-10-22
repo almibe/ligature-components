@@ -1,7 +1,7 @@
 {
 	"name": "@ligature/ligature-components",
-	"version": "0.2.0",
-	"private": "false",
+	"version": "0.3.0-SNAPSHOT",
+	"private": "true",
 	"license": "MPL-2.0",
 	"homepage": "https://github.com/almibe/ligature-components",
 	"repository": {
