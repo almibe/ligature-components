@@ -11,6 +11,13 @@
     function removeDataset(event) {
         datasets = datasets.filter((ds) => ds !== event.detail);
     }
+
+    function openDataset(event) {
+        console.log("Open Dataset - " + event.detail);
+    }
 </script>
 
-<Datasets {datasets} on:addDataset="{addDataset}" on:removeDataset="{removeDataset}"></Datasets>
+<Datasets {datasets} 
+    on:addDataset="{addDataset}" 
+    on:removeDataset="{removeDataset}"
+    on:openDataset="{openDataset}"></Datasets>

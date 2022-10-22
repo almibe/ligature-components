@@ -55,19 +55,23 @@
     dispatch('removeDataset', datasetToRemove);
     removeDialog.hide();
   }
+
+  function openDataset(datasetName) {
+    dispatch('openDataset', datasetName);
+  }
 </script>
 
 <h1 class="title">Datasets</h1>
 <button class="button" on:click={() => addDialog.show()}>Add Dataset</button>
 
-<table class="table">
+<table class="table is-fullwidth">
   <tr>
     <th>Dataset</th>
     <th>Remove?</th>
   </tr>
   {#each datasets as dataset}
     <tr>
-      <td><a href="/datasets/{dataset}">{dataset}</a></td>
+      <td><a on:click="{openDataset(dataset)}">{dataset}</a></td>
       <td><button class="button" on:click={() => showRemoveDataset(dataset)}>❌</button></td>
     </tr>
   {/each}
@@ -81,13 +85,13 @@
 >
   <div class="dialog-overlay" data-a11y-dialog-hide></div>
   <div class="dialog-content" role="document">
-    <button class="dialog-close button" type="button" data-a11y-dialog-hide aria-label="Close dialog">
+    <button class="button dialog-close" type="button" data-a11y-dialog-hide aria-label="Close dialog">
       &times;
     </button>
     <h1 id="addDatasetTitle">Add Dataset</h1>
     <p><label>Name: <input required name="datasetName" id="datasetName"></label></p>
-    <p><button class="dialog-response-button" on:click={() => addDataset()}>Add Dataset</button>
-    <p><button class="dialog-response-button" on:click={() => addDialog.hide()}>Cancel</button>
+    <p><button class="dialog-response-button button" on:click={() => addDataset()}>Add Dataset</button>
+    <p><button class="dialog-response-button button" on:click={() => addDialog.hide()}>Cancel</button>
   </div>
 </div>
 
