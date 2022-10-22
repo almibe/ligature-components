@@ -85,10 +85,10 @@
 >
   <div class="dialog-overlay" data-a11y-dialog-hide></div>
   <div class="dialog-content" role="document">
-    <button class="button dialog-close" type="button" data-a11y-dialog-hide aria-label="Close dialog">
+    <button class="dialog-close" type="button" data-a11y-dialog-hide aria-label="Close dialog">
       &times;
     </button>
-    <h1 id="addDatasetTitle">Add Dataset</h1>
+    <h1 id="addDatasetTitle" class="title">Add Dataset</h1>
     <p><label>Name: <input required name="datasetName" id="datasetName"></label></p>
     <p><button class="dialog-response-button button" on:click={() => addDataset()}>Add Dataset</button>
     <p><button class="dialog-response-button button" on:click={() => addDialog.hide()}>Cancel</button>
@@ -106,8 +106,8 @@
     <button class="dialog-close" type="button" data-a11y-dialog-hide aria-label="Close dialog">
       &times;
     </button>
-    <h1 id="removeDatasetTitle">Remove {datasetToRemove}?</h1>
-    <p><button class="dialog-response-button" on:click={() => removeDataset()}>Yes</button>
-    <p><button class="dialog-response-button" on:click={() => removeDialog.hide()}>No</button>
+    <h1 id="removeDatasetTitle" class="title">Remove {datasetToRemove}?</h1>
+    <p><button class="button dialog-response-button" on:click={() => removeDataset()}>Yes</button>
+    <p><button class="button dialog-response-button" on:click={() => removeDialog.hide()}>No</button>
   </div>
 </div>

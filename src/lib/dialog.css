@@ -35,6 +35,7 @@
 }
 
 .dialog-close {
+    background-color: white;
     border: none;
     float:right;
     font-size: 2em;
