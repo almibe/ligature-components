@@ -1,8 +1,13 @@
 {
 	"name": "@ligature/ligature-components",
-	"version": "0.1.0-SNAPSHOT",
-	"private": "true",
+	"version": "0.2.0",
+	"private": "false",
 	"license": "MPL-2.0",
+	"homepage": "https://github.com/almibe/ligature-components",
+	"repository": {
+		"type": "git",
+		"url": "https://github.com/almibe/ligature-components.git"
+	  },
 	"scripts": {
 		"dev": "vite dev",
 		"build": "svelte-kit sync && svelte-package",
