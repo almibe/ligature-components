@@ -145,17 +145,19 @@ function resultDisplay(selectedResultTab: string) {
     document.getElementById("result-text-tab")?.classList.remove("is-active");
 
     document.getElementById(`result-${selectedResultTab}-tab`)?.classList.add("is-active");
-
-    document.getElementById("table").style.display = "none";
-    document.getElementById("graph").style.display = "none";
-    document.getElementById("resultText").style.display = "none";
     
     if (selectedResultTab == 'table') {
         document.getElementById("table").style.display = "block";
+        document.getElementById("graph").style.display = "none";
+        document.getElementById("resultText").style.display = "none";
     } else if (selectedResultTab == 'graph') {
         document.getElementById("graph").style.display = "block";
+        document.getElementById("table").style.display = "none";
+        document.getElementById("resultText").style.display = "none";
     } else {
         document.getElementById("resultText").style.display = "block";
+        document.getElementById("table").style.display = "none";
+        document.getElementById("graph").style.display = "none";
     }
 }
 </script>
@@ -189,9 +191,9 @@ function resultDisplay(selectedResultTab: string) {
 <div id="results">
     <div class="tabs">
         <ul>
-          <li id="result-table-tab" class="is-active"><a on:click={() => resultDisplay("table")}>Table</a></li>
-          <li id="result-graph-tab"><a on:click={() => resultDisplay("graph")}>Graph</a></li>
-          <li id="result-text-tab"><a on:click={() => resultDisplay("text")}>Text</a></li>
+          <li id="result-table-tab" class="is-active"><a href="#results" on:click={() => resultDisplay("table")}>Table</a></li>
+          <li id="result-graph-tab"><a href="#results" on:click={() => resultDisplay("graph")}>Graph</a></li>
+          <li id="result-text-tab"><a href="#results" on:click={() => resultDisplay("text")}>Text</a></li>
         </ul>
     </div>
     <div id="table"></div>
@@ -200,6 +202,12 @@ function resultDisplay(selectedResultTab: string) {
 </div>
 
 <style>
+    #graph {
+        display: none;
+    }
+    #resultText {
+        display: none;
+    }
     #textEditor {
         height:500px;
         overflow:scroll;
