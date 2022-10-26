@@ -4,7 +4,7 @@
     let resultText = "";
 
     function runQuery(event) {
-        resultText = "run query - " + event.detail;
+        resultText = event.detail;
     }
 
     function runInsert(event) {

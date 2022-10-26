@@ -105,31 +105,35 @@ function onTabChange(event) {
     currentTab = tab;
 }
 
+$: {
+    if (currentTab == 'query') {
+        if (table != undefined && table != null && table.initialized) {
+        let presentation = wanderResultToPresentation(resultText);
+            if ('error' in presentation) {
+                //TODO handle error
+            } else {
+                //handle table
+                let tablePresentation = presentation.tableView();
+                table.setColumns(tablePresentation.columns);
+                table.replaceData(tablePresentation.data);
+                //handle graph
+                updateGraph(presentation.graphElements());
+            }
+        }
+    }
+    text[currentTab + "Results"] = resultText;
+}
+
 async function runQuery() {
     dispatch('runQuery', inputEditor.state.doc.toString());
-
-    let presentation = wanderResultToPresentation(resultText);
-    if ('error' in presentation) {
-        //TODO handle error
-    } else {
-        //handle table
-        let tablePresentation = presentation.tableView();
-        table.setColumns(tablePresentation.columns);
-        table.replaceData(tablePresentation.data);
-        //handle graph
-        updateGraph(presentation.graphElements());
-    }
-    text["queryResults"] = resultText;
 }
 
 async function runInsert() {
     dispatch("runInsert", inputEditor.state.doc.toString());
-    text["insertResults"] = resultText;
 }
 
 async function runRemove() {
     dispatch("runRemove", inputEditor.state.doc.toString());
-    text["removeResults"] = resultText;
 }
 
 function clear() {
