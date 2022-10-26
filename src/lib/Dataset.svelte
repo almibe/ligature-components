@@ -3,16 +3,17 @@ import "bulma/css/bulma.css";
 import {TabulatorFull as Tabulator} from 'tabulator-tables';
 import "tabulator-tables/dist/css/tabulator.min.css";
 import "tabbyjs/dist/css/tabby-ui.css";
-import { page } from '$app/stores';
 import { onMount, createEventDispatcher } from 'svelte';
 import { wanderResultToPresentation } from './presentation';
 import cytoscape from 'cytoscape';
 
 import {EditorView, basicSetup} from "codemirror";
+import {EditorState} from "@codemirror/state";
 import {javascript} from "@codemirror/lang-javascript";
 
 export let datasetName = "";
 export let resultText = "";
+let selectedResultTab = 'table';
 let dispatch = createEventDispatcher();
 
 let inputEditor = null;
@@ -102,6 +103,15 @@ function onTabChange(event) {
         changes: {from: 0, to: inputEditor.state.doc.length, insert: text[tab]}
     })
     resultText = text[tab + "Results"];
+    if (tab === 'query') {
+        document.getElementById("queryResultTabs").style.display = "block";
+        resultDisplay(selectedResultTab);
+    } else {
+        document.getElementById("queryResultTabs").style.display = "none";
+        document.getElementById("table").style.display = "none";
+        document.getElementById("graph").style.display = "none";
+        document.getElementById("resultText").style.display = "block";
+    }
     currentTab = tab;
 }
 
@@ -138,12 +148,14 @@ async function runRemove() {
 
 function clear() {
     inputEditor.setState(EditorState.create({doc: "", extensions: [basicSetup, javascript()]}))
-    inputEditor.clearHistory();
     text[currentTab] = "";
     text[currentTab + "Results"] = "";
+    resultText = "";
+    //TODO if current tab is query clear table and graph as well
 }
 
-function resultDisplay(selectedResultTab: string) {
+function resultDisplay(selectedTab: string) {
+    selectedResultTab = selectedTab;
     document.getElementById("result-table-tab")?.classList.remove("is-active");
     document.getElementById("result-graph-tab")?.classList.remove("is-active");
     document.getElementById("result-text-tab")?.classList.remove("is-active");
@@ -166,7 +178,7 @@ function resultDisplay(selectedResultTab: string) {
 }
 </script>
 
-<h1 class="title">{$page.params.datasetName}</h1>
+<h1 class="title">{datasetName}</h1>
 <button class="button backButton" on:click={() => window.location.href = '/'}>Back</button>
 
 <ul data-tabs>
@@ -193,7 +205,7 @@ function resultDisplay(selectedResultTab: string) {
 <div id="textEditor"></div>
 
 <div id="results">
-    <div class="tabs">
+    <div id="queryResultTabs" class="tabs">
         <ul>
           <li id="result-table-tab" class="is-active"><a href="#results" on:click={() => resultDisplay("table")}>Table</a></li>
           <li id="result-graph-tab"><a href="#results" on:click={() => resultDisplay("graph")}>Graph</a></li>

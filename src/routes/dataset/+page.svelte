@@ -1,6 +1,7 @@
 <script>
     import Dataset from '../../lib/Dataset.svelte';
 
+    let datasetName = "test-dataset";
     let resultText = "";
 
     function runQuery(event) {
@@ -16,7 +17,8 @@
     }
 </script>
 
-<Dataset {resultText} 
+<Dataset {datasetName}
+    {resultText} 
     on:runQuery="{runQuery}" 
     on:runInsert="{runInsert}" 
     on:runRemove="{runRemove}"></Dataset>
