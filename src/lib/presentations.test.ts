@@ -57,3 +57,28 @@ test('Read multiple Statements aobut a single Entity', () => {
     expect(presentation.tableView()).toEqual(tableExpected);
     expect(presentation.graphElements()).toEqual(elementsExpected);
 });
+
+// test('Support Strings', () => {
+//     let input = "<a> <b> \"c\"";
+    
+//     let tableExpected = {
+//         data: [
+//             {"id": 1, "<entity>": "a", "b": "c"},
+//         ],
+//         columns: [
+//             {title:"Entity", field:"<entity>", sorter:"string"},
+//             {title:"b", field:"b", sorter: "string"}
+//         ]
+//     };
+
+//     let elementsExpected = [
+//         {data: {id: "<a>"}},
+//         {data: {id: 0, label: "c"}},
+//         {data: {label: "b", source: "<a>", target: 0}}
+//     ]
+
+//     let presentation = wanderResultToPresentation(input);
+//     console.log(presentation);
+//     expect(presentation.tableView()).toEqual(tableExpected);
+//     expect(presentation.graphElements()).toEqual(elementsExpected);
+// });

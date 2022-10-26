@@ -6,7 +6,7 @@ export type Identifier = {
     identifier: string
 }
 
-export type Value = string | bigint | Identifier
+export type Value = string | Identifier
 
 export type State = {
     input: string,
@@ -23,7 +23,7 @@ type Data = { id: number }
 type Column = { title: string, field: string, sorter: string }
 
 export class Presentation {
-    private store: Array<Statement> = []; //TODO make private
+    private store: Array<Statement> = [];
 
     public addStatement(statement: Statement): void {
         if (!this.store.find((s) => (statement[0] == s[0] && statement[1] == s[1] && statement[2] == s[2]))) {
@@ -186,6 +186,62 @@ export function readIdentifier(state: State): Identifier | error {
     return {error: "Invalid Identifier"}
 }
 
-function readValue(state: State): bigint | string | { identifier: string } | error {
-    return readIdentifier(state);
+function readInteger(state: State): string | error {
+    let integer = "";
+    while(state.location < state.input.length) {
+        console.log("about to test ", state.input[state.location] )
+        if (/[0-9-]/.test(state.input[state.location])) {
+            console.log("in true")
+            integer = integer + state.input[state.location];
+            state.location++;
+        } else {
+            console.log("in false")
+            if (integer.length > 0) {
+                console.log("returning number " + integer);
+                return integer;
+            } else {
+                return {error: "Invalid Integer"};
+            }
+        }
+    }
+    if (integer.length > 0) {
+        console.log("returning number " + integer);
+        return integer;
+    } else {
+        return {error: "Invalid Integer"};
+    }
+}
+
+function readString(state: State): string | error {
+    let result = "";
+    if (state.input[state.location] == '"') {
+        state.location++;
+    } else {
+        return {error: "Invalid String"};
+    }
+    while(state.location < state.input.length) {
+        if (state.input[state.location] != '"') {
+            result = result + state.input[state.location];
+            state.location++;
+        } else {
+            state.location++; //skip "
+            if (result.length > 0) {
+                return '"' + result + '"';
+            } else {
+                return {error: "Invalid String"};
+            }
+        }
+    }
+    return {error: "Invalid String"};
+}
+
+function readValue(state: State): string | { identifier: string } | error {
+    let nextChar = state.input[state.location];
+    if (/[0-9-]/.test(nextChar)) { //TODO not complete
+        return readInteger(state);
+    } else if (nextChar == '"') {
+        return readString(state);
+    } else {
+        return readIdentifier(state);
+    }
 }
