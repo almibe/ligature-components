@@ -168,7 +168,7 @@ export function readIdentifier(state: State): Identifier | error {
     if (state.input[state.location] == "<") {
         state.location++; //skip <
         while(state.location < state.input.length) {
-            if (/[a-zA-Z_]/.test(state.input[state.location])) { //TODO this partern isn't complete
+            if (/[a-zA-Z0-9-._~:/?#\[\]@!$&'()*+,;%=]/.test(state.input[state.location])) {
                 identifier = identifier + state.input[state.location];
                 state.location++;
             } else if (state.input[state.location] == ">") {
