@@ -218,22 +218,26 @@ function resultDisplay(selectedTab: string) {
 </div>
 
 <style>
+    #textEditor {
+        height:300px;
+        resize: vertical;
+        overflow:scroll;
+    }
+    #results {
+        resize: vertical;
+        overflow: auto;
+    }
     #graph {
         display: none;
     }
     #resultText {
         display: none;
     }
-    #textEditor {
-        height:500px;
-        overflow:scroll;
-    }
     #cy {
         width: 1000px;
         height: 500px;
         display: block;
     }
-
     .backButton {
         float: right;
     }
