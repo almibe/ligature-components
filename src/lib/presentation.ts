@@ -22,7 +22,11 @@ type GEdge = { data: { label: string, source: string, target: string}}
 type Data = { id: number }
 type Column = { title: string, field: string, sorter: string }
 
-export class Presentation {
+type TableData = { columns: Array<Column>, data: Array<Data> };
+type GraphData = Array<GElement>;
+type Presentation = { tableData: TableData, graphData: GraphData };
+
+export class StatementsPresentation {
     private store: Array<Statement> = [];
 
     public addStatement(statement: Statement): void {
@@ -31,7 +35,11 @@ export class Presentation {
         }
     }
 
-    public tableView(): { columns: Array<Column>, data: Array<Data> } {
+    public presentation(): Presentation {
+        return { tableData: this.tableView(), graphData: this.graphElements()};
+    }
+
+    public tableView(): TableData {
         let columns: Array<Column> = [{title:"Entity", field:"<entity>", sorter:"string"}];
         let data: Array<Data> = [];
         let index = 0; //index used for tabulator
@@ -65,8 +73,8 @@ export class Presentation {
         };
     }
 
-    public graphElements(): Array<GElement> {
-        let result: Array<GElement> = []
+    public graphElements(): GraphData {
+        let result: GraphData = []
         this.store.forEach((statement) => {
             let entity = this.writeValue(statement[0])
             let value = this.writeValue(statement[2])
@@ -83,6 +91,25 @@ export class Presentation {
         } else {
             return value;
         }
+    }
+}
+
+function checkValue(input: string): Presentation | null {
+    let state = { input: input.trim(), location: 0 };
+    let value = readValue(state)
+    if (typeof value == 'string') {
+        return {
+            tableData: { columns: [{title: "Value", field: "value", sorter: "string"}], data: [{id: 1, value}]},
+            graphData: [{ data: { id: value } }]
+        }
+    } else if ('identifier' in value) {
+        let valueString = "<" + value.identifier + ">";
+        return {
+            tableData: { columns: [{title: "Value", field: "value", sorter: "string"}], data: [{id: 1, value: valueString}]},
+            graphData: [{ data: { id: valueString } }]
+        }
+    } else {
+        return null;
     }
 }
 
@@ -115,8 +142,13 @@ export class Presentation {
  *    }
  */
 export function wanderResultToPresentation(input: string): Presentation | error {
+    let valuePresentation = checkValue(input)
+    if (valuePresentation != null) {
+        return valuePresentation;
+    }
+
     let state = { input, location: 0 };
-    let result = new Presentation();
+    let result = new StatementsPresentation();
 
     while (state.location < state.input.length) {
         ignoreSpace(state);
@@ -138,7 +170,7 @@ export function wanderResultToPresentation(input: string): Presentation | error 
 
         result.addStatement([entityRes, attributeRes, valueRes]);
     }
-    return result
+    return result.presentation();
 }
 
 function ignoreSpace(state: State) {
@@ -189,15 +221,11 @@ export function readIdentifier(state: State): Identifier | error {
 function readInteger(state: State): string | error {
     let integer = "";
     while(state.location < state.input.length) {
-        console.log("about to test ", state.input[state.location] )
         if (/[0-9-]/.test(state.input[state.location])) {
-            console.log("in true")
             integer = integer + state.input[state.location];
             state.location++;
         } else {
-            console.log("in false")
             if (integer.length > 0) {
-                console.log("returning number " + integer);
                 return integer;
             } else {
                 return {error: "Invalid Integer"};
@@ -205,7 +233,6 @@ function readInteger(state: State): string | error {
         }
     }
     if (integer.length > 0) {
-        console.log("returning number " + integer);
         return integer;
     } else {
         return {error: "Invalid Integer"};

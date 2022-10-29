@@ -123,11 +123,11 @@ $: {
                 //TODO handle error
             } else {
                 //handle table
-                let tablePresentation = presentation.tableView();
+                let tablePresentation = presentation.tableData;
                 table.setColumns(tablePresentation.columns);
                 table.replaceData(tablePresentation.data);
                 //handle graph
-                updateGraph(presentation.graphElements());
+                updateGraph(presentation.graphData);
             }
         }
     }
