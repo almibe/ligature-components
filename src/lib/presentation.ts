@@ -97,6 +97,9 @@ export class StatementsPresentation {
 function checkValue(input: string): Presentation | null {
     let state = { input: input.trim(), location: 0 };
     let value = readValue(state)
+    if (state.location != state.input.length) {
+        return null;
+    }
     if (typeof value == 'string') {
         return {
             tableData: { columns: [{title: "Value", field: "value", sorter: "string"}], data: [{id: 1, value}]},
