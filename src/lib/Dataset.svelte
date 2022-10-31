@@ -6,8 +6,8 @@ import "tabbyjs/dist/css/tabby-ui.css";
 import { onMount, createEventDispatcher } from 'svelte';
 import { wanderResultToPresentation } from './presentation';
 
-import {Springy, Graph} from "../lib/springy";
-import {springy } from "../lib/springyui";
+import {Springy, Graph} from "./springy";
+import {springy } from "./springyui";
 
 import {EditorView, basicSetup} from "codemirror";
 import {EditorState} from "@codemirror/state";
