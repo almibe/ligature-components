@@ -5,7 +5,9 @@ import "tabulator-tables/dist/css/tabulator.min.css";
 import "tabbyjs/dist/css/tabby-ui.css";
 import { onMount, createEventDispatcher } from 'svelte';
 import { wanderResultToPresentation } from './presentation';
-import cytoscape from 'cytoscape';
+
+import {Springy, Graph} from "../lib/springy";
+import {springy } from "../lib/springyui";
 
 import {EditorView, basicSetup} from "codemirror";
 import {EditorState} from "@codemirror/state";
@@ -27,46 +29,23 @@ let text = {
 };
 let tabs = null;
 let table = null;
-let cy = null;
 let currentTab = "query";
+let graph = null;
 
 function initGraph() {
-    cy = cytoscape({
-      container: document.getElementById('cy'),
-      elements: [],
-      style: [{
-        selector: 'node',
-        style: {
-            'width': 10,
-            'height': 10,
-            'background-color': '#666',
-            'label': 'data(id)'
-        }},
-        {
-        selector: 'edge',
-        style: {
-            'width': 3,
-            'line-color': '#ccc',
-            'target-arrow-color': '#ccc',
-            'target-arrow-shape': 'triangle',
-            'curve-style': 'bezier',
-            'label': 'data(label)'
-        }
-        }
-    ],
+    graph = new Graph();
 
-    layout: {
-        name: 'cose',
-    }
+    springy(document.getElementById('graphCanvas'), {
+        graph: graph,
+        nodeSelected: function(node){
+            //console.log('Node selected: ' + JSON.stringify(node.data));
+        }
     });
 }
 
 function updateGraph(elements) {
-    cy.filter().forEach(element => {
-        element.remove();
-    });
-    cy.add(elements);
-    cy.layout({name: 'cose'}).run();
+    graph.clear();
+    graph.loadJSON(elements);
 }
 
 onMount(async () => {
@@ -213,7 +192,9 @@ function resultDisplay(selectedTab: string) {
         </ul>
     </div>
     <div id="table"></div>
-    <div id="graph"><div id="cy"></div></div>
+    <div id="graph">
+        <canvas id="graphCanvas" width="1300" height="500" />
+    </div>
     <div id="resultText"><pre>{resultText}</pre></div>
 </div>
 
@@ -232,11 +213,6 @@ function resultDisplay(selectedTab: string) {
     }
     #resultText {
         display: none;
-    }
-    #cy {
-        width: 1000px;
-        height: 500px;
-        display: block;
     }
     .backButton {
         float: right;

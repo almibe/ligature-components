@@ -13,3 +13,7 @@ npm run dev -- --open
 ```
 
 Use `npm run test` to run automated tests.
+
+## Attribution
+
+This project contains a fork of https://github.com/dhotson/springy.

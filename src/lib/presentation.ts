@@ -15,15 +15,14 @@ export type State = {
 
 export type Statement = [Identifier, Identifier, Value]
 
-type GElement = GNode | GEdge
-type GNode = { data: { id: string } }
-type GEdge = { data: { label: string, source: string, target: string}}
+type Node = string
+type Edge = [Node, Node, {label: string}]
 
 type Data = { id: number }
 type Column = { title: string, field: string, sorter: string }
 
 type TableData = { columns: Array<Column>, data: Array<Data> };
-type GraphData = Array<GElement>;
+type GraphData = {nodes: Array<Node>, edges: Array<Edge>};
 type Presentation = { tableData: TableData, graphData: GraphData };
 
 export class StatementsPresentation {
@@ -74,18 +73,23 @@ export class StatementsPresentation {
     }
 
     public graphElements(): GraphData {
-        let result: GraphData = []
+        let nodes: Set<Node> = new Set()
+        let edges: Array<Edge> = []
+
         this.store.forEach((statement) => {
             let entity = this.writeValue(statement[0])
             let value = this.writeValue(statement[2])
-            result.push({data: {id: entity}})
-            result.push({data: {id: value}})
-            result.push({data: {label: statement[1].identifier, source: entity, target: value}})
+            nodes.add(entity);
+            nodes.add(value);
+            edges.push([entity, value, {label: statement[1].identifier}])
+            // result.push({data: {id: entity}})
+            // result.push({data: {id: value}})
+            // result.push({data: {label: statement[1].identifier, source: entity, target: value}})
         })
-        return result;
+        return {nodes: Array.from(nodes), edges};
     }
 
-    private writeValue(value: Value): any {
+    private writeValue(value: Value): string {
         if (typeof value == 'object' && 'identifier' in value) {
             return "<" + value.identifier + ">";
         } else {
