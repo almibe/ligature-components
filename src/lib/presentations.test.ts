@@ -26,12 +26,12 @@ test('Read basic Statement', () => {
     ]
 
     let presentation = wanderResultToPresentation(input);
-    expect(presentation.tableView()).toEqual(tableExpected);
-    expect(presentation.graphElements()).toEqual(elementsExpected);
+    expect(presentation.tableData).toEqual(tableExpected);
+    expect(presentation.graphData).toEqual(elementsExpected);
 });
 
-test('Read multiple Statements aobut a single Entity', () => {
-    let input = "<a> <b> <c>\n<a> <d> <e>"; //TODO add test with a duplicate attribute
+test('Read multiple Statements about a single Entity', () => {
+    let input = "<a> <b> <c>\n<a> <d> <e>";
 
     let tableExpected = {
         data: [
@@ -54,8 +54,35 @@ test('Read multiple Statements aobut a single Entity', () => {
     ];
 
     let presentation = wanderResultToPresentation(input);
-    expect(presentation.tableView()).toEqual(tableExpected);
-    expect(presentation.graphElements()).toEqual(elementsExpected);
+    expect(presentation.tableData).toEqual(tableExpected);
+    expect(presentation.graphData).toEqual(elementsExpected);
+});
+
+test('Read multiple Statements about a single Entity with a Single Attribute', () => {
+    let input = "<a> <b> <c>\n<a> <b> <d>";
+
+    let tableExpected = {
+        data: [
+            { id: 1, "<entity>": "a", "b": ["<c>", "<d>"]}
+        ],
+        columns: [
+            {title:"Entity", field:"<entity>", sorter:"string"},
+            {title:"b", field:"b", sorter:"string"}
+        ]
+    };
+
+    let elementsExpected = [
+        {data: {id: "<a>"}},
+        {data: {id: "<c>"}},
+        {data: {label: "b", source: "<a>", target: "<c>"}},
+        {data: {id: "<a>"}},
+        {data: {id: "<d>"}},
+        {data: {label: "b", source: "<a>", target: "<d>"}}        
+    ];
+
+    let presentation = wanderResultToPresentation(input);
+    expect(presentation.tableData).toEqual(tableExpected);
+    expect(presentation.graphData).toEqual(elementsExpected);
 });
 
 // test('Support Strings', () => {

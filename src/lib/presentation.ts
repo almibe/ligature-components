@@ -53,6 +53,12 @@ export class StatementsPresentation {
             let match = data.find((d) => d["<entity>"] == entity)
             if (match) {
                 if (columnName in match) {//  if so check if column exists
+                    if (typeof match[columnName] == 'array') {
+                        match[columnName].push(this.writeValue(statement[2]));
+                    } else {
+                        let oldValue = match[columnName];
+                        match[columnName] = [oldValue, this.writeValue(statement[2])];
+                    }
                     //if so make column a list (or add to list if it already exists)
                     //or maybe throw an error if showing a list is weird
                 } else {
