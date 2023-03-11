@@ -1,6 +1,6 @@
 # Ligature Components
 
-This project contains a set of Svelte components that are intented to be used with various Ligature projects.
+This project contains a set of Web Components made using [Lit](https://lit.dev) and [Shoelace](https://shoelace.style) that are intented to be used with various [Ligature](https://ligature.dev) projects.
 
 ## Developing
 
