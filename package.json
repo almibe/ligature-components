@@ -17,7 +17,9 @@
     "build": "tsc && vite build"
   },
   "dependencies": {
-    "lit": "^2.6.1"
+    "@shoelace-style/shoelace": "^2.3.0",
+    "lit": "^2.6.1",
+    "simpledotcss": "^2.1.2"
   },
   "devDependencies": {
     "typescript": "^4.9.3",
