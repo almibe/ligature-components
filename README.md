@@ -1,5 +1,7 @@
 # Ligature Components
 
+## Note: Work on this project has moved to https://github.com/almibe/ligature-lab
+
 This project contains a set of Web Components made using [Lit](https://lit.dev) and [Shoelace](https://shoelace.style) that are intented to be used with various [Ligature](https://ligature.dev) projects.
 
 ## Developing

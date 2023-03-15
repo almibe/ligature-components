@@ -8,16 +8,7 @@ import '@shoelace-style/shoelace/dist/components/dialog/dialog.js';
 export class DatasetsUI extends LitElement {
 
     @property()
-    datasets: string[] = []
-
-    private datasetRow(dataset: string) {
-        return html`
-            <tr>
-                <td>${dataset}</td>
-                <td></td>
-            </tr>
-        `
-    }
+    datasets: string[] = [];
 
     render() { 
         const datasetList = [];
@@ -26,21 +17,23 @@ export class DatasetsUI extends LitElement {
         );
 
         return html`
-            <sl-dialog label="Create Dataset" class="dialog-header-actions">
-                <sl-icon-button class="new-window" slot="header-actions" name="box-arrow-up-right"></sl-icon-button>
+            <sl-dialog label="Create Dataset" class="dialog-add-dataset">
                 Add Dataset?
+                <p><label>Name: <input name="datasetName" id="datasetName"></label></p>
+                <p><button class="dialog-response-button button" @click="{() => addDataset()}">Add Dataset</button></p>
+                <p><button class="dialog-response-button button" @click="{() => addDialog.hide()}">Cancel</button></p>
                 <sl-button slot="footer" variant="primary">Close</sl-button>
             </sl-dialog>
 
             <h1>Datasets</h1>
-            <sl-button>Add Dataset</sl-button>
+            <sl-button @click="${this.addDataset}">Add Dataset</sl-button>
             <table>
                 <thead>
                     <th>Dataset Name</th>
                     <th>Remove?</th>
                 </thead>
 
-            </table>`
+            </table>`;
     }
 
     static styles = css`
@@ -51,5 +44,21 @@ export class DatasetsUI extends LitElement {
         table thead, table tr {
             border-bottom: 1px solid #000;
         }
-    `
+    `;
+
+    private datasetRow(dataset: string) {
+        return html`
+            <tr>
+                <td>${dataset}</td>
+                <td></td>
+            </tr>
+        `;
+    }
+
+    private addDataset(e: Event) {
+        const dialog = this.renderRoot.querySelector('.dialog-add-dataset')!!;
+        const closeButton = this.renderRoot.querySelector('sl-button[slot="footer"]')!!;        
+        closeButton.addEventListener('click', () => dialog.hide());
+        dialog.show();
+    }
 }
