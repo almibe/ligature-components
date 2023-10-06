@@ -6,6 +6,7 @@
     <title>Wander Components Demo</title>
     <link rel="stylesheet" href="./src/index.css" />
     <script type="module" src="/src/wander-lang.ts"></script>
+    <script type="module" src="/src/wander-editor.ts"></script>
   </head>
   <body>
     <p>No attributes.</p>
@@ -45,13 +46,13 @@
       end
     </wander-lang>
     <p>action="editor"</p>
-    <wander-lang action="editor">
+    <wander-editor>
       let
         val x = "Hello"
         val y = "World"
       in
         '(x y)
       end
-    </wander-lang>
+    </wander-editor>
   </body>
 </html>
