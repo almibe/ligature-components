@@ -1,21 +1,20 @@
-<!DOCTYPE html>
+<!doctype html>
 <html lang="en">
-	<head>
-		<meta charset="UTF-8" />
-		<title>Ligature Components Test Site</title>
-		<link rel="icon" href="/static/img/logo.svg" />
-		<link rel="stylesheet" href="/src/index.css" />
-		<meta name="viewport" content="width=device-width, initial-scale=1" />
-	</head>
-	<body>
-		<section class="section">
-			<div class="container">
-        		<p>Demos:</p>
-				<ul>
-					<li><a href="datasets.html">Datasets</a></li>
-					<li><a href="dataset.html">Dataset</a></li>
-				</ul>
-      		</div>
-		</section>
-	</body>
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Wander Components Demo</title>
+    <link rel="stylesheet" href="./src/index.css" />
+    <script type="module" src="/src/wander-lang.ts"></script>
+  </head>
+  <body>
+    <wander-lang>
+      let
+        val x = "Hello"
+        val y = "World"
+      in
+        '(x y)
+      end
+    </wander-lang>
+  </body>
 </html>
