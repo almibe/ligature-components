@@ -3,6 +3,11 @@
   "private": true,
   "version": "0.1.0",
   "type": "module",
+  "exports": {
+    ".": "./src/wander-editor.ts",
+    "./wander-editor.ts": "./src/wander-editor.ts",
+    "./wander-lang.ts": "./src/wander-lang.ts"
+  },
   "scripts": {
     "dev": "vite",
     "build": "tsc && vite build",

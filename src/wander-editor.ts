@@ -19,13 +19,12 @@ export class WanderEditor extends LitElement {
 
   connectedCallback(): void {
     super.connectedCallback()
-    console.log("test");
-    this.initializeEditor("#editor", () => {}, () => {});
+    this.initializeEditor(() => {}, () => {});
   }
 
   static styles = css``;
 
-  async initializeEditor(id: string, setText, run) {
+  async initializeEditor(setText, run) {
     await this.updateComplete;
     let inputEditor: EditorView;
     let runEvent;
