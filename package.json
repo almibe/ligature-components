@@ -9,8 +9,9 @@
     "preview": "vite preview"
   },
   "dependencies": {
-    "@wander-lang/wander": "^0.3.0",
-    "lit": "^2.7.6"
+    "@wander-lang/wander": "^0.3.2",
+    "lit": "^2.7.6",
+    "prismjs": "^1.29.0"
   },
   "devDependencies": {
     "typescript": "^5.0.2",

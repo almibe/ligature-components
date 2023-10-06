@@ -4,7 +4,28 @@ This project contains a set of Web Components made using [Lit](https://lit.dev) 
 
 ## Using The Components
 
-...
+### `<wander-lang>`
+
+Example
+
+```
+<wander-lang>
+    let
+    val x = "Hello"
+    val y = "World"
+    in
+    '(x y)
+    end
+</wander-lang>
+
+```
+
+#### Actions
+
+##### Run
+
+##### Introspect
+
 
 ## Developing
 

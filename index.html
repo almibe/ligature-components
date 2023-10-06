@@ -8,7 +8,44 @@
     <script type="module" src="/src/wander-lang.ts"></script>
   </head>
   <body>
+    <p>No attributes.</p>
     <wander-lang>
+      let
+        val x = "Hello"
+        val y = "World"
+      in
+        '(x y)
+      end
+    </wander-lang>
+    <p>action="run"</p>
+    <wander-lang action="run">
+      let
+        val x = "Hello"
+        val y = "World"
+      in
+        '(x y)
+      end
+    </wander-lang>
+    <p>action="introspect"</p>
+    <wander-lang action="introspect">
+      let
+        val x = "Hello"
+        val y = "World"
+      in
+        '(x y)
+      end
+    </wander-lang>
+    <p>action="display"</p>
+    <wander-lang action="display">
+      let
+        val x = "Hello"
+        val y = "World"
+      in
+        '(x y)
+      end
+    </wander-lang>
+    <p>action="editor"</p>
+    <wander-lang action="editor">
       let
         val x = "Hello"
         val y = "World"

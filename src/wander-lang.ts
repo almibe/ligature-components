@@ -1,6 +1,11 @@
-import { LitElement, css, html } from 'lit'
+import { LitElement, css, html, unsafeCSS } from 'lit'
 import { customElement, property } from 'lit/decorators.js'
-import { run } from '@wander-lang/wander';
+import { run, introspect } from '@wander-lang/wander';
+import style from "prismjs/themes/prism-coy.css?inline";
+import Prism from "prismjs";
+import "prismjs/components/prism-sml"
+import { unsafeHTML } from 'lit/directives/unsafe-html.js';
+
 
 @customElement('wander-lang')
 export class WanderLang extends LitElement {
@@ -8,13 +13,20 @@ export class WanderLang extends LitElement {
   docsHint = 'Click on the Vite and Lit logos to learn more'
 
   render() {
-    return html`
-      <pre>${JSON.stringify(run(this.textContent!!))}</pre>
-    `
+    const action = this.attributes.getNamedItem("action");
+    if (action == null || action.value == "run") {
+      return html`<pre>${JSON.stringify(run(this.textContent!!))}</pre>`
+    } else if (action.value == "introspect") {
+      return html`<pre>${JSON.stringify(introspect(this.textContent!!))}</pre>`
+    } else if (action.value == "display") {
+      const result = Prism.highlight(this.textContent, Prism.languages.sml);
+      return html`<pre><code class="language-sml">${unsafeHTML(result)}</code></pre>`
+    } else {
+      //throw new DOMException("Unknown Action " + action.value);
+    }
   }
 
-  static styles = css`
-  `
+  static styles = unsafeCSS(style);
 }
 
 declare global {
@@ -22,3 +34,4 @@ declare global {
     'wander-lang': WanderLang
   }
 }
+
