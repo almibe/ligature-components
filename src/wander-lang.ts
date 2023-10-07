@@ -4,7 +4,7 @@ import { customElement } from 'lit/decorators.js'
 import { unsafeHTML } from 'lit/directives/unsafe-html.js';
 import hljs from 'highlight.js/lib/core';
 import javascript from 'highlight.js/lib/languages/sml';
-import style from '../node_modules/highlight.js/styles/default.css';
+import 'highlight.js/styles/default.css';
 
 hljs.registerLanguage('sml', javascript);
 
@@ -37,7 +37,6 @@ export class WanderLang extends LitElement {
     }
   }
 
-  static styles = unsafeCSS(style + "\n * { background-color: #111111; color: #DDDDDD }");
 }
 
 declare global {
