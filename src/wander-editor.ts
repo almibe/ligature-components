@@ -13,7 +13,7 @@ export class WanderEditor extends LitElement {
 
   render() {
     return html`
-      <div id="editor" class="code">Editor</div>
+      <div id="editor" class="code"></div>
     `
   }
 

@@ -18,7 +18,6 @@
     "@codemirror/view": "^6.21.3",
     "@wander-lang/wander": "^0.3.2",
     "codemirror": "^6.0.1",
-    "highlight.js": "^11.8.0",
     "lit": "^2.7.6"
   },
   "devDependencies": {
