@@ -12,8 +12,8 @@ dependencies:
     specifier: ^6.21.3
     version: 6.21.3
   '@wander-lang/wander':
-    specifier: ^0.3.2
-    version: 0.3.2
+    specifier: ^0.4.2
+    version: 0.4.2
   codemirror:
     specifier: ^6.0.1
     version: 6.0.1(@lezer/common@1.1.0)
@@ -481,8 +481,8 @@ packages:
     resolution: {integrity: sha512-IDaobHimLQhjwsQ/NMwRVfa/yL7L/wriQPMhw1ZJall0KX6E1oxk29XMDeilW5qTIg5aoiqf5Udy8U/51aNoQQ==}
     dev: false
 
-  /@wander-lang/wander@0.3.2:
-    resolution: {integrity: sha512-NvDTgkt3mbjl3TGyi7+z5jqO2EntSuqUcnDh4e3Jcwb76t7jehXju8Hfytrd96vcAcjy7EWofe0m8r/86+hURA==}
+  /@wander-lang/wander@0.4.2:
+    resolution: {integrity: sha512-b2gcsGcpcFF11Jt5zuXG4YzmCR7/axC8EcAEYQ0OnhjRFnbatKddSBCwmc8mBz0EIgdPQvGYkBMdyjFXWiOPbQ==}
     dev: false
 
   /acorn-node@1.8.2:

@@ -1,7 +1,7 @@
 {
   "name": "@wander-lang/wander-components",
+  "version": "0.2.0",
   "private": true,
-  "version": "0.1.0",
   "type": "module",
   "exports": {
     ".": "./src/wander-editor.ts",
@@ -16,7 +16,7 @@
   "dependencies": {
     "@codemirror/commands": "^6.3.0",
     "@codemirror/view": "^6.21.3",
-    "@wander-lang/wander": "^0.3.2",
+    "@wander-lang/wander": "^0.4.2",
     "codemirror": "^6.0.1",
     "lit": "^2.7.6"
   },

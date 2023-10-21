@@ -5,54 +5,32 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <title>Wander Components Demo</title>
     <link rel="stylesheet" href="./src/index.css" />
-    <script type="module" src="/src/wander-lang.ts"></script>
+    <script type="module" src="/src/wander-code.ts"></script>
     <script type="module" src="/src/wander-editor.ts"></script>
   </head>
   <body>
-    <p>No attributes.</p>
-    <wander-lang>
-      let
-        val x = "Hello"
-        val y = "World"
-      in
-        '(x y)
-      end
-    </wander-lang>
-    <p>action="run"</p>
-    <wander-lang action="run">
-      let
-        val x = "Hello"
-        val y = "World"
-      in
-        '(x y)
-      end
-    </wander-lang>
-    <p>action="introspect"</p>
-    <wander-lang action="introspect">
-      let
-        val x = "Hello"
-        val y = "World"
-      in
-        '(x y)
-      end
-    </wander-lang>
-    <p>action="display"</p>
-    <wander-lang action="display">
-      let
-        val x = "Hello"
-        val y = "World"
-      in
-        '(x y)
-      end
-    </wander-lang>
-    <p>action="editor"</p>
-    <wander-editor>
-      let
-        val x = "Hello"
-        val y = "World"
-      in
-        '(x y)
-      end
-    </wander-editor>
+    <main>
+      <section>
+        <wander-code>
+          let
+            val x = "Hello"
+            val y = "World"
+          in
+            '(x y)
+          end
+        </wander-code>
+      </section>
+      <hr>
+      <section>
+        <wander-editor>
+          let
+            val x = "Hello"
+            val y = "World"
+          in
+            '(x y)
+          end
+        </wander-editor>      
+      </section>
+    </main>
   </body>
 </html>
