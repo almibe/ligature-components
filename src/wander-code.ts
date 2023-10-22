@@ -1,6 +1,6 @@
 import { run, introspect } from '@wander-lang/wander';
 import { LitElement, html } from 'lit';
-import { customElement } from 'lit/decorators.js';
+import { customElement, property } from 'lit/decorators.js';
 
 @customElement('wander-code')
 export class WanderCode extends LitElement {
@@ -8,11 +8,16 @@ export class WanderCode extends LitElement {
     return this;
   }
   
+  @property()
   script: string = "";
 
-  render() {
+  connectedCallback(): void {
+    super.connectedCallback();
     this.script = this.textContent!!;
     this.textContent = "";
+  }
+
+  render() {
     const highlightResult = highlight(this.script);
     const runResult = runScript(this.script);
     return html`<pre><code>${highlightResult}</code></pre><hr><pre><code>${runResult}</code></pre>`;
@@ -21,7 +26,6 @@ export class WanderCode extends LitElement {
 
 function runScript(input: string) {
   let res = run(input);
-  console.log(res)
   if (res.string.Ok) {
     return html`<span class="result">Result:${res.string.Ok}`;
   } else {
@@ -39,13 +43,20 @@ function highlight(input: string) {
   }
 }
 
-const keywords = ["Let", "In", "End", "Val"];
+const keywords = ["Let", "In", "End", "Val", "If", "Else", "When"];
 
 const syntax = {
   OpenParen: "(",
   CloseParen: ")",
   SingleQuote: "'",
   EqualSign: "=",
+  OpenSquare: "[",
+  CloseSquare: "]",
+  OpenBrace: "{",
+  CloseBrace: "}",
+  Lambda: "\\",
+  Arrow: "->",
+  Colon: ":",
 }
 
 function highlight_token(token) {

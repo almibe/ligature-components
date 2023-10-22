@@ -11,18 +11,8 @@
   <body>
     <main>
       <section>
-        <wander-code>
-          let
-            val x = "Hello"
-            val y = "World"
-          in
-            '(x y)
-          end
-        </wander-code>
-      </section>
-      <hr>
-      <section>
-        <wander-editor>
+        <button id="runButton">Run</button>
+        <wander-editor id="editor">
           let
             val x = "Hello"
             val y = "World"
@@ -31,6 +21,21 @@
           end
         </wander-editor>      
       </section>
+      <section>
+        <wander-code id="code">
+          let
+            val x = "Hello"
+            val y = "World"
+          in
+            '(x y)
+          end
+        </wander-code>
+      </section>
     </main>
   </body>
+  <script>
+    document.getElementById("runButton").addEventListener("click", (e) => {
+      document.getElementById("code").script = document.getElementById("editor").text;
+    });
+  </script>
 </html>

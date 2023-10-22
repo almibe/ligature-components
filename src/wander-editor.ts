@@ -1,36 +1,42 @@
-import { LitElement, css, html, unsafeCSS } from 'lit'
-import { customElement, query } from 'lit/decorators.js'
-import { run, introspect } from '@wander-lang/wander';
-import { unsafeHTML } from 'lit/directives/unsafe-html.js';
+import { LitElement, css, html } from 'lit'
+import { customElement, property, query } from 'lit/decorators.js'
+import { run } from '@wander-lang/wander';
 import { EditorView, basicSetup } from "codemirror";
 import { ViewUpdate, keymap } from "@codemirror/view"
 import { indentWithTab } from "@codemirror/commands"
+import { language } from '@codemirror/language';
+import { WanderLanguage } from './wander-code-mirror';
 
 @customElement('wander-editor')
 export class WanderEditor extends LitElement {
   @query('#editor')
   _editorNode: Element;
 
+  @property()
+  text: string = "";
+
   render() {
-    return html`
-      <div id="editor" class="code"></div>
-    `
+    return html`<div id="editor" class="code"></div>`
   }
 
   connectedCallback(): void {
-    super.connectedCallback()
-    this.initializeEditor(() => {}, () => {});
+    super.connectedCallback();
+    this.text = this.textContent!!;
+    this.textContent = "";
+    this.initializeEditor();
   }
 
   static styles = css``;
 
-  async initializeEditor(setText, run) {
+  async initializeEditor() {
     await this.updateComplete;
     let inputEditor: EditorView;
     let runEvent;
   
     inputEditor = new EditorView({
+      doc: this.text,
       extensions: [
+        language.of(WanderLanguage),
         EditorView.theme({
           "&": {height: "300px", overflow: "auto", resize: "vertical"},
           ".cm-scroller": {overflow: "auto"}
@@ -44,7 +50,7 @@ export class WanderEditor extends LitElement {
         }),
         EditorView.updateListener.of((v: ViewUpdate) => {
           if (v.docChanged) {
-            setText(v.state.doc.toString())
+            this.text = v.state.doc.toString();
           }
         }),
         basicSetup,
