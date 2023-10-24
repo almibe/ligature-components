@@ -1,6 +1,6 @@
 import {parser} from "./wander-lezer-parser.js";
 import {LRLanguage, LanguageSupport, indentNodeProp, foldNodeProp, foldInside, delimitedIndent} from "@codemirror/language"
-import {styleTags, tags as t} from "@lezer/highlight"
+import {styleTags, tags} from "@lezer/highlight"
 
 export const WanderLanguage = LRLanguage.define({
   parser: parser.configure({
@@ -12,11 +12,11 @@ export const WanderLanguage = LRLanguage.define({
         Application: foldInside
       }),
       styleTags({
-        Identifier: t.variableName,
-        Boolean: t.bool,
-        String: t.string,
-        LineComment: t.lineComment,
-        "( )": t.paren
+        Identifier: tags.variableName,
+        Boolean: tags.bool,
+        String: tags.string,
+        LineComment: tags.lineComment,
+        "( )": tags.paren
       })
     ]
   }),

@@ -4,9 +4,9 @@
   "private": true,
   "type": "module",
   "exports": {
-    ".": "./src/wander-editor.ts",
+    ".": "./src/wander-code.ts",
     "./wander-editor.ts": "./src/wander-editor.ts",
-    "./wander-lang.ts": "./src/wander-lang.ts"
+    "./wander-code.ts": "./src/wander-code.ts"
   },
   "scripts": {
     "dev": "vite",
