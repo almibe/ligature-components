@@ -1,6 +1,5 @@
 import { LitElement, css, html } from 'lit'
 import { customElement, property, query } from 'lit/decorators.js'
-import { run } from '@wander-lang/wander';
 import { EditorView, basicSetup } from "codemirror";
 import { ViewUpdate, keymap } from "@codemirror/view"
 import { indentWithTab } from "@codemirror/commands"
@@ -31,7 +30,6 @@ export class WanderEditor extends LitElement {
   async initializeEditor() {
     await this.updateComplete;
     let inputEditor: EditorView;
-    let runEvent;
   
     inputEditor = new EditorView({
       doc: this.text,
@@ -40,13 +38,6 @@ export class WanderEditor extends LitElement {
         EditorView.theme({
           "&": {height: "300px", overflow: "auto", resize: "vertical"},
           ".cm-scroller": {overflow: "auto"}
-        }),
-        EditorView.domEventHandlers({
-          keydown: e => {
-            if((e.code == "Enter") && (e.metaKey || e.ctrlKey)) {
-              e.preventDefault();
-            }
-          }
         }),
         EditorView.updateListener.of((v: ViewUpdate) => {
           if (v.docChanged) {
@@ -59,12 +50,6 @@ export class WanderEditor extends LitElement {
         parent: this._editorNode,
       });
       inputEditor.focus();
-      runEvent = (e) => {
-        if((e.code == "Enter") && (e.metaKey || e.ctrlKey)) {
-            run(inputEditor.state.doc.toString());
-        }
-      };
-      runEvent = document.body.addEventListener('keydown', runEvent);
   }
 }
 

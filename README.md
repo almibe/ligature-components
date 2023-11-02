@@ -10,14 +10,13 @@ Example
 
 ```
 <wander-lang>
-    let
-    val x = "Hello"
-    val y = "World"
-    in
-    '(x y)
-    end
+let
+  val x = "Hello"
+  val y = "World"
+in
+  '(x y)
+end
 </wander-lang>
-
 ```
 
 #### Actions
