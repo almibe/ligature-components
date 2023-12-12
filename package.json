@@ -1,7 +1,6 @@
 {
   "name": "@wander-lang/wander-components",
-  "version": "0.5.0",
-  "private": true,
+  "version": "0.5.2",
   "type": "module",
   "exports": {
     ".": "./src/wander-code.ts",
@@ -20,7 +19,7 @@
     "@codemirror/view": "^6.21.3",
     "@lezer/highlight": "^1.1.6",
     "@lezer/lr": "^1.3.13",
-    "@wander-lang/wander": "^0.5.0",
+    "@wander-lang/wander": "^0.7.10",
     "codemirror": "^6.0.1",
     "lit": "^3.0.0"
   },
@@ -28,8 +27,6 @@
     "@lezer/generator": "^1.5.1",
     "rollup-plugin-postcss-lit": "^2.1.0",
     "typescript": "^5.0.2",
-    "vite": "^4.4.5",
-    "vite-plugin-top-level-await": "^1.3.1",
-    "vite-plugin-wasm": "^3.2.2"
+    "vite": "^4.4.5"
   }
 }
