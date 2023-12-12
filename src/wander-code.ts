@@ -23,7 +23,7 @@ export class WanderCode extends LitElement {
   }
 
   render() {
-    const highlightResult = highlight(this.script);
+    const highlightResult = JSON.parse(JSON.stringify(highlight(this.script))).map(value => html`<span class="${value[0]}">${value[1]}</span>`);
     const runResult = runScript(this.script);
     return html`<pre><code>${highlightResult}</code></pre><hr><pre><code>${runResult}</code></pre>`;
   }
