@@ -1,6 +1,6 @@
 {
   "name": "@wander-lang/wander-components",
-  "version": "0.5.2",
+  "version": "0.5.3",
   "type": "module",
   "exports": {
     ".": "./src/wander-code.ts",
@@ -20,8 +20,7 @@
     "@lezer/highlight": "^1.1.6",
     "@lezer/lr": "^1.3.13",
     "@wander-lang/wander": "^0.7.10",
-    "codemirror": "^6.0.1",
-    "lit": "^3.0.0"
+    "codemirror": "^6.0.1"
   },
   "devDependencies": {
     "@lezer/generator": "^1.5.1",
