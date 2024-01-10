@@ -4,32 +4,30 @@
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <title>Wander Components Demo</title>
-    <link rel="stylesheet" href="./src/index.css" />
-    <script type="module" src="/src/wander-code.ts"></script>
-    <script type="module" src="/src/wander-editor.ts"></script>
+    <link rel="stylesheet" href="./src/web/index.css" />
   </head>
   <body>
     <main>
       <section>
         <button id="runButton">Run</button>
-        <wander-editor id="editor">
+        <div id="editor">
           x = "Hello",
           y = "World",
           [x, y]
-        </wander-editor>      
+        </div>
       </section>
       <section>
-        <wander-code id="code">
-          x = "Hello",
-          y = "World",
-          [x, y]
-        </wander-code>
+        <div id="code">
+        </div>
       </section>
     </main>
   </body>
-  <script>
+  <script type="module">
+    import { initializeEditor } from './src/web/wander-editor.ts';
+    import { run, printResult } from './src/interpreter/interpreter.ts';
+    let editor = initializeEditor("editor");
     document.getElementById("runButton").addEventListener("click", (e) => {
-      document.getElementById("code").script = document.getElementById("editor").text;
+      document.getElementById("code").innerText = printResult(run(editor.readText()));
     });
   </script>
 </html>

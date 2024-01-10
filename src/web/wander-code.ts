@@ -1,8 +1,6 @@
 import { execute, highlight } from '@wander-lang/wander';
 
-wanderCode("code", "x = 5")
-
-export function wanderCode(id, script) {
+export function wanderCode(className: string) {
   const element = document.getElementById(id);
   const highlightResult = JSON.parse(JSON.stringify(highlight(script))).map(value => `<span class="${value[0]}">${value[1]}</span>`);
   const runResult = runScript(script);

@@ -17,3 +17,12 @@ span.comment {
 span.string {
     color: limegreen;
 }
+
+#editor {
+    padding-top: 25px;
+}
+
+#code {
+    padding-top:100px;
+    padding-left:150px;
+}
