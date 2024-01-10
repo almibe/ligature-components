@@ -1,6 +1,5 @@
 //import {run as runScript } from '@wander-lang/wander/Wander'
 
-import { W } from 'vitest/dist/reporters-qc5Smpt5.js';
 import { Environment } from './environment.js';
 import { Expression } from './expressions.js';
 import { parse } from './parser.js';
