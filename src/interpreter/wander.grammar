@@ -1,6 +1,6 @@
 @top Script { expression+ }
 
-expression { Field | True | False | Int | String | Module | Array | Grouping | When | Lambda }
+expression { Field | Bool | Int | String | Module | Array | Grouping | When | Lambda }
 
 String { string }
 Module { "{" list<Field>? "}" }
@@ -13,9 +13,7 @@ Field { FieldName "=" expression }
 FieldName { string }
 
 @tokens {
-  True  { "true" }
-  False { "false" }
-
+  Bool { "true" | "false" }
   Int { '-'? int }
   int  { '0' | $[1-9] @digit* }
 

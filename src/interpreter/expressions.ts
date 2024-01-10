@@ -1,18 +1,16 @@
-import { Immutable } from "immer";
+export interface IntegerExpr {
+    readonly value: bigint
+    readonly type: "Int"
+}
 
-export type IntegerExpr = Immutable<{
-    value: bigint,
-    type: "Int"
-}>
+export interface StringExpr {
+    readonly value: string
+    readonly type: "String"
+}
 
-export type StringExpr = Immutable<{
-    value: string,
-    type: "String"
-}>
-
-export type BoolExpr = Immutable<{
-    value: boolean,
-    type: "Bool"
-}>
+export interface BoolExpr {
+    readonly value: boolean
+    readonly type: "Bool"
+}
 
 export type Expression = IntegerExpr | StringExpr | BoolExpr;

@@ -1,18 +1,20 @@
-import { Immutable } from "immer";
+export type WanderError = string;
 
-export type IntegerValue = Immutable<{
-    value: bigint,
-    type: "Int"
-}>
+export interface IntegerValue {
+    readonly value: bigint
+    readonly type: "Int"
+}
 
-export type StringValue = Immutable<{
-    value: string,
-    type: "String"
-}>
+export interface StringValue {
+    readonly value: string
+    readonly type: "String"
+}
 
-export type BoolValue = Immutable<{
-    value: boolean,
-    type: "Bool"
-}>
+export interface BoolValue {
+    readonly value: boolean
+    readonly type: "Bool"
+}
 
 export type WanderValue = IntegerValue | StringValue | BoolValue;
+
+export type WanderResult = WanderError | WanderValue;

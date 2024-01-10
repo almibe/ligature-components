@@ -2,18 +2,18 @@
 import {LRParser} from "@lezer/lr"
 export const parser = LRParser.deserialize({
   version: 14,
-  states: "'UOVQPOOOtQPO'#C_O!xQPO'#C^O!}QPO'#CfO#VQPO'#CiO#^QPO'#CjO#eQPO'#CkO#QQPO'#ClOOQO'#Cu'#CuOOQO'#Cm'#CmQVQPOOOVQPO,58xOOQO'#C_'#C_O#lQPO'#CxOOQO,59Q,59QO#tQPO,59QO#yQPO'#CzOOQO,59T,59TO$UQPO,59TOOQO,59U,59UO$ZQPO,59UO$`QPO'#CpO$eQPO,59VOOQO,59V,59VOOQO'#Cq'#CqO$lQPO,59WOOQO-E6k-E6kOOQO1G.d1G.dO#QQPO'#CnO$tQPO,59dOOQO1G.l1G.lOVQPO'#CoO$|QPO,59fOOQO1G.o1G.oOOQO1G.p1G.pOVQPO,59[OOQO-E6n-E6nOOQO1G.q1G.qOOQO-E6o-E6oOVQPO1G.rOOQO,59Y,59YOOQO-E6l-E6lOOQO,59Z,59ZOOQO-E6m-E6mO%XQPO1G.vOOQO7+$^7+$^OOQO7+$b7+$b",
-  stateData: "%^~OhOS~OSWOTWOUWOXRO[SOjPOpTOrUOtVO~OSVXTVXUVXXVX[VXfVXjVXkRXpVXrVXtVXZVXmVXoVXsVXWVX~OkZO~OW^Oj[O~OZaO~PVOocO~PVOqgO~PVOmlOWlX~OWnO~OmoOZnXonX~OZqO~OorO~OssO~OquO~PVOj[OuwO~OmlOWla~OmoOZnaona~Om!OO~O",
-  goto: "$ToPPp!SPPP!fPP!fPP!f!f!f!f!r!x#O#U#[PPP#bPP#zP#}dWOSTUYZfoswQ]RRxlhQORSTUYZfloswThVieWOSTUYZfoswQYORjYQm]RymQp`R{pQfURtfQiVRviSXOYS`STSeUfQkZQzoQ|sR}wR_RQbSRdT",
-  nodeNames: "⚠ Script Field FieldName True False Int String } { Module ] [ Array Grouping When Lambda",
-  maxTerm: 37,
+  states: "'UOVQPOOOqQPO'#C_O!rQPO'#C^O!wQPO'#CeO#PQPO'#ChO#WQPO'#CiO#_QPO'#CjO!zQPO'#CkOOQO'#Ct'#CtOOQO'#Cl'#ClQVQPOOOVQPO,58xOOQO'#C_'#C_O#fQPO'#CwOOQO,59P,59PO#nQPO,59PO#sQPO'#CyOOQO,59S,59SO$OQPO,59SOOQO,59T,59TO$TQPO,59TO$YQPO'#CoO$_QPO,59UOOQO,59U,59UOOQO'#Cp'#CpO$fQPO,59VOOQO-E6j-E6jOOQO1G.d1G.dO!zQPO'#CmO$nQPO,59cOOQO1G.k1G.kOVQPO'#CnO$vQPO,59eOOQO1G.n1G.nOOQO1G.o1G.oOVQPO,59ZOOQO-E6m-E6mOOQO1G.p1G.pOOQO-E6n-E6nOVQPO1G.qOOQO,59X,59XOOQO-E6k-E6kOOQO,59Y,59YOOQO-E6l-E6lO%RQPO1G.uOOQO7+$]7+$]OOQO7+$a7+$a",
+  stateData: "%W~OgOS~OSWOTWOWROZSOiPOoTOqUOsVO~OSUXTUXWUXZUXeUXiUXjRXoUXqUXsUXYUXlUXnUXrUXVUX~OjZO~OV^Oi[O~OYaO~PVOncO~PVOpgO~PVOllOVkX~OVnO~OloOYmXnmX~OYqO~OnrO~OrsO~OpuO~PVOi[OtwO~OllOVka~OloOYmanma~Ol!OO~O",
+  goto: "$SnPPo!RPP!ePP!ePP!e!e!e!e!q!w!}#T#ZPPP#aPP#yP#|dWOSTUYZfoswQ]RRxlhQORSTUYZfloswThVieWOSTUYZfoswQYORjYQm]RymQp`R{pQfURtfQiVRviSXOYS`STSeUfQkZQzoQ|sR}wR_RQbSRdT",
+  nodeNames: "⚠ Script Field FieldName Bool Int String } { Module ] [ Array Grouping When Lambda",
+  maxTerm: 36,
   nodeProps: [
-    ["openedBy", 8,"{",11,"["],
-    ["closedBy", 9,"}",12,"]"]
+    ["openedBy", 7,"{",10,"["],
+    ["closedBy", 8,"}",11,"]"]
   ],
   skippedNodes: [0],
   repeatNodeCount: 5,
-  tokenData: "(x~ReXY!dYZ!d]^!dpq!drs!ixy%Ryz%W|}%]}!O%b!Q!R%n!R![%s!_!`&Q!}#O&_#O#P&d#P#Q&i#X#Y&n#Y#Z'P#h#i'n#k#l(V#o#p(n#q#r(s~!iOh~~!lWpq!iqr!irs#Us#O!i#O#P#Z#P;'S!i;'S;=`${<%lO!i~#ZOj~~#^Xrs!i!P!Q!i#O#P!i#U#V!i#Y#Z!i#b#c!i#f#g!i#h#i!i#i#j#y~#|R!Q![$V!c!i$V#T#Z$V~$YR!Q![$c!c!i$c#T#Z$c~$fR!Q![$o!c!i$o#T#Z$o~$rR!Q![!i!c!i!i#T#Z!i~%OP;=`<%l!i~%WOp~~%]Oo~~%bOm~~%eR!Q!R%n!R![%s!`!a%{~%sOU~~%xPU~!Q![%s~&QOu~~&VPk~!`!a&Y~&_Os~~&dO[~~&iOt~~&nOZ~~&qP#b#c&t~&wP#W#X&z~'POq~~'SP#T#U'V~'YP#`#a']~'`P#g#h'c~'fP#X#Y'i~'nOT~~'qP#f#g't~'wP#i#j'z~'}P#X#Y(Q~(VOS~~(YP#[#](]~(`P#X#Y(c~(fP#b#c(i~(nOr~~(sOX~~(xOW~",
+  tokenData: "(m~ReXY!dYZ!d]^!dpq!drs!ixy%Ryz%W|}%]}!O%b!Q!R%n!R![%s!_!`&Q!}#O&_#O#P&d#P#Q&i#X#Y&n#Y#Z'P#h#i'n#k#l'z#o#p(c#q#r(h~!iOg~~!lWpq!iqr!irs#Us#O!i#O#P#Z#P;'S!i;'S;=`${<%lO!i~#ZOi~~#^Xrs!i!P!Q!i#O#P!i#U#V!i#Y#Z!i#b#c!i#f#g!i#h#i!i#i#j#y~#|R!Q![$V!c!i$V#T#Z$V~$YR!Q![$c!c!i$c#T#Z$c~$fR!Q![$o!c!i$o#T#Z$o~$rR!Q![!i!c!i!i#T#Z!i~%OP;=`<%l!i~%WOo~~%]On~~%bOl~~%eR!Q!R%n!R![%s!`!a%{~%sOT~~%xPT~!Q![%s~&QOt~~&VPj~!`!a&Y~&_Or~~&dOZ~~&iOs~~&nOY~~&qP#b#c&t~&wP#W#X&z~'POp~~'SP#T#U'V~'YP#`#a']~'`P#g#h'c~'fP#X#Y'i~'nOS~~'qP#f#g't~'wP#i#j'c~'}P#[#](Q~(TP#X#Y(W~(ZP#b#c(^~(cOq~~(hOW~~(mOV~",
   tokenizers: [0],
   topRules: {"Script":[0,1]},
   tokenPrec: 0

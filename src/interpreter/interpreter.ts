@@ -1,26 +1,10 @@
 //import {run as runScript } from '@wander-lang/wander/Wander'
 
+import { W } from 'vitest/dist/reporters-qc5Smpt5.js';
 import { Environment } from './environment.js';
 import { Expression } from './expressions.js';
-import { WanderValue } from './values.js';
-import { parser } from './wander-lezer-parser.js'
-
-type WanderError = string;
-
-export function parse(script: string): WanderError | Expression[] {
-    const parseResults = parser.parse(script)
-    let results = []
-    let offset = 0;
-    parseResults.children.forEach(child => {
-        if (child.type.name == "Int") {
-            const value = BigInt(script.substring(offset, offset + child.length))
-            results.push({type:"Int", value})
-        } else {
-            throw "Unknown type";
-        }
-    });
-    return results;
-}
+import { parse } from './parser.js';
+import { WanderError, WanderValue } from './values.js';
 
 export function evaluateScript(expressions: Expression[], environment: Environment): WanderValue | WanderError {
     let result = "No result.";
@@ -32,7 +16,7 @@ export function evaluateScript(expressions: Expression[], environment: Environme
 
 export function evaluate(expression: Expression, environment: Environment): WanderValue | WanderError {
     switch ((expression as Expression).type) {
-        case "Int":
+        case "Int": case "String": case "Bool":
             return expression as WanderValue;
         default:
             return `Could not evaluate. -- ${JSON.stringify(expression)}`;

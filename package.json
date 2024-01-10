@@ -3,15 +3,15 @@
   "version": "0.5.3",
   "type": "module",
   "exports": {
-    ".": "./src/wander-code.ts",
-    "./wander-editor.ts": "./src/wander-editor.ts",
-    "./wander-code.ts": "./src/wander-code.ts"
+    ".": "./src/web/wander-code.ts",
+    "./wander-editor.ts": "./src/web/wander-editor.ts",
+    "./wander-code.ts": "./src/web/wander-code.ts"
   },
   "scripts": {
     "dev": "vite",
     "build": "tsc && vite build",
     "preview": "vite preview",
-    "prepare": "lezer-generator src/wander.grammar -o src/wander-lezer-parser.js",
+    "prepare": "lezer-generator src/interpreter/wander.grammar -o src/interpreter/wander-lezer-parser.js",
     "test": "vitest"
   },
   "dependencies": {
