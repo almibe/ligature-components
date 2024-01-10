@@ -1,15 +1,15 @@
-@top Script { expression+ }
+@top Script { list<Expression> }
 
-expression { Field | Bool | Int | String | Module | Array | Grouping | When | Lambda }
+Expression { Field | Bool | Int | String | Module | Array | Grouping | When | Lambda }
 
 String { string }
 Module { "{" list<Field>? "}" }
-Array  { "[" list<expression>? "]" }
-Grouping { "(" list<expression>? ")" }
-When { "when" (expression "=>" expression ",")* "end" }
-Lambda { "\\" FieldName+ "->" expression }
+Array  { "[" list<Expression>? "]" }
+Grouping { "(" list<Expression>? ")" }
+When { "when" (Expression "=>" Expression ",")* "end" }
+Lambda { "\\" FieldName+ "->" Expression }
 
-Field { FieldName "=" expression }
+Field { FieldName "=" Expression }
 FieldName { string }
 
 @tokens {
@@ -28,6 +28,6 @@ FieldName { string }
 }
 
 @skip { whitespace }
-list<item> { item ("," item)* }
+list<item> { item ("," item)* ","? }
 
 @detectDelim

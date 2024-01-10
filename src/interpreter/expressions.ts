@@ -1,3 +1,7 @@
+export interface GroupingExpr {
+    expressions: Expression[]
+}
+
 export interface IntegerExpr {
     readonly value: bigint
     readonly type: "Int"
@@ -13,4 +17,4 @@ export interface BoolExpr {
     readonly type: "Bool"
 }
 
-export type Expression = IntegerExpr | StringExpr | BoolExpr;
+export type Expression = GroupingExpr | IntegerExpr | StringExpr | BoolExpr;

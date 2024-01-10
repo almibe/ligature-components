@@ -25,9 +25,19 @@
   <script type="module">
     import { initializeEditor } from './src/web/wander-editor.ts';
     import { run, printResult } from './src/interpreter/interpreter.ts';
-    let editor = initializeEditor("editor");
+    import { parse } from './src/interpreter/parser.ts';
+
+    function runAndDisplay() {
+      const script = editor.readText();
+      const result = printResult(run(script));
+      document.getElementById("code").innerText = result;
+    }
+
+    let editor = initializeEditor({elementId: "editor", onRun: (text) => { 
+      runAndDisplay();
+     }});
     document.getElementById("runButton").addEventListener("click", (e) => {
-      document.getElementById("code").innerText = printResult(run(editor.readText()));
+      runAndDisplay();
     });
   </script>
 </html>

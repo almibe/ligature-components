@@ -3,28 +3,32 @@ import { WanderError } from './values.js';
 import { parser } from './wander-lezer-parser.js'
 
 export function parse(script: string): WanderError | Expression[] {
-    const parseResults = parser.parse(script)
-    let results = []
-    let offset = 0;
-    parseResults.children.forEach(child => {
-        console.log(JSON.stringify(child))
-        switch (child.type.name) {
-            case "Int": {
-                const value = BigInt(script.substring(offset, offset + child.length))
-                results.push({type:"Int", value})
-                break;
-            }
-            case "String": {
-                const value = script.substring(offset+1, offset + child.length-1)
-                results.push({type:"String", value})
-                break;
-            }
-            case "Bool": {
-                const value = Boolean(script.substring(offset, offset + child.length))
-                results.push({type:"Bool", value})
-                break;
-            }
-        }
-    });
+    const parseResults = parser.parse(script);
+    let results = [];
+    let cursor = parseResults.cursor();
+    cursor.next(); //ignore the top "Script" node, should do error checking here
+    do {
+        let result = parseExpression(cursor, script);
+        results.push(result);
+    } while (cursor.next())
     return results;
+}
+
+function parseExpression(cursor: any, script: string): Expression | WanderError {
+    cursor.next(); //TODO should error check here to make sure it's an Expression
+    switch (cursor.type.name) {
+        case "Int": {
+            const value = BigInt(script.substring(cursor.from, cursor.to));
+            return {type:"Int", value};
+        }
+        case "String": {
+            const value = script.substring(cursor.from+1, cursor.to-1);
+            return {type:"String", value};
+        }
+        case "Bool": {
+            const value = Boolean(script.substring(cursor.from, cursor.to));
+            return {type:"Bool", value};
+        }
+    }
+    return "TODO";
 }

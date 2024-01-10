@@ -3,7 +3,7 @@
   "version": "0.5.3",
   "type": "module",
   "exports": {
-    ".": "./src/web/wander-code.ts",
+    ".": "./src/interpreter/interpreter.ts",
     "./wander-editor.ts": "./src/web/wander-editor.ts",
     "./wander-code.ts": "./src/web/wander-code.ts"
   },

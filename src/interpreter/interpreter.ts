@@ -1,12 +1,10 @@
-//import {run as runScript } from '@wander-lang/wander/Wander'
-
 import { Environment } from './environment.js';
 import { Expression } from './expressions.js';
 import { parse } from './parser.js';
-import { WanderError, WanderValue } from './values.js';
+import { WanderError, WanderResult, WanderValue } from './values.js';
 
-export function evaluateScript(expressions: Expression[], environment: Environment): WanderValue | WanderError {
-    let result = "No result.";
+export function evaluateScript(expressions: Expression[], environment: Environment): WanderResult {
+    let result: WanderResult = "No result.";
     expressions.forEach(expression => {
         result = evaluate(expression, environment);
     })
@@ -31,12 +29,14 @@ export function run(script: string): WanderValue | WanderError {
     }
 }
 
-export function printResult(result: WanderValue | WanderError): string {
+export function printResult(result: WanderResult): string {
     if (typeof result == "string") {
         return result
     } else {
         switch (result.type) {
             case 'Int': return result.value.toString();
+            case 'Bool': return result.value.toString();
+            case 'String': return JSON.stringify(result.value);
             default: return `Unknown type: ${JSON.stringify(result)}`
         }
     }

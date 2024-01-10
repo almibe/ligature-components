@@ -4,14 +4,19 @@ import { indentWithTab } from "@codemirror/commands"
 import { language } from '@codemirror/language';
 import { WanderLanguage } from './wander-code-mirror';
 
-interface Editor {
+export interface Editor {
   readText(): string
   setText(text: string): void
 }
 
-export function initializeEditor(id): Editor {
+export interface EditorConfig {
+  readonly elementId: string
+  readonly onRun: (text: string) => {}
+}
+
+export function initializeEditor(config: EditorConfig): Editor {
   let inputEditor: EditorView;
-  const element = document.getElementById(id)
+  const element = document.getElementById(config.elementId)
   const script = element.innerText;
   element.innerText = "";
   inputEditor = new EditorView({
@@ -25,6 +30,14 @@ export function initializeEditor(id): Editor {
       EditorView.updateListener.of((v: ViewUpdate) => {
         if (v.docChanged) {
           //this.text = v.state.doc.toString();
+        }
+      }),
+      EditorView.domEventHandlers({
+        keydown: (e, v) => {
+          if((e.code == "Enter") && (e.metaKey || e.ctrlKey)) {
+            config.onRun(v.state.doc.toString());
+            e.preventDefault();
+          }
         }
       }),
       basicSetup,

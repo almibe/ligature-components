@@ -12,9 +12,10 @@ export const WanderLanguage = LRLanguage.define({
         Application: foldInside
       }),
       styleTags({
-        Identifier: tags.variableName,
-        Boolean: tags.bool,
+        FieldName: tags.variableName,
+        Bool: tags.bool,
         String: tags.string,
+        Int: tags.number,
         LineComment: tags.lineComment,
         "( )": tags.paren
       })
