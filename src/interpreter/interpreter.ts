@@ -1,5 +1,6 @@
-import { Environment } from './environment.js';
-import { Expression } from './expressions.js';
+import { produce } from 'immer';
+import { Environment, bindVariable } from './environment.js';
+import { BindingExpr, Expression } from './expressions.js';
 import { parse } from './parser.js';
 import { ArrayValue, WanderError, WanderResult, WanderValue } from './values.js';
 import { Either, Left, Right } from 'purify-ts/Either';
@@ -15,22 +16,37 @@ export function evaluateScript(expressions: Expression[], environment: Environme
 export function evaluate(expression: Expression, environment: Environment): WanderResult {
     if (expression.type != undefined) {
         switch ((expression as Expression).type) {
-            case "Int": case "String": case "Bool": case "Array": case "Module":
-                return Right(expression as WanderValue);
+            case "Int": case "String": case "Bool":
+                return Right([expression, environment]);
+            case "Array":
+                return Right([expression, environment]); //TODO handle elements
+            case "Module":
+                return Right([expression, environment]); //TODO handle elements
+            case "Binding":
+                return evalBinding(expression, environment);
             default:
                 return Left(`Could not evaluate. -- ${JSON.stringify(expression)}`);
-        }    
+        }
     } else {
         return Left(expression);
     }
 }
 
-export function run(script: string): WanderResult {
+function evalBinding(expression: BindingExpr, environment: Environment): WanderResult {
+    let result = evaluate(expression.value, environment);
+    if (result.isRight) {
+        return result;
+    } else {
+        return bindVariable(environment, expression.name, result.unsafeCoerce());
+    }
+}
+
+export function run(script: string, environment: Environment): WanderResult {
     const parseResults = parse(script);
     if (parseResults.isLeft()) {
         return parseResults;
     } else {
-        return evaluateScript(parseResults.unsafeCoerce(), {});
+        return evaluateScript(parseResults.unsafeCoerce(), environment);
     }
 }
 
@@ -38,7 +54,7 @@ export function printResult(result: WanderResult): string {
     if (result.isLeft()) {
         return result.leftOrDefault("Error");
     } else {
-        return printValue(result.unsafeCoerce());
+        return printValue(result.unsafeCoerce()[0]);
     }
 }
 

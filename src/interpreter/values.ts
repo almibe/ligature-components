@@ -1,5 +1,6 @@
 import { Immutable } from 'immer';
 import { Either } from 'purify-ts/Either'
+import { Environment } from './environment';
 
 export type WanderError = string;
 
@@ -30,4 +31,4 @@ export interface ModuleValue {
 
 export type WanderValue = ModuleValue | ArrayValue | IntegerValue | StringValue | BoolValue;
 
-export type WanderResult = Either<WanderError, WanderValue>;
+export type WanderResult = Either<WanderError, [WanderValue, Environment]>;

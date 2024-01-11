@@ -21,3 +21,8 @@ test("parse Module", () => {
 	const result = parse(`{x = 5}`);
 	expect(result).toStrictEqual(Right([{ value: new Map([["x", {value: 5n, type: "Int"}]]), type: "Module"}]));
 })
+
+test("parse Binding", () => {
+	const result = parse("x = 5");
+	expect(result).toStrictEqual(Right([{ name: "x", value: {value: 5n, type: "Int"}, type: "Binding"}]))
+})

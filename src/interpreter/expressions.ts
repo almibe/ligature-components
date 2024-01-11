@@ -1,5 +1,11 @@
 import { Immutable } from "immer"
 
+export interface BindingExpr {
+    readonly name: string
+    readonly value: any //TODO should be Expression
+    readonly type: "Binding"
+}
+
 export interface GroupingExpr {
     readonly expressions: Expression[]
     readonly type: "Grouping"
@@ -30,4 +36,4 @@ export interface BoolExpr {
     readonly type: "Bool"
 }
 
-export type Expression = ModuleExpr | ArrayExpr | GroupingExpr | IntegerExpr | StringExpr | BoolExpr;
+export type Expression = BindingExpr | ModuleExpr | ArrayExpr | GroupingExpr | IntegerExpr | StringExpr | BoolExpr;

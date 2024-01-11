@@ -16,7 +16,11 @@ function parseExpressions(node: any, script: string): Either<WanderError, Expres
     let expressionNodes = node.getChildren("Expression"); //ignore the top "Script" node, should do error checking here
     expressionNodes.forEach(element => {
         let result = parseExpression(element, script);
-        results.push(result.unsafeCoerce());
+        if (result.isRight()) {
+            results.push(result.unsafeCoerce());
+        } else {
+            throw result.leftOrDefault("Error");
+        }
     });
     return Right(results);
 }
@@ -44,10 +48,18 @@ function parseExpression(expressionNode: any, script: string): Either<WanderErro
             case "Module": {
                 return parseModule(childNode, script);
             }
+            case "Field": {
+                return parseBinding(childNode, script);
+            }
         }
     } else {
         return Left(`Error: Unexpected type ${expressionNode.type.name}`);
     }
+}
+
+function parseBinding(bindingNode: any, script: string): Either<WanderError, Expression> {
+    let result = parseField(bindingNode, script);
+    return Right({ type: "Binding", name: result[0], value: result[1]})
 }
 
 function parseArray(arrayNode: any, script: string): Either<WanderError, Expression> {
@@ -76,9 +88,13 @@ function parseFields(moduleNode: any, script: string): Map<string, WanderValue> 
     let fieldNodes = moduleNode.getChildren("Field");
     let results = [];
     fieldNodes.forEach(element => {
-        let fieldName = script.substring(element.getChild("FieldName").from, element.getChild("FieldName").to)
-        let value = parseExpression(element.getChild("Expression"),script)
-        results.push([fieldName, value.unsafeCoerce()])
+        results.push(parseField(element, script))
     });
     return new Map(results);
+}
+
+function parseField(element: any, script: string): [string, WanderValue] {
+    let fieldName = script.substring(element.getChild("FieldName").from, element.getChild("FieldName").to);
+    let value = parseExpression(element.getChild("Expression"),script);
+    return [fieldName, value.unsafeCoerce()];
 }

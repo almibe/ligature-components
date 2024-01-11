@@ -1,11 +1,10 @@
 import { Immutable, enableMapSet, produce } from "immer";
-import { Expression } from "./expressions";
 import { Just, Maybe, Nothing } from "purify-ts";
 import { WanderValue } from "./values";
 
 enableMapSet()
 
-export type Environment = Immutable<Array<Map<string, Expression>>>;
+export type Environment = Immutable<Array<Map<string, WanderValue>>>;
 
 export function newEnvironment(): Environment {
     return [new Map()];

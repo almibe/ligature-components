@@ -1,73 +1,86 @@
 import { expect, test } from 'vitest'
-import { run } from './interpreter.ts';
+import { printResult, run } from './interpreter.ts';
 import { Right } from 'purify-ts';
+import { newEnvironment } from './environment.ts';
+import { WanderResult, WanderValue } from './values.ts';
+
+const env = newEnvironment();
+
+function evalAndCheck(script: string, expected: WanderValue) {
+	const result = run(script, env);
+	expect(result).toEqual(Right([expected, env]));	
+}
+
+test("print Int", () => {
+	expect(printResult(Right([{type: "Int", value: 4n}, newEnvironment()]))).toEqual("4")
+})
+
+test("print empty Array", () => {
+	expect(printResult(Right([{type: "Array", value: []}, newEnvironment()]))).toEqual("[]")
+})
+
+test("print empty Module", () => {
+	expect(printResult(Right([{type: "Module", value: new Map()}, newEnvironment()]))).toEqual("{}")
+})
 
 test('eval Int', () => {
-	const result = run("45");
-	expect(result).toEqual(Right({ value: 45n, type: "Int" }));
+	evalAndCheck("45", { value: 45n, type: "Int" });
 });
 
 test('eval String', () => {
-	const result = run(`"Hello, World!"`);
-	expect(result).toEqual(Right({ value: "Hello, World!", type: "String"}));
+	evalAndCheck(`"Hello, World!"`, { value: "Hello, World!", type: "String"});
 });
 
 test("eval Bool", () => {
-	const result = run(`true`);
-	expect(result).toEqual(Right({ value: true, type: "Bool"}));
+	evalAndCheck(`true`, { value: true, type: "Bool"});
 });
 
 test('eval Int as expression', () => {
-	const result = run("45,");
-	expect(result).toEqual(Right({ value: 45n, type: "Int" }));
+	evalAndCheck("45,", { value: 45n, type: "Int" });
 });
 
 test('eval String as expression', () => {
-	const result = run(`"Hello, World!",`);
-	expect(result).toEqual(Right({ value: "Hello, World!", type: "String"}));
+	evalAndCheck(`"Hello, World!",`, { value: "Hello, World!", type: "String"});
 });
 
 test("eval Bool as expression", () => {
-	const result = run(`true,`);
-	expect(result).toEqual(Right({ value: true, type: "Bool"}));
+	evalAndCheck(`true,`, { value: true, type: "Bool"});
 });
 
 test("eval script of literals", () => {
-	const result = run(`true, 5, "hello"`);
-	expect(result).toEqual(Right({ value: "hello", type: "String"}));
+	evalAndCheck(`true, 5, "hello"`, { value: "hello", type: "String"});
 });
 
 test("eval empty Array", () => {
-	const result = run(`[]`);
-	expect(result).toEqual(Right({ value: [], type: "Array"}));
+	evalAndCheck(`[]`, { value: [], type: "Array"});
 });
 
 test("eval Array with 1 value", () => {
-	const result = run(`[1]`);
-	expect(result).toEqual(Right({ value: [{type: "Int", value: 1n}], type: "Array"}));
+	evalAndCheck(`[1]`, { value: [{type: "Int", value: 1n}], type: "Array"});
 });
 
 test("eval Array", () => {
-	const result = run(`[true, 4]`);
-	expect(result).toEqual(Right({ value: [{type: "Bool", value: true}, {type: "Int", value: 4n}], type: "Array"}));
+	evalAndCheck(`[true, 4]`, { value: [{type: "Bool", value: true}, {type: "Int", value: 4n}], type: "Array"});
 });
 
 test("eval empty Module", () => {
-	const result = run("{}");
-	expect(result).toEqual(Right({ value: new Map(), type: "Module"}));
+	evalAndCheck("{}", { value: new Map(), type: "Module"});
 });
 
 test("eval Module with one field", () => {
-	const result = run(`{hello = "world"}`);
-	expect(result).toEqual(Right({ value: new Map([["hello", {type: "String", "value": "world"}]]), type: "Module"}));
+	evalAndCheck(`{hello = "world"}`, { value: new Map([["hello", {type: "String", "value": "world"}]]), type: "Module"});
 });
 
 test("eval Module with multiple fields", () => {
-	const result = run(`{hello = "world", x = 5, y = 6}`);
-	console.log(result)
-	expect(result).toEqual(Right({ value: new Map([
+	evalAndCheck(`{hello = "world", x = 5, y = 6}`, { value: new Map([
 		["hello", {type: "String", "value": "world"}],
 		["x", {type: "Int", "value": 5n}],
 		["y", {type: "Int", "value": 6n}],
-	]), type: "Module"}));
+	]), type: "Module"});
 });
+
+test("eval binding", () => {
+	evalAndCheck("x = 5", {
+		type: "Int", value: 5n
+	})
+})
