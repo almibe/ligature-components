@@ -1,5 +1,18 @@
+import { Immutable } from "immer"
+
 export interface GroupingExpr {
-    expressions: Expression[]
+    readonly expressions: Expression[]
+    readonly type: "Grouping"
+}
+
+export interface ModuleExpr {
+    readonly value: Immutable<Map<string, Expression>>
+    readonly type: "Module"
+}
+
+export interface ArrayExpr {
+    readonly value: Expression[]
+    readonly type: "Array"
 }
 
 export interface IntegerExpr {
@@ -17,4 +30,4 @@ export interface BoolExpr {
     readonly type: "Bool"
 }
 
-export type Expression = GroupingExpr | IntegerExpr | StringExpr | BoolExpr;
+export type Expression = ModuleExpr | ArrayExpr | GroupingExpr | IntegerExpr | StringExpr | BoolExpr;

@@ -1,3 +1,6 @@
+import { Immutable } from 'immer';
+import { Either } from 'purify-ts/Either'
+
 export type WanderError = string;
 
 export interface IntegerValue {
@@ -15,6 +18,16 @@ export interface BoolValue {
     readonly type: "Bool"
 }
 
-export type WanderValue = IntegerValue | StringValue | BoolValue;
+export interface ArrayValue {
+    readonly value: WanderValue[]
+    readonly type: "Array"
+}
 
-export type WanderResult = WanderError | WanderValue;
+export interface ModuleValue {
+    readonly value: Immutable<Map<string, WanderValue>>
+    readonly type: "Module"
+}
+
+export type WanderValue = ModuleValue | ArrayValue | IntegerValue | StringValue | BoolValue;
+
+export type WanderResult = Either<WanderError, WanderValue>;

@@ -10,13 +10,14 @@ When { "when" (Expression "=>" Expression ",")* "end" }
 Lambda { "\\" FieldName+ "->" Expression }
 
 Field { FieldName "=" Expression }
-FieldName { string }
+FieldName { name }
 
 @tokens {
   Bool { "true" | "false" }
   Int { '-'? int }
   int  { '0' | $[1-9] @digit* }
 
+  name { $[a-zA-Z_]$[0-9a-zA-Z-_]* }
   string { '"' char* '"' }
   char { $[\u{20}\u{21}\u{23}-\u{5b}\u{5d}-\u{10ffff}] | "\\" esc }
   esc  { $["\\\/bfnrt] | "u" hex hex hex hex }
@@ -24,7 +25,7 @@ FieldName { string }
 
   whitespace { $[ \n\r\t] }
 
-  "{" "}" "[" "]"
+  @precedence { "when", "end", Bool, "->", name }
 }
 
 @skip { whitespace }
