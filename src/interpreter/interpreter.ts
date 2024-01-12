@@ -20,7 +20,7 @@ export function evaluateScript(expressions: Expression[], environment: Environme
 export function evaluate(expression: Expression, environment: Environment): WanderResult {
     if (expression.type != undefined) {
         switch ((expression as Expression).type) {
-            case "Int": case "String": case "Bool":
+            case "Int": case "String": case "Bool": case "Lambda":
                 return Right([expression, environment]);
             case "Array":
                 return evalArray(expression, environment);

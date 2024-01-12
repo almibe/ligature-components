@@ -1,6 +1,7 @@
 import { Immutable } from 'immer';
 import { Either } from 'purify-ts/Either'
 import { Environment } from './environment';
+import { Expression } from './expressions';
 
 export type WanderError = string;
 
@@ -29,6 +30,12 @@ export interface ModuleValue {
     readonly type: "Module"
 }
 
-export type WanderValue = ModuleValue | ArrayValue | IntegerValue | StringValue | BoolValue;
+export interface LambdaValue {
+    readonly parameters: string[]
+    readonly body: Expression
+    readonly type: "Lambda"
+}
+
+export type WanderValue = ModuleValue | ArrayValue | IntegerValue | StringValue | BoolValue | LambdaValue;
 
 export type WanderResult = Either<WanderError, [WanderValue, Environment]>;

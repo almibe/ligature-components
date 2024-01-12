@@ -96,3 +96,9 @@ test("eval Grouping", () => {
 		type: "Int", value: 3n
 	})
 })
+
+test("eval Lambda", () => {
+	evalAndCheck("\\x -> x", {
+		type: "Lambda", parameters: ["x"], body: {type: "Name", value: "x"}
+	})
+})

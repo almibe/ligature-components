@@ -1,4 +1,4 @@
-import { Expression } from './expressions.js';
+import { Expression, LambdaExpr } from './expressions.js';
 import { WanderError, WanderValue } from './values.js';
 import { parser } from './wander-lezer-parser.js';
 import { Either, Left, Right } from 'purify-ts/Either';
@@ -57,12 +57,25 @@ function parseExpression(expressionNode: any, script: string): Either<WanderErro
             case "Grouping": {
                 return parseGrouping(childNode, script);
             }
+            case "Lambda": {
+                return parseLambda(childNode, script);
+            }
             default: {
                 return Left(`Error: Unexpected type ${childNode.type.name}`);
             }
         }
     } else {
         return Left(`Error: Unexpected type ${expressionNode.type.name}`);
+    }
+}
+
+function parseLambda(lambdaNode: any, script: string): Either<WanderError, LambdaExpr> {
+    let parameters = lambdaNode.getChildren("FieldName").map(childNode => script.substring(childNode.from, childNode.to))
+    let body = parseExpression(lambdaNode.getChild("Expression"), script)
+    if (body.isLeft()) {
+        return body;
+    } else {
+        return Right({ type: "Lambda", parameters, body: body.unsafeCoerce() });
     }
 }
 

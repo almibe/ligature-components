@@ -33,3 +33,10 @@ test("parse Grouping", () => {
 		{type:"Int", value: 1n},{type:"Int", value: 2n},{type:"Int", value: 3n}
 	]}]))
 })
+
+test("parse Lambda", () => {
+	const result = parse("\\x -> x");
+	expect(result).toStrictEqual(Right([{ type: "Lambda", parameters: ["x"], body:
+		{type:"Name", value: "x"}
+	}]))
+})

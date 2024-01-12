@@ -41,4 +41,11 @@ export interface NameExpr {
     readonly type: "Name"
 }
 
-export type Expression = BindingExpr | ModuleExpr | ArrayExpr | GroupingExpr | IntegerExpr | StringExpr | BoolExpr | NameExpr;
+export interface LambdaExpr {
+    readonly parameters: string[]
+    readonly body: Expression
+    readonly type: "Lambda"
+}
+
+export type Expression = BindingExpr | ModuleExpr | ArrayExpr | GroupingExpr 
+    | IntegerExpr | StringExpr | BoolExpr | NameExpr | LambdaExpr;
