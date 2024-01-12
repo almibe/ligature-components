@@ -2,13 +2,13 @@ import { expect, test } from 'vitest'
 import { printResult, run } from './interpreter.ts';
 import { Right } from 'purify-ts';
 import { newEnvironment } from './environment.ts';
-import { WanderResult, WanderValue } from './values.ts';
+import { WanderValue } from './values.ts';
 
 const env = newEnvironment();
 
 function evalAndCheck(script: string, expected: WanderValue) {
 	const result = run(script, env);
-	expect(result).toEqual(Right([expected, env]));	
+	expect(result.unsafeCoerce()[0]).toEqual(expected);
 }
 
 test("print Int", () => {
@@ -81,6 +81,12 @@ test("eval Module with multiple fields", () => {
 
 test("eval binding", () => {
 	evalAndCheck("x = 5", {
+		type: "Int", value: 5n
+	})
+})
+
+test("eval binding with reference", () => {
+	evalAndCheck("x = 5, x", {
 		type: "Int", value: 5n
 	})
 })

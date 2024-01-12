@@ -51,6 +51,12 @@ function parseExpression(expressionNode: any, script: string): Either<WanderErro
             case "Field": {
                 return parseBinding(childNode, script);
             }
+            case "FieldName": {
+                return Right({type:"Name", value: script.substring(childNode.from, childNode.to)});
+            }
+            default: {
+                return Left(`Error: Unexpected type ${childNode.type.name}`);
+            }
         }
     } else {
         return Left(`Error: Unexpected type ${expressionNode.type.name}`);

@@ -1,16 +1,18 @@
+@precedence { high }
+
 @top Script { list<Expression> }
 
-Expression { Field | Bool | Int | String | Module | Array | Grouping | When | Lambda }
+Expression { Field | !high Bool | !high Int | String | Module | Array | Grouping | When | Lambda | FieldName | Application }
 
-String { string }
-Module { "{" list<Field>? "}" }
-Array  { "[" list<Expression>? "]" }
-Grouping { "(" list<Expression>? ")" }
-When { "when" (Expression "=>" Expression ",")* "end" }
-Lambda { "\\" FieldName+ "->" Expression }
-
-Field { FieldName "=" Expression }
-FieldName { name }
+String { !high string }
+Module { !high "{" list<Field>? "}" }
+Array  { !high "[" list<Expression>? "]" }
+Grouping { !high "(" list<Expression>? ")" }
+When { !high "when" (Expression "=>" Expression ",")* "end" }
+Lambda { !high "\\" FieldName+ "->" Expression }
+Application { FieldName Expression+ }
+Field { !high FieldName "=" Expression }
+FieldName { !high name }
 
 @tokens {
   Bool { "true" | "false" }

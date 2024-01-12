@@ -1,14 +1,19 @@
 import { produce } from 'immer';
-import { Environment, bindVariable } from './environment.js';
-import { BindingExpr, Expression } from './expressions.js';
+import { Environment, bindVariable, newEnvironment, read } from './environment.js';
+import { ArrayExpr, BindingExpr, Expression, ModuleExpr, NameExpr } from './expressions.js';
 import { parse } from './parser.js';
 import { ArrayValue, WanderError, WanderResult, WanderValue } from './values.js';
 import { Either, Left, Right } from 'purify-ts/Either';
 
 export function evaluateScript(expressions: Expression[], environment: Environment): WanderResult {
     let result: WanderResult = Left("No result.");
+    let currentEnvironment = environment;
+    if (currentEnvironment == undefined) {
+        currentEnvironment = newEnvironment();
+    }
     expressions.forEach(expression => {
-        result = evaluate(expression, environment);
+        result = evaluate(expression, currentEnvironment);
+        currentEnvironment = result.unsafeCoerce()[1];
     })
     return result;
 }
@@ -19,11 +24,13 @@ export function evaluate(expression: Expression, environment: Environment): Wand
             case "Int": case "String": case "Bool":
                 return Right([expression, environment]);
             case "Array":
-                return Right([expression, environment]); //TODO handle elements
+                return evalArray(expression, environment);
             case "Module":
-                return Right([expression, environment]); //TODO handle elements
+                return evalModule(expression, environment);
             case "Binding":
                 return evalBinding(expression, environment);
+            case "Name":
+                return evalName(expression, environment);
             default:
                 return Left(`Could not evaluate. -- ${JSON.stringify(expression)}`);
         }
@@ -32,12 +39,49 @@ export function evaluate(expression: Expression, environment: Environment): Wand
     }
 }
 
+function evalName(nameExpr: NameExpr, environment: Environment): WanderResult {
+    let res = read(environment, nameExpr.value).toEither("Error in evalName, " + nameExpr.value);
+    if (res.isLeft()) {
+        return res;
+    } else {
+        return Right([res.unsafeCoerce(), environment])
+    }
+}
+
+function evalArray(expression: ArrayExpr, environment: Environment): WanderResult {
+    let results = [];
+    for (const element of expression.value) {
+        let result = evaluate(element, environment);
+        if (result.isLeft()) {
+            return result;
+        } else {
+            results.push(result.unsafeCoerce()[0]);
+        }    
+    }
+    return Right([{type:"Array", value: results}, environment]);
+}
+
+function evalModule(expression: ModuleExpr, environment: Environment): WanderResult {
+    let results = new Map();
+    for (const [name, element] of expression.value.entries()) {
+        let result = evaluate(element, environment);
+        if (result.isLeft()) {
+            return result;
+        } else {
+            results.set(name, result.unsafeCoerce()[0]);
+        }    
+    }
+    return Right([{type:"Module", value: results}, environment]);
+}
+
 function evalBinding(expression: BindingExpr, environment: Environment): WanderResult {
     let result = evaluate(expression.value, environment);
-    if (result.isRight) {
+    if (result.isLeft()) {
         return result;
     } else {
-        return bindVariable(environment, expression.name, result.unsafeCoerce());
+        let newValue = result.unsafeCoerce()
+        let newEnv = bindVariable(environment, expression.name, newValue[0]);
+        return Right([newValue[0], newEnv]);
     }
 }
 

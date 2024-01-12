@@ -36,4 +36,9 @@ export interface BoolExpr {
     readonly type: "Bool"
 }
 
-export type Expression = BindingExpr | ModuleExpr | ArrayExpr | GroupingExpr | IntegerExpr | StringExpr | BoolExpr;
+export interface NameExpr {
+    readonly value: string,
+    readonly type: "Name"
+}
+
+export type Expression = BindingExpr | ModuleExpr | ArrayExpr | GroupingExpr | IntegerExpr | StringExpr | BoolExpr | NameExpr;
