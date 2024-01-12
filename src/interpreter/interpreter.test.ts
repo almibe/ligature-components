@@ -90,3 +90,9 @@ test("eval binding with reference", () => {
 		type: "Int", value: 5n
 	})
 })
+
+test("eval Grouping", () => {
+	evalAndCheck("(1,2,3)", {
+		type: "Int", value: 3n
+	})
+})

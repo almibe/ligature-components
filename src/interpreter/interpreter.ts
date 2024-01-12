@@ -1,9 +1,8 @@
-import { produce } from 'immer';
 import { Environment, bindVariable, newEnvironment, read } from './environment.js';
-import { ArrayExpr, BindingExpr, Expression, ModuleExpr, NameExpr } from './expressions.js';
+import { ArrayExpr, BindingExpr, Expression, GroupingExpr, ModuleExpr, NameExpr } from './expressions.js';
 import { parse } from './parser.js';
-import { ArrayValue, WanderError, WanderResult, WanderValue } from './values.js';
-import { Either, Left, Right } from 'purify-ts/Either';
+import { WanderResult, WanderValue } from './values.js';
+import { Left, Right } from 'purify-ts/Either';
 
 export function evaluateScript(expressions: Expression[], environment: Environment): WanderResult {
     let result: WanderResult = Left("No result.");
@@ -31,12 +30,27 @@ export function evaluate(expression: Expression, environment: Environment): Wand
                 return evalBinding(expression, environment);
             case "Name":
                 return evalName(expression, environment);
+            case "Grouping":
+                return evalGrouping(expression, environment);
             default:
                 return Left(`Could not evaluate. -- ${JSON.stringify(expression)}`);
         }
     } else {
         return Left(expression);
     }
+}
+
+function evalGrouping(groupingExpr: GroupingExpr, environment: Environment): WanderResult {
+    let lastResult = {type:"Module", value: new Map()};
+    for (const element of groupingExpr.expressions) {
+        let result = evaluate(element, environment);
+        if (result.isLeft()) {
+            return result;
+        } else {
+            lastResult = result.unsafeCoerce()[0];
+        }    
+    }
+    return Right([lastResult, environment]);
 }
 
 function evalName(nameExpr: NameExpr, environment: Environment): WanderResult {

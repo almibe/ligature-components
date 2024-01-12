@@ -8,7 +8,7 @@ String { !high string }
 Module { !high "{" list<Field>? "}" }
 Array  { !high "[" list<Expression>? "]" }
 Grouping { !high "(" list<Expression>? ")" }
-When { !high "when" (Expression "=>" Expression ",")* "end" }
+When { !high "when" list<(Expression "=>" Expression ",")> "end" }
 Lambda { !high "\\" FieldName+ "->" Expression }
 Application { FieldName Expression+ }
 Field { !high FieldName "=" Expression }

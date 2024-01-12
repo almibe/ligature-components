@@ -26,3 +26,10 @@ test("parse Binding", () => {
 	const result = parse("x = 5");
 	expect(result).toStrictEqual(Right([{ name: "x", value: {value: 5n, type: "Int"}, type: "Binding"}]))
 })
+
+test("parse Grouping", () => {
+	const result = parse("(1,2,3)");
+	expect(result).toStrictEqual(Right([{ type: "Grouping", expressions: [
+		{type:"Int", value: 1n},{type:"Int", value: 2n},{type:"Int", value: 3n}
+	]}]))
+})

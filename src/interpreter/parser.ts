@@ -54,6 +54,9 @@ function parseExpression(expressionNode: any, script: string): Either<WanderErro
             case "FieldName": {
                 return Right({type:"Name", value: script.substring(childNode.from, childNode.to)});
             }
+            case "Grouping": {
+                return parseGrouping(childNode, script);
+            }
             default: {
                 return Left(`Error: Unexpected type ${childNode.type.name}`);
             }
@@ -66,6 +69,19 @@ function parseExpression(expressionNode: any, script: string): Either<WanderErro
 function parseBinding(bindingNode: any, script: string): Either<WanderError, Expression> {
     let result = parseField(bindingNode, script);
     return Right({ type: "Binding", name: result[0], value: result[1]})
+}
+
+function parseGrouping(groupingNode: any, script: string): Either<WanderError, Expression> {
+    if (groupingNode.firstChild == null) {
+        return Right({ type:"Array", value: [] });
+    } else {
+        const value = parseExpressions(groupingNode, script);
+        if (value.isRight()) {
+            return Right({ type: "Grouping", expressions: value.unsafeCoerce() });
+        } else {
+            return Left(value.leftOrDefault("Error in parseArray."))
+        }
+    }
 }
 
 function parseArray(arrayNode: any, script: string): Either<WanderError, Expression> {
