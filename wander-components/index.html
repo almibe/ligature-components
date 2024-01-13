@@ -22,8 +22,8 @@
   </body>
   <script type="module">
     import { initializeEditor } from './src/web/wander-editor.ts';
-    import { run, printResult } from './src/interpreter/interpreter.ts';
-    import { parse } from './src/interpreter/parser.ts';
+    import { run, printResult } from '@wander-lang/wander/src/interpreter.ts';
+    import { parse } from '@wander-lang/wander/src/parser.ts';
 
     function runAndDisplay() {
       const script = editor.readText();

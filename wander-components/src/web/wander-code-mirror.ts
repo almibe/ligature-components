@@ -1,4 +1,4 @@
-import {parser} from "../interpreter/wander-lezer-parser.js";
+import {parser} from "@wander-lang/wander/src/wander-lezer-parser.js";
 import {LRLanguage, LanguageSupport, indentNodeProp, foldNodeProp, foldInside, delimitedIndent} from "@codemirror/language"
 import {styleTags, tags} from "@lezer/highlight"
 
