@@ -1,0 +1,41 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Wander Components Demo</title>
+    <link rel="stylesheet" href="./src/web/index.css" />
+  </head>
+  <body>
+    <main>
+      <section>
+        <button id="runButton">Run</button>
+        <div id="editor">
+          x=5,x
+        </div>
+      </section>
+      <section>
+        <div id="code">
+        </div>
+      </section>
+    </main>
+  </body>
+  <script type="module">
+    import { initializeEditor } from './src/web/wander-editor.ts';
+    import { run, printResult } from './src/interpreter/interpreter.ts';
+    import { parse } from './src/interpreter/parser.ts';
+
+    function runAndDisplay() {
+      const script = editor.readText();
+      const result = printResult(run(script));
+      document.getElementById("code").innerText = result;
+    }
+
+    let editor = initializeEditor({elementId: "editor", onRun: (text) => { 
+      runAndDisplay();
+     }});
+    document.getElementById("runButton").addEventListener("click", (e) => {
+      runAndDisplay();
+    });
+  </script>
+</html>
