@@ -24,6 +24,7 @@
     "@wander-lang/wander": "^0.7.10",
     "codemirror": "^6.0.1",
     "immer": "^10.0.3",
+    "lodash": "^4.17.21",
     "purify-ts": "^2.0.3"
   },
   "devDependencies": {

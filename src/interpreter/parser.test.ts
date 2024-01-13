@@ -40,3 +40,23 @@ test("parse Lambda", () => {
 		{type:"Name", value: "x"}
 	}]))
 })
+
+test("parse Application", () => {
+	const result = parse("x 1 2 3");
+	expect(result).toStrictEqual(Right([{ type: "Application", name: {type: "Name", value: "x"},
+		args: [{type:"Int", value: 1n},{type:"Int", value: 2n},{type:"Int", value: 3n}]
+	}]));
+})
+
+test("parse empty when", () => {
+	const result = parse(`when end`);
+	expect(result).toStrictEqual(Right([{ type: "When", body: []}]));
+})
+
+test("parse simple when", () => {
+	const result = parse(`when true => 4, false => 3 end`);
+	expect(result).toStrictEqual(Right([{ type: "When", body: [
+		[{type: "Bool", value: true}, {type: "Int", value: 4n}],
+		[{type: "Bool", value: false}, {type: "Int", value: 3n}]
+	]}]));
+})

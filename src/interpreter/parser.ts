@@ -1,8 +1,8 @@
-import { Expression, LambdaExpr } from './expressions.js';
+import { ApplicationExpr, Expression, LambdaExpr, WhenExpr } from './expressions.js';
 import { WanderError, WanderValue } from './values.js';
 import { parser } from './wander-lezer-parser.js';
 import { Either, Left, Right } from 'purify-ts/Either';
-
+import { _ } from "lodash"; 
 export function parse(script: string): Either<WanderError, Expression[]> {
     const parseResults = parser.parse(script);
     return parseExpressions(parseResults.topNode, script);
@@ -39,7 +39,7 @@ function parseExpression(expressionNode: any, script: string): Either<WanderErro
                 return Right({type:"String", value});
             }
             case "Bool": {
-                const value = Boolean(script.substring(childNode.from, childNode.to));
+                const value = script.substring(childNode.from, childNode.to) === "true";
                 return Right({type:"Bool", value});
             }
             case "Array": {
@@ -60,12 +60,38 @@ function parseExpression(expressionNode: any, script: string): Either<WanderErro
             case "Lambda": {
                 return parseLambda(childNode, script);
             }
+            case "Application": {
+                return parseApplication(childNode, script);
+            }
+            case "When": {
+                return parseWhen(childNode, script);
+            }
             default: {
                 return Left(`Error: Unexpected type ${childNode.type.name}`);
             }
         }
     } else {
         return Left(`Error: Unexpected type ${expressionNode.type.name}`);
+    }
+}
+
+function parseWhen(whenNode: any, script: string): Either<WanderError, WhenExpr> {
+    let body = _.chunk(
+        whenNode
+        .getChildren("Expression")
+        .map(e => parseExpression(e, script).unsafeCoerce()
+        ), 2)
+    return Right({type: "When", body});
+}
+
+function parseApplication(applicationNode: any, script: string): Either<WanderError, ApplicationExpr> {
+    const nameNode = applicationNode.getChild("FieldName");
+    const name = {type: "Name", value: script.substring(nameNode.from, nameNode.to)};
+    const args = parseExpressions(applicationNode, script);
+    if (args.isLeft()) {
+        return args;
+    } else {
+        return Right({type: "Application", name, args: args.unsafeCoerce() })
     }
 }
 

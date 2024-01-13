@@ -36,6 +36,25 @@ export interface LambdaValue {
     readonly type: "Lambda"
 }
 
-export type WanderValue = ModuleValue | ArrayValue | IntegerValue | StringValue | BoolValue | LambdaValue;
+export type Tag = {} | { tag: Function } | { chain: Function[] }
+
+export interface TaggedField {
+    readonly name: string
+    readonly tag: Tag
+}
+
+export interface HostFunction {
+    readonly docString: string
+    readonly parameters: TaggedField[]
+    readonly resultTag: Tag
+    readonly fn: (args: WanderValue[], environment: Environment) => WanderResult
+    readonly type: "HostFunction"
+}
+
+export type Function = HostFunction | LambdaValue
+
+export type WanderValue = ModuleValue | ArrayValue | IntegerValue | StringValue | BoolValue | LambdaValue | HostFunction;
 
 export type WanderResult = Either<WanderError, [WanderValue, Environment]>;
+
+export const empty: ModuleValue = { type: "Module", value: new Map() }

@@ -8,7 +8,11 @@ const env = newEnvironment();
 
 function evalAndCheck(script: string, expected: WanderValue) {
 	const result = run(script, env);
-	expect(result.unsafeCoerce()[0]).toEqual(expected);
+	if (result.isLeft()) {
+		throw result.leftOrDefault("");
+	} else {
+		expect(result.unsafeCoerce()[0]).toEqual(expected);
+	}
 }
 
 test("print Int", () => {
@@ -100,5 +104,17 @@ test("eval Grouping", () => {
 test("eval Lambda", () => {
 	evalAndCheck("\\x -> x", {
 		type: "Lambda", parameters: ["x"], body: {type: "Name", value: "x"}
+	})
+})
+
+test("eval Lambda application", () => {
+	evalAndCheck("id = \\x -> x, id 1", {
+		type: "Int", value: 1n
+	})
+})
+
+test("eval when", () => {
+	evalAndCheck("when false => 4, true => 5 end", {
+		type: "Int", value: 5n
 	})
 })

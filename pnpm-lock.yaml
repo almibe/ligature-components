@@ -32,6 +32,9 @@ dependencies:
   immer:
     specifier: ^10.0.3
     version: 10.0.3
+  lodash:
+    specifier: ^4.17.21
+    version: 4.17.21
   purify-ts:
     specifier: ^2.0.3
     version: 2.0.3
@@ -934,6 +937,10 @@ packages:
       mlly: 1.4.2
       pkg-types: 1.0.3
     dev: true
+
+  /lodash@4.17.21:
+    resolution: {integrity: sha512-v2kDEe57lecTulaDIuNTPy3Ry4gLGJ6Z1O3vE1krgXZNrsQ+LFTGHVxVjcXPs17LhbZVGedAJv8XZ1tvj5FvSg==}
+    dev: false
 
   /loupe@2.3.7:
     resolution: {integrity: sha512-zSMINGVYkdpYSOBmLi0D1Uo7JU9nVdQKrHxC8eYlV+9YKK9WePqAlL7lSlorG/U2Fw1w0hTBmaa/jrQ3UbPHtA==}

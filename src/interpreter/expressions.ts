@@ -47,5 +47,16 @@ export interface LambdaExpr {
     readonly type: "Lambda"
 }
 
-export type Expression = BindingExpr | ModuleExpr | ArrayExpr | GroupingExpr 
-    | IntegerExpr | StringExpr | BoolExpr | NameExpr | LambdaExpr;
+export interface ApplicationExpr {
+    readonly name: NameExpr
+    readonly args: Expression[]
+    readonly type: "Application"
+}
+
+export interface WhenExpr {
+    readonly body: Immutable<{condition: Expression, body: Expression}[]>
+    readonly type: "When"
+}
+
+export type Expression = BindingExpr | ModuleExpr | ArrayExpr | GroupingExpr | WhenExpr
+    | IntegerExpr | StringExpr | BoolExpr | NameExpr | LambdaExpr | ApplicationExpr;

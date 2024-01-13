@@ -1,8 +1,9 @@
 import { Environment, bindVariable, newEnvironment, read } from './environment.js';
-import { ArrayExpr, BindingExpr, Expression, GroupingExpr, ModuleExpr, NameExpr } from './expressions.js';
+import { ApplicationExpr, ArrayExpr, BindingExpr, Expression, GroupingExpr, ModuleExpr, NameExpr, WhenExpr } from './expressions.js';
 import { parse } from './parser.js';
-import { WanderResult, WanderValue } from './values.js';
+import { HostFunction, LambdaValue, WanderResult, WanderValue, empty } from './values.js';
 import { Left, Right } from 'purify-ts/Either';
+import { _ } from 'lodash';
 
 export function evaluateScript(expressions: Expression[], environment: Environment): WanderResult {
     let result: WanderResult = Left("No result.");
@@ -12,7 +13,11 @@ export function evaluateScript(expressions: Expression[], environment: Environme
     }
     expressions.forEach(expression => {
         result = evaluate(expression, currentEnvironment);
-        currentEnvironment = result.unsafeCoerce()[1];
+        if (result.isLeft()) {
+            return result;
+        } else {
+            currentEnvironment = result.unsafeCoerce()[1];
+        }
     })
     return result;
 }
@@ -32,12 +37,64 @@ export function evaluate(expression: Expression, environment: Environment): Wand
                 return evalName(expression, environment);
             case "Grouping":
                 return evalGrouping(expression, environment);
+            case "Application":
+                return evalApplication(expression, environment);
+            case "When":
+                return evalWhen(expression, environment);
             default:
                 return Left(`Could not evaluate. -- ${JSON.stringify(expression)}`);
         }
     } else {
         return Left(expression);
     }
+}
+
+function evalWhen(whenExpr: WhenExpr, environment: Environment): WanderResult {
+    for(const condition of whenExpr.body) {
+        const res = evaluate(condition[0], environment);
+        if (res.isLeft()) {
+            return res
+        } else {
+            if (_.isMatch(res.unsafeCoerce()[0], { type: "Bool", value: true })) {
+                return evaluate(condition[1],environment)
+            }
+        }
+    }
+    return Right(empty)
+}
+
+function evalApplication(applicationExpr: ApplicationExpr, environment: Environment): WanderResult {
+    let nameResult = evalName(applicationExpr.name, environment);
+    if (nameResult.isLeft()) {
+        return nameResult;
+    }
+    let fn = nameResult.unsafeCoerce()[0];
+    let args = []
+    for (const arg of applicationExpr.args) {
+        let res = evaluate(arg, environment)
+        if (res.isLeft()) {
+            return res
+        } else {
+            args.push(res.unsafeCoerce()[0])
+        }
+    }
+    switch (fn.type) {
+        case "Lambda": return runLambda(fn, args, environment);
+        case "HostFunction": return runHostFunction(fn, args, environment);
+        default: return Left("Only Host Functions or Lambdas can be ran.");
+    }
+}
+
+function runLambda(fn: LambdaValue, args: WanderValue[], environment: Environment): WanderResult {
+    let newEnv = environment;
+    fn.parameters.forEach((param, i) => {
+        newEnv = bindVariable(newEnv, param, args[i]);
+    })
+    return evaluate(fn.body, newEnv);
+}
+
+function runHostFunction(fn: HostFunction, args: WanderValue[], environment: Environment): WanderResult {
+    return fn.fn(args, environment);
 }
 
 function evalGrouping(groupingExpr: GroupingExpr, environment: Environment): WanderResult {
