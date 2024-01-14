@@ -35,9 +35,15 @@
       document.getElementById("code").innerText = result;
     }
 
-    let editor = initializeEditor({elementId: "editor", onRun: (text) => { 
-      runAndDisplay();
-     }});
+    let editor = initializeEditor({
+      elementId: "editor", 
+      onRun: (text) => { 
+        runAndDisplay();
+      },
+      onKey: (key, text, position) => {
+        console.log(`${key} - ${text} - ${position}`);
+      }
+    });
     document.getElementById("runButton").addEventListener("click", (e) => {
       runAndDisplay();
     });

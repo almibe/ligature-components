@@ -12,6 +12,7 @@ export interface Editor {
 export interface EditorConfig {
   readonly elementId: string
   readonly onRun: (text: string) => {}
+  readonly onKey: (key: string, text: string, position: number) => {}
 }
 
 export function initializeEditor(config: EditorConfig): Editor {
@@ -37,6 +38,8 @@ export function initializeEditor(config: EditorConfig): Editor {
           if((e.code == "Enter") && (e.metaKey || e.ctrlKey)) {
             config.onRun(v.state.doc.toString());
             e.preventDefault();
+          } else {
+            config.onKey(e.key, v.state.doc.toString(), v.state.selection.main.anchor)
           }
         }
       }),
