@@ -60,6 +60,9 @@ importers:
       '@wander-lang/wander':
         specifier: workspace:*
         version: link:../wander
+      ace-builds:
+        specifier: ^1.32.3
+        version: 1.32.3
       codemirror:
         specifier: ^6.0.1
         version: 6.0.1(@lezer/common@1.2.0)
@@ -739,6 +742,10 @@ packages:
       loupe: 2.3.7
       pretty-format: 29.7.0
     dev: true
+
+  /ace-builds@1.32.3:
+    resolution: {integrity: sha512-ptSTUmDEU+LuwGiPY3/qQPmmAWE27vuv5sASL8swLRyLGJb7Ye7a8MrJ4NnAkFh1sJgVUqKTEGWRRFDmqYPw2Q==}
+    dev: false
 
   /acorn-walk@8.3.2:
     resolution: {integrity: sha512-cjkyv4OtNCIeqhHrfS81QWXoCBPExR/J62oyEqepVw8WaQeSqpW2uhuLPh1m9eWhDuOo/jUXVTlifvesOWp/4A==}
