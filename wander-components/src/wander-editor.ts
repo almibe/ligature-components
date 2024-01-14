@@ -52,6 +52,8 @@ export function initializeEditor(config: EditorConfig): Editor {
   
   return {
     readText: () => inputEditor.state.doc.toString(),
-    setText: (text: string) => inputEditor.state.doc = text
+    setText: (text: string) => {
+      inputEditor.dispatch({changes: {from: 0, to: inputEditor.state.doc.length, insert: text}})
+    }
   };
 }

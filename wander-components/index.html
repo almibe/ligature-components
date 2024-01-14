@@ -26,6 +26,7 @@
     import { parse } from '@wander-lang/wander/src/parser.ts';
 
     function runAndDisplay() {
+      editor.setText("")
       const script = editor.readText();
       const result = printResult(run(script));
       document.getElementById("code").innerText = result;
