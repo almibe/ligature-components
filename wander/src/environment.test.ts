@@ -4,7 +4,7 @@ import { bindVariable, newEnvironment, newScope, read } from './environment.ts';
 
 test('Environment should start empty', () => {
 	const result = newEnvironment();
-	expect(result).toMatchObject([new Map()]);
+	expect(result).toMatchObject({ scope: [new Map()], libraries: [] });
 });
 
 test('Reading from empty Environment should return Nothing', () => {
