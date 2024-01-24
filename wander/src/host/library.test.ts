@@ -1,6 +1,6 @@
 import { expect, test } from 'vitest'
-import { run } from './interpreter.ts';
-import { WanderValue } from './values.ts';
+import { run } from '../interpreter.ts';
+import { WanderValue } from '../values.ts';
 import { std } from './library.ts';
 
 function evalAndCheck(script: string, expected: WanderValue) {

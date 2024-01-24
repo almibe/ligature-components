@@ -26,9 +26,9 @@
     import { parse } from '@wander-lang/wander/src/parser.ts';
 
     function runAndDisplay() {
-      editor.setText("")
       const script = editor.readText();
       const result = printResult(run(script));
+      editor.setText("")
       document.getElementById("code").innerText = result;
     }
 
@@ -38,7 +38,6 @@
         runAndDisplay();
       },
       onKey: (key, text, position) => {
-        console.log(`${key} - ${text} - ${position}`);
       }
     });
     document.getElementById("runButton").addEventListener("click", (e) => {

@@ -44,6 +44,7 @@ export interface TaggedField {
 }
 
 export interface HostFunction {
+    readonly name: string
     readonly docString: string
     readonly parameters: TaggedField[]
     readonly resultTag: Tag

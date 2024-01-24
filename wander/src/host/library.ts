@@ -1,5 +1,5 @@
 import { Right } from "purify-ts";
-import { Environment, bindVariable, newEnvironment } from "./environment";
+import { Environment, bindVariable, newEnvironment } from "../environment";
 import { _ } from 'lodash';
 
 export function std(): Environment {
