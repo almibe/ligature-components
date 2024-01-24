@@ -1,7 +1,7 @@
 import { Environment, bindVariable, newEnvironment, newScope, read } from './environment.js';
 import { ApplicationExpr, ArrayExpr, BindingExpr, Expression, GroupingExpr, ModuleExpr, NameExpr, WhenExpr } from './expressions.js';
 import { parse } from './parser.js';
-import { ArrayValue, HostFunction, LambdaValue, WanderResult, WanderValue, empty } from './values.js';
+import { ArrayValue, HostFunction, LambdaValue, ModuleValue, WanderResult, WanderValue, empty } from './values.js';
 import { Left, Right } from 'purify-ts/Either';
 import { _ } from 'lodash';
 
@@ -82,7 +82,16 @@ function evalApplication(applicationExpr: ApplicationExpr, environment: Environm
         case "Lambda": return runLambda(fn, args, environment);
         case "HostFunction": return runHostFunction(fn, args, environment);
         case "Array": return callArray(fn, args, environment);
-        default: return Left("Only Host Functions or Lambdas can be ran.");
+        case "Module": return callModule(fn, args, environment);
+        default: return Left("Only Host Functions, Lambdas, Arrays, or Modules can be ran.");
+    }
+}
+
+function callModule(module: ModuleValue, args: WanderValue[], environment: Environment): WanderResult {
+    if (args.length == 1 && args[0].type == "String") {
+        return Right([module.value.get(args[0].value), environment]);
+    } else {
+        return Left(`Cannot call Module with value passed. ${args}`)
     }
 }
 
