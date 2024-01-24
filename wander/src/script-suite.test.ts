@@ -37,9 +37,8 @@ if (process.env.WANDER_TEST_SUITE != undefined) {
 				if (result.isLeft()) {
 					test('Error running script', () => { throw result.toString() });
 				} else {
-					evaluateResults(result.unsafeCoerce(), scriptFile);
+					evaluateResults(result.unsafeCoerce()[0], scriptFile);
 				}
-				//call evalate results		
 			} catch (e) {
 				test('Error reading file', () => { throw e });
 			}
