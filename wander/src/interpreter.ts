@@ -1,4 +1,4 @@
-import { Environment, bindVariable, newEnvironment, read } from './environment.js';
+import { Environment, bindVariable, newEnvironment, newScope, read } from './environment.js';
 import { ApplicationExpr, ArrayExpr, BindingExpr, Expression, GroupingExpr, ModuleExpr, NameExpr, WhenExpr } from './expressions.js';
 import { parse } from './parser.js';
 import { HostFunction, LambdaValue, WanderResult, WanderValue, empty } from './values.js';
@@ -99,12 +99,14 @@ function runHostFunction(fn: HostFunction, args: WanderValue[], environment: Env
 
 function evalGrouping(groupingExpr: GroupingExpr, environment: Environment): WanderResult {
     let lastResult = {type:"Module", value: new Map()};
+    let newEnvironment = newScope(environment)
     for (const element of groupingExpr.expressions) {
-        let result = evaluate(element, environment);
+        let result = evaluate(element, newEnvironment);
         if (result.isLeft()) {
             return result;
         } else {
             lastResult = result.unsafeCoerce()[0];
+            newEnvironment = result.unsafeCoerce()[1];
         }    
     }
     return Right([lastResult, environment]);
@@ -180,7 +182,7 @@ export function printValue(value: WanderValue): string {
         case 'String': return JSON.stringify(value.value);
         case 'Array': return printArray(value.value)
         case 'Module': return printModule(value.value)
-        default: return `Unknown type: ${JSON.stringify(value)}`
+        default: throw `Unknown type: ${JSON.stringify(value)}`
     }
 }
 
