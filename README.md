@@ -6,6 +6,7 @@ This project requires [node](https://nodejs.org/en/download/) and [pnpm](https:/
 Once you check out this project run the following commands.
 
 ```bash
+cd wander-components
 pnpm install
 pnpm run dev
 ```
