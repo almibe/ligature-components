@@ -1,5 +1,5 @@
 import { ApplicationExpr, Expression, LambdaExpr, WhenExpr } from './expressions.js';
-import { WanderError, WanderValue } from './values.js';
+import { Field, WanderError, WanderValue } from './values.js';
 import { parser } from './wander-lezer-parser.js';
 import { Either, Left, Right } from 'purify-ts/Either';
 import { _ } from "lodash"; 
@@ -154,8 +154,8 @@ function parseFields(moduleNode: any, script: string): Map<string, WanderValue> 
     return new Map(results);
 }
 
-function parseField(element: any, script: string): [string, WanderValue] {
-    let fieldName = script.substring(element.getChild("FieldName").from, element.getChild("FieldName").to);
+function parseField(element: any, script: string): [Field, WanderValue] {
+    let name = script.substring(element.getChild("FieldName").from, element.getChild("FieldName").to);
     let value = parseExpression(element.getChild("Expression"),script);
-    return [fieldName, value.unsafeCoerce()];
+    return [{ name }, value.unsafeCoerce()];
 }

@@ -3,8 +3,9 @@ import { printResult, run } from './interpreter.ts';
 import { Right } from 'purify-ts';
 import { newEnvironment } from './environment.ts';
 import { WanderValue } from './values.ts';
+import { std } from './host/library.ts';
 
-const env = newEnvironment();
+const env = std();
 
 function evalAndCheck(script: string, expected: WanderValue) {
 	const result = run(script, env);
@@ -16,15 +17,15 @@ function evalAndCheck(script: string, expected: WanderValue) {
 }
 
 test("print Int", () => {
-	expect(printResult(Right([{type: "Int", value: 4n}, newEnvironment()]))).toEqual("4")
+	expect(printResult(Right([{type: "Int", value: 4n}, std()]))).toEqual("4")
 })
 
 test("print empty Array", () => {
-	expect(printResult(Right([{type: "Array", value: []}, newEnvironment()]))).toEqual("[]")
+	expect(printResult(Right([{type: "Array", value: []}, std()]))).toEqual("[]")
 })
 
 test("print empty Module", () => {
-	expect(printResult(Right([{type: "Module", value: new Map()}, newEnvironment()]))).toEqual("{}")
+	expect(printResult(Right([{type: "Module", value: new Map()}, std()]))).toEqual("{}")
 })
 
 test('eval Int', () => {

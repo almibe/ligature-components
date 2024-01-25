@@ -26,25 +26,33 @@ export interface ArrayValue {
 }
 
 export interface ModuleValue {
-    readonly value: Immutable<Map<string, WanderValue>>
+    readonly value: Immutable<Map<Field, WanderValue>>
     readonly type: "Module"
 }
 
 export interface LambdaValue {
-    readonly parameters: string[]
+    readonly parameters: TaggedField[]
     readonly body: Expression
     readonly type: "Lambda"
 }
 
 export type Tag = {} | { tag: Function } | { chain: Function[] }
 
-export interface TaggedField {
+export interface Field {
     readonly name: string
+}
+
+export interface FieldPath {
+    readonly parts: Field[]
+}
+
+export interface TaggedField {
+    readonly field: Field
     readonly tag: Tag
 }
 
 export interface HostFunction {
-    readonly name: string
+    readonly fieldPath: FieldPath
     readonly docString: string
     readonly parameters: TaggedField[]
     readonly resultTag: Tag

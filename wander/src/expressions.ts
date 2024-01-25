@@ -1,7 +1,8 @@
 import { Immutable } from "immer"
+import { Field, FieldPath, TaggedField } from "./values"
 
 export interface BindingExpr {
-    readonly name: string
+    readonly field: Field
     readonly value: any //TODO should be Expression
     readonly type: "Binding"
 }
@@ -12,7 +13,7 @@ export interface GroupingExpr {
 }
 
 export interface ModuleExpr {
-    readonly value: Immutable<Map<string, Expression>>
+    readonly value: Immutable<Map<Field, Expression>>
     readonly type: "Module"
 }
 
@@ -36,19 +37,19 @@ export interface BoolExpr {
     readonly type: "Bool"
 }
 
-export interface NameExpr {
-    readonly value: string,
-    readonly type: "Name"
+export interface FieldPathExpr {
+    readonly value: FieldPath,
+    readonly type: "FieldPath"
 }
 
 export interface LambdaExpr {
-    readonly parameters: string[]
+    readonly parameters: TaggedField[]
     readonly body: Expression
     readonly type: "Lambda"
 }
 
 export interface ApplicationExpr {
-    readonly name: NameExpr
+    readonly fieldPath: FieldPath
     readonly args: Expression[]
     readonly type: "Application"
 }
@@ -59,4 +60,4 @@ export interface WhenExpr {
 }
 
 export type Expression = BindingExpr | ModuleExpr | ArrayExpr | GroupingExpr | WhenExpr
-    | IntegerExpr | StringExpr | BoolExpr | NameExpr | LambdaExpr | ApplicationExpr;
+    | IntegerExpr | StringExpr | BoolExpr | FieldPathExpr | LambdaExpr | ApplicationExpr;

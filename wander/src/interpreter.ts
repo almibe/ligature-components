@@ -1,15 +1,16 @@
 import { Environment, bindVariable, newEnvironment, newScope, read } from './environment.js';
-import { ApplicationExpr, ArrayExpr, BindingExpr, Expression, GroupingExpr, ModuleExpr, NameExpr, WhenExpr } from './expressions.js';
+import { ApplicationExpr, ArrayExpr, BindingExpr, Expression, FieldPathExpr, GroupingExpr, ModuleExpr, NameExpr, WhenExpr } from './expressions.js';
 import { parse } from './parser.js';
 import { ArrayValue, HostFunction, LambdaValue, ModuleValue, WanderResult, WanderValue, empty } from './values.js';
 import { Left, Right } from 'purify-ts/Either';
 import { _ } from 'lodash';
+import { std } from './host/library.js';
 
 export function evaluateScript(expressions: Expression[], environment: Environment): WanderResult {
     let result: WanderResult = Left("No result.");
     let currentEnvironment = environment;
     if (currentEnvironment == undefined) {
-        currentEnvironment = newEnvironment();
+        currentEnvironment = std();
     }
     expressions.forEach(expression => {
         result = evaluate(expression, currentEnvironment);
@@ -34,7 +35,7 @@ export function evaluate(expression: Expression, environment: Environment): Wand
             case "Binding":
                 return evalBinding(expression, environment);
             case "Name":
-                return evalName(expression, environment);
+                return evalFieldPath(expression, environment);
             case "Grouping":
                 return evalGrouping(expression, environment);
             case "Application":
@@ -64,7 +65,7 @@ function evalWhen(whenExpr: WhenExpr, environment: Environment): WanderResult {
 }
 
 function evalApplication(applicationExpr: ApplicationExpr, environment: Environment): WanderResult {
-    let nameResult = evalName(applicationExpr.name, environment);
+    let nameResult = evalFieldPath(applicationExpr.fi, environment);
     if (nameResult.isLeft()) {
         return nameResult;
     }
@@ -130,8 +131,8 @@ function evalGrouping(groupingExpr: GroupingExpr, environment: Environment): Wan
     return Right([lastResult, environment]);
 }
 
-function evalName(nameExpr: NameExpr, environment: Environment): WanderResult {
-    let res = read(environment, nameExpr.value).toEither("Error in evalName, " + nameExpr.value);
+function evalFieldPath(fieldPathExpr: FieldPathExpr, environment: Environment): WanderResult {
+    let res = read(environment, fieldPathExpr.value).toEither("Error in evalName, " + fieldPathExpr.value);
     if (res.isLeft()) {
         return res;
     } else {
