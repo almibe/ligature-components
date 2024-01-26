@@ -36,7 +36,14 @@ test("parse Grouping", () => {
 
 test("parse single name", () => {
 	const result = parse("x");
-	expect(result).toStrictEqual(Right([{name: "x"}]));
+	expect(result).toStrictEqual(Right([
+		{
+			type: "FieldPath", 
+			value: { parts: [	
+				{"name": "x"},
+			]
+		}}
+	]));
 })
 
 test("parse field path", () => {
@@ -56,12 +63,12 @@ test("parse field path", () => {
 test("parse Lambda", () => {
 	const result = parse("\\x -> x");
 	expect(result).toStrictEqual(Right([{ type: "Lambda", parameters: [{name: "x"}], body:
-		{name: "x"}}]))
+		{type: "FieldPath", value: {parts: [{name: "x"}]}}}]))
 })
 
 test("parse Application", () => {
 	const result = parse("x 1 2 3");
-	expect(result).toStrictEqual(Right([{ type: "Application", name: {type: "FieldPath", value: {parts: [{name: "x"}]}},
+	expect(result).toStrictEqual(Right([{ type: "Application", fieldPath: {type: "FieldPath", value: {parts: [{name: "x"}]}},
 		args: [{type:"Int", value: 1n},{type:"Int", value: 2n},{type:"Int", value: 3n}]
 	}]));
 })

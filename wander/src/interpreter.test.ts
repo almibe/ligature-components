@@ -71,29 +71,29 @@ test("eval empty Module", () => {
 	evalAndCheck("{}", { value: new Map(), type: "Module"});
 });
 
-// test("eval Module with one field", () => {
-// 	evalAndCheck(`{hello = "world"}`, { value: new Map([[{name: "hello"}, {type: "String", "value": "world"}]]), type: "Module"});
-// });
+test("eval Module with one field", () => {
+	evalAndCheck(`{hello = "world"}`, { value: new Map([["hello", {type: "String", "value": "world"}]]), type: "Module"});
+});
 
-// test("eval Module with multiple fields", () => {
-// 	evalAndCheck(`{hello = "world", x = 5, y = 6}`, { value: new Map([
-// 		[{name: "hello"}, {type: "String", "value": "world"}],
-// 		[{name: "x"}, {type: "Int", "value": 5n}],
-// 		[{name: "y"}, {type: "Int", "value": 6n}],
-// 	]), type: "Module"});
-// });
+test("eval Module with multiple fields", () => {
+	evalAndCheck(`{hello = "world", x = 5, y = 6}`, { value: new Map([
+		["hello", {type: "String", "value": "world"}],
+		["x", {type: "Int", "value": 5n}],
+		["y", {type: "Int", "value": 6n}],
+	]), type: "Module"});
+});
 
-// test("eval binding", () => {
-// 	evalAndCheck("x = 5", {
-// 		type: "Int", value: 5n
-// 	})
-// })
+test("eval binding", () => {
+	evalAndCheck("x = 5", {
+		type: "Int", value: 5n
+	})
+})
 
-// test("eval binding with reference", () => {
-// 	evalAndCheck("x = 5, x", {
-// 		type: "Int", value: 5n
-// 	})
-// })
+test("eval binding with reference", () => {
+	evalAndCheck("x = 5, x", {
+		type: "Int", value: 5n
+	})
+})
 
 test("eval Grouping", () => {
 	evalAndCheck("(1,2,3)", {
@@ -101,17 +101,17 @@ test("eval Grouping", () => {
 	})
 })
 
-// test("eval Lambda", () => {
-// 	evalAndCheck("\\x -> x", {
-// 		type: "Lambda", parameters: ["x"], body: {type: "Name", value: "x"}
-// 	})
-// })
+test("eval Lambda", () => {
+	evalAndCheck("\\x -> x", {
+		type: "Lambda", parameters: [{name: "x"}], body: {type: "FieldPath", value: { parts: [{ name: "x" }]}}
+	})
+})
 
-// test("eval Lambda application", () => {
-// 	evalAndCheck("id = \\x -> x, id 1", {
-// 		type: "Int", value: 1n
-// 	})
-// })
+test("eval Lambda application", () => {
+	evalAndCheck("id = \\x -> x, id 1", {
+		type: "Int", value: 1n
+	})
+})
 
 test("eval when", () => {
 	evalAndCheck("when false => 4, true => 5 end", {

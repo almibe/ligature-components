@@ -140,12 +140,8 @@ function parseWhen(whenNode: any, script: string): Either<WanderError, WhenExpr>
 
 function parseFieldPath(node: any, script: string): Either<WanderError, FieldPathExpr> {
     const fullName = script.substring(node.from, node.to).split(".").map(value => {return { name: value}})
-    if (fullName.length == 1) {
-        return Right(fullName[0])
-    } else {
-        const name = {type: "FieldPath", value: {parts: fullName}};
-        return Right(name)    
-    }
+    const name = {type: "FieldPath", value: {parts: fullName}};
+    return Right(name)
 }
 
 function parseApplication(applicationNode: any, script: string): Either<WanderError, ApplicationExpr> {
@@ -163,7 +159,7 @@ function parseApplication(applicationNode: any, script: string): Either<WanderEr
             child = child.nextSibling;
         }    
     }
-    return Right({type: "Application", name: {type: "FieldPath", value: {parts: fullName}}, args });
+    return Right({type: "Application", fieldPath: {type: "FieldPath", value: {parts: fullName}}, args });
 }
 
 function parseLambda(lambdaNode: any, script: string): Either<WanderError, LambdaExpr> {

@@ -160,8 +160,8 @@ function evalModule(expression: ModuleExpr, environment: Environment): WanderRes
         if (result.isLeft()) {
             return result;
         } else {
-            results.set(name, result.unsafeCoerce()[0]);
-        }    
+            results.set(name.name, result.unsafeCoerce()[0]);
+        }
     }
     return Right([{type:"Module", value: results}, environment]);
 }
@@ -201,6 +201,8 @@ export function printValue(value: WanderValue): string {
         case 'String': return JSON.stringify(value.value);
         case 'Array': return printArray(value.value)
         case 'Module': return printModule(value.value)
+        case 'HostFunction': return "\"[HostFunction]\""
+        case 'Lambda': return "\"[Lambda]\""
         default: throw `Unknown type: ${JSON.stringify(value)}`
     }
 }
