@@ -27,7 +27,7 @@ function parseExpressions(node: any, script: string): Either<WanderError, Expres
 
 function parseExpression(expressionNode: any, script: string): Either<WanderError, Expression> {
     //TODO double check node is an expression
-    if (expressionNode.firstChild.to === expressionNode.lastChild.to && expressionNode.firstChild.from === expressionNode.lastChild.from) {
+    if (expressionNode.firstChild != null && expressionNode.firstChild.to === expressionNode.lastChild.to && expressionNode.firstChild.from === expressionNode.lastChild.from) {
         let childNode = expressionNode.firstChild;
         switch (childNode.type.name) {
             case "Int": {
@@ -82,6 +82,53 @@ function parseExpression(expressionNode: any, script: string): Either<WanderErro
     }
 }
 
+function parseSingleExpression(childNode: any, script: string): Either<WanderError, Expression> {
+        switch (childNode.type.name) {
+            case "Int": {
+                const value = BigInt(script.substring(childNode.from, childNode.to));
+                return Right({type:"Int", value});
+            }
+            case "String": {
+                const value = script.substring(childNode.from+1, childNode.to-1);
+                return Right({type:"String", value});
+            }
+            case "Bool": {
+                const value = script.substring(childNode.from, childNode.to) === "true";
+                return Right({type:"Bool", value});
+            }
+            case "Array": {
+                return parseArray(childNode, script);
+            }
+            case "Module": {
+                return parseModule(childNode, script);
+            }
+            case "Field": {
+                return parseBinding(childNode, script);
+            }
+            case "Name": {
+                return parseFieldPath(childNode, script) //Right({type:"Name", value: script.substring(childNode.from, childNode.to)});
+            }
+            case "Grouping": {
+                return parseGrouping(childNode, script);
+            }
+            case "Lambda": {
+                return parseLambda(childNode, script);
+            }
+            case "Expression": {
+                return parseApplication(childNode, script);
+            }
+            case "When": {
+                return parseWhen(childNode, script);
+            }
+            case "Application": {
+                return parseApplication(childNode, script);
+            }
+            default: {
+                return Left(`Error: Unexpected type ${childNode.type.name}`);
+            }
+        }
+}
+
 function parseWhen(whenNode: any, script: string): Either<WanderError, WhenExpr> {
     let body = _.chunk(
         whenNode
@@ -108,7 +155,7 @@ function parseApplication(applicationNode: any, script: string): Either<WanderEr
     child = child.nextSibling;
     const args = [];
     while (child != null) {
-        const res = parseExpression(child, script);
+        const res = parseSingleExpression(child, script);
         if (res.isLeft()) {
             return res;
         } else {
@@ -180,7 +227,7 @@ function parseFields(moduleNode: any, script: string): Map<string, WanderValue> 
 }
 
 function parseField(element: any, script: string): [Field, WanderValue] {
-    let name = script.substring(element.getChild("FieldName").from, element.getChild("FieldName").to);
+    let name = script.substring(element.getChild("Name").from, element.getChild("Name").to);
     let value = parseExpression(element.getChild("Expression"),script);
     return [{ name }, value.unsafeCoerce()];
 }
