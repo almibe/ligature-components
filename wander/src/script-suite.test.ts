@@ -8,6 +8,8 @@ import * as fs from 'fs';
 import { std } from './host/library.ts';
 const env = std();
 
+test("delete me", () => {})
+
 function evaluateResults(results: WanderValue, scriptName: string) {
 	if (results.type == "Array") {
 		results.value.forEach(result => {
@@ -28,8 +30,7 @@ function evaluateResults(results: WanderValue, scriptName: string) {
 
 if (process.env.WANDER_TEST_SUITE != undefined) {
 	const dir = process.env.WANDER_TEST_SUITE;
-	console.log(dir);
-	const testScripts = globSync(dir + "/**.test.wander");
+	const testScripts = globSync(dir + "/**_.test.wander");
 	testScripts.forEach(scriptFile => {
 		suite(scriptFile, () => {
 			const script = fs.readFileSync(scriptFile, 'utf-8');

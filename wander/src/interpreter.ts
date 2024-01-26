@@ -34,7 +34,7 @@ export function evaluate(expression: Expression, environment: Environment): Wand
                 return evalModule(expression, environment);
             case "Binding":
                 return evalBinding(expression, environment);
-            case "Name":
+            case "FieldPath":
                 return evalFieldPath(expression, environment);
             case "Grouping":
                 return evalGrouping(expression, environment);
@@ -65,7 +65,7 @@ function evalWhen(whenExpr: WhenExpr, environment: Environment): WanderResult {
 }
 
 function evalApplication(applicationExpr: ApplicationExpr, environment: Environment): WanderResult {
-    let nameResult = evalFieldPath(applicationExpr.fi, environment);
+    let nameResult = evalFieldPath(applicationExpr.fieldPath, environment);
     if (nameResult.isLeft()) {
         return nameResult;
     }

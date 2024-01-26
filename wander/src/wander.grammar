@@ -2,17 +2,18 @@
 
 @top Script { list<Expression> }
 
-Expression { Field | !high Bool | !high Int | String | Module | Array | Grouping | When | Lambda | FieldName | Application }
+single { Name | Field | !high Bool | !high Int | String | Module | Array | Grouping | When | Lambda }
+Expression { single | Application }
 
 String { !high string }
-Module { !high "{" list<Field | FieldName>? "}" }
+Module { !high "{" list<Field | Name>? "}" }
 Array  { !high "[" list<Expression>? "]" }
 Grouping { !high "(" list<Expression>? ")" }
 When { !high "when" list<(Expression "=>" Expression ",")> "end" }
-Lambda { !high "\\" FieldName+ "->" Expression }
-Application { FieldName Expression+ }
-Field { !high FieldName "=" Expression }
-FieldName { !high name }
+Lambda { !high "\\" Name+ "->" Expression }
+Application { Name single+ }
+
+Field { !high Name "=" Expression }
 
 @tokens {
   Bool { "true" | "false" }
@@ -20,7 +21,7 @@ FieldName { !high name }
   int  { '0' | $[1-9] @digit* }
   Comment[isolate] { "--" ![\n]* }
 
-  name { $[a-zA-Z_]$[0-9a-zA-Z-_]* }
+  Name { $[a-zA-Z_]$[\.0-9a-zA-Z-_]* }
   string { 'i'? '"' char* '"' }
   char { $[\u{20}\u{21}\u{23}-\u{5b}\u{5d}-\u{10ffff}] | "\\" esc }
   esc  { $["\\\/bfnrt] | "u" hex hex hex hex }
@@ -28,7 +29,7 @@ FieldName { !high name }
 
   whitespace { $[ \n\r\t] }
 
-  @precedence { "when", "end", Bool, "->", string, name }
+  @precedence { "when", "end", Bool, "->", string, Name }
 }
 
 @skip { whitespace | Comment }

@@ -7,8 +7,7 @@ export interface ModuleLibrary {
 
 export function hostLibrary(fns: HostFunction[]): ModuleLibrary {
     return {
-        lookup: (name: string) => {
-            console.log("In look up", name)
+        lookup: (name: string) => {", name)
             return Right({type: "Module", value: new Map()})
         }
     }

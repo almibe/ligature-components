@@ -5,7 +5,7 @@ import { ModuleLibrary } from "./libraries/module-library";
 
 enableMapSet()
 
-export type Scope = Immutable<Array<Map<Field, WanderValue>>>;
+export type Scope = Immutable<Array<Map<string, WanderValue>>>;
 export type Environment = { scope: Scope, libraries: ModuleLibrary[] }
 
 export function newEnvironment(libraries: ModuleLibrary[]): Environment {
@@ -22,18 +22,19 @@ export function removeScope(environment: Environment): Environment {
 
 export function bindVariable(environment: Environment, field: Field, value: WanderValue): Environment {
     return produce(environment, e => { 
-        e.scope[e.scope.length-1].set(field, value)
+        e.scope[e.scope.length-1].set(field.name, value)
      })
 }
 
 export function read(environment: Environment, fieldPath: FieldPath): Maybe<WanderValue> {
+    //TODO this doesn't read into modules
     if (fieldPath.parts.length == 1) {
         const field = fieldPath.parts[0];
         let offset = environment.scope.length - 1;
         while (offset >= 0) {
             let currentScope = environment.scope[offset];
-            if (currentScope.has(field)) {
-                return Just(currentScope.get(field));
+            if (currentScope.has(field.name)) {
+                return Just(currentScope.get(field.name));
             }
             offset = offset - 1;
         }

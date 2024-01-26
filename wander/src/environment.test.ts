@@ -9,20 +9,20 @@ test('Environment should start empty', () => {
 
 test('Reading from empty Environment should return Nothing', () => {
 	const result = newEnvironment([]);
-	expect(read(result, "hello")).toMatchObject(Nothing);
+	expect(read(result, {parts:[{name: "hello"}]})).toMatchObject(Nothing);
 });
 
 test('Write and read value', () => {
 	let result = newEnvironment([]);
-    result = bindVariable(result, "hello", {type: "Bool", value: true});
-	expect(read(result, "hello")).toMatchObject(Just({type: "Bool", value: true}));
+    result = bindVariable(result, {name: "hello"}, {type: "Bool", value: true});
+	expect(read(result, {parts:[{name:"hello"}]})).toMatchObject(Just({type: "Bool", value: true}));
 });
 
 test('shadow in scope', () => {
     let env = newEnvironment([]);
-    env = bindVariable(env, "hello", {type: "Bool", value: true});
+    env = bindVariable(env, {name: "hello"}, {type: "Bool", value: true});
     let env1 = newScope(env);
-    let env2 = bindVariable(env1, "hello", {type: "Bool", value: false});
-    expect(read(env1, "hello")).toMatchObject(Just({type: "Bool", value: true}));
-    expect(read(env2, "hello")).toMatchObject(Just({type: "Bool", value: false}));
+    let env2 = bindVariable(env1, {name: "hello"}, {type: "Bool", value: false});
+    expect(read(env1, {parts:[{name:"hello"}]})).toMatchObject(Just({type: "Bool", value: true}));
+    expect(read(env2, {parts:[{name:"hello"}]})).toMatchObject(Just({type: "Bool", value: false}));
 });
