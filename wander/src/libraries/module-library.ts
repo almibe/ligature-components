@@ -1,14 +1,19 @@
-import { Either, Right } from "purify-ts";
-import { HostFunction, WanderError, WanderValue } from "../values";
+import { Either, Left, Right } from "purify-ts";
+import { FieldPath, HostFunction, WanderError, WanderValue } from "../values";
 
 export interface ModuleLibrary {
-    lookup(name: string): Either<WanderError, WanderValue>
+    lookup(fieldPath: FieldPath): Either<WanderError, WanderValue>
 }
 
 export function hostLibrary(fns: HostFunction[]): ModuleLibrary {
     return {
-        lookup: (name: string) => {", name)
-            return Right({type: "Module", value: new Map()})
+        lookup: (fieldPath: FieldPath) => {
+            for (const hostFunction of fns) {
+                if (hostFunction.fieldPath == fieldPath) {
+                    return Right(hostFunction);
+                }
+            }
+            return Left(`${fieldPath} not found.`)
         }
     }
 }

@@ -132,11 +132,11 @@ function evalGrouping(groupingExpr: GroupingExpr, environment: Environment): Wan
 }
 
 function evalFieldPath(fieldPathExpr: FieldPathExpr, environment: Environment): WanderResult {
-    let res = read(environment, fieldPathExpr.value).toEither("Error in evalName, " + fieldPathExpr.value);
+    let res = read(environment, fieldPathExpr.value);
     if (res.isLeft()) {
         return res;
     } else {
-        return Right([res.unsafeCoerce(), environment])
+        return Right([res.unsafeCoerce(), environment]);
     }
 }
 

@@ -6,9 +6,6 @@ import { WanderValue } from './values.ts';
 import { glob, globSync, globStream, globStreamSync, Glob } from 'glob';
 import * as fs from 'fs';
 import { std } from './host/library.ts';
-const env = std();
-
-test("delete me", () => {})
 
 function evaluateResults(results: WanderValue, scriptName: string) {
 	if (results.type == "Array") {
@@ -30,12 +27,12 @@ function evaluateResults(results: WanderValue, scriptName: string) {
 
 if (process.env.WANDER_TEST_SUITE != undefined) {
 	const dir = process.env.WANDER_TEST_SUITE;
-	const testScripts = globSync(dir + "/**_.test.wander");
+	const testScripts = globSync(dir + "/**.test.wander");
 	testScripts.forEach(scriptFile => {
 		suite(scriptFile, () => {
 			const script = fs.readFileSync(scriptFile, 'utf-8');
 			try {
-				const result = run(script, env)
+				const result = run(script, std())
 				if (result.isLeft()) {
 					test('Error running script', () => { throw result.toString() });
 				} else {

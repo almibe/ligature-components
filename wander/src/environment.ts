@@ -1,6 +1,6 @@
 import { Immutable, enableMapSet, produce } from "immer";
-import { Just, Maybe, Nothing } from "purify-ts";
-import { Field, FieldPath, WanderValue } from "./values";
+import { Either, Just, Left, Right } from "purify-ts";
+import { Field, FieldPath, WanderError, WanderValue } from "./values";
 import { ModuleLibrary } from "./libraries/module-library";
 
 enableMapSet()
@@ -26,15 +26,15 @@ export function bindVariable(environment: Environment, field: Field, value: Wand
      })
 }
 
-export function read(environment: Environment, fieldPath: FieldPath): Maybe<WanderValue> {
-    //TODO this doesn't read into modules
+export function read(environment: Environment, fieldPath: FieldPath): Either<WanderError, WanderValue> {
+    //TODO this doesn't read into modules, so x.y.z won't work but x will
     if (fieldPath.parts.length == 1) {
         const field = fieldPath.parts[0];
         let offset = environment.scope.length - 1;
         while (offset >= 0) {
             let currentScope = environment.scope[offset];
             if (currentScope.has(field.name)) {
-                return Just(currentScope.get(field.name));
+                return Right(currentScope.get(field.name));
             }
             offset = offset - 1;
         }
@@ -42,8 +42,8 @@ export function read(environment: Environment, fieldPath: FieldPath): Maybe<Wand
     for (const library of environment.libraries) {
         const lookup = library.lookup(fieldPath);
         if (lookup.isRight()) {
-            return lookup.unsafeCoerce();
+            return Just(lookup.unsafeCoerce());
         }
     }
-    return Nothing;
+    return Left(`Could not find ${fieldPath}`);
 }
