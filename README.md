@@ -13,8 +13,9 @@ pnpm run dev
 
 ## Generated Files
 
-This project uses the parser generator Lezer and generates two files, wander-lezer-parser.js and wander-lezer-parser.terms.js.
-Files are generated on build automatically.
+The /wander/ project uses the parser generator [Lezer](https://lezer.codemirror.net/) and generates two files,
+wander-lezer-parser.js and wander-lezer-parser.terms.js.
+These files are generated during build automatically and are in the gitignore file.
 
 The grammar used for Wander is based off of Lezer's example JSON grammar.
 https://github.com/lezer-parser/json/blob/main/src/json.grammar

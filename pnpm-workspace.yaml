@@ -1,3 +1,4 @@
 packages:
   - 'wander'
   - 'wander-components'
+  - 'wander-components-new'

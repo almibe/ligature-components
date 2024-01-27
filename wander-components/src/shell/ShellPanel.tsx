@@ -1,6 +1,6 @@
 import '@shoelace-style/shoelace/dist/themes/light.css';
 import { Editor, initializeEditor } from '@wander-lang/wander-components/src/wander-editor.ts';
-import { createSignal, onMount } from 'solid-js';
+import { onMount } from 'solid-js';
 import { bus } from './bus.ts';
 import { Results } from './Results.tsx';
 
