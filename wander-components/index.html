@@ -2,46 +2,15 @@
 <html lang="en">
   <head>
     <meta charset="UTF-8" />
+    <link rel="icon" type="image/svg+xml" href="/vite.svg" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <title>Wander Components Demo</title>
-    <link rel="stylesheet" href="./src/shell/shell.css" />
+    <link rel="stylesheet" href="./src/index.css" />
+    <script type="module" src="/src/my-element.ts"></script>
   </head>
   <body>
-    <main>
-      <section>
-        <button id="runButton">Run</button>
-        <div id="editor">
-          x=5,x
-        </div>
-      </section>
-      <section>
-        <div id="code">
-        </div>
-      </section>
-    </main>
+    <my-element>
+      <h1>Vite + Lit</h1>
+    </my-element>
   </body>
-  <script type="module">
-    import { initializeEditor } from './src/editor/wander-editor.ts';
-    import { run, printResult } from '@wander-lang/wander/src/interpreter.ts';
-    import { parse } from '@wander-lang/wander/src/parser.ts';
-
-    function runAndDisplay() {
-      const script = editor.readText();
-      const result = printResult(run(script));
-      editor.setText("")
-      document.getElementById("code").innerText = result;
-    }
-
-    let editor = initializeEditor({
-      elementId: "editor", 
-      onRun: (text) => { 
-        runAndDisplay();
-      },
-      onKey: (key, text, position) => {
-      }
-    });
-    document.getElementById("runButton").addEventListener("click", (e) => {
-      runAndDisplay();
-    });
-  </script>
 </html>
