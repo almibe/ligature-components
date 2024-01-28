@@ -1,4 +1,4 @@
-import { execute, highlight } from '@wander-lang/wander';
+import { run, introspect } from '@wander-lang/wander';
 
 export function wanderCode(className: string) {
   const element = document.getElementById(id);

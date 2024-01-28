@@ -10,16 +10,15 @@ export interface Editor {
 }
 
 export interface EditorConfig {
-  readonly elementId: string
-  readonly onRun: (text: string) => {}
-  readonly onKey: (key: string, text: string, position: number) => {}
+  readonly element: HTMLElement
+  readonly onRun: (text: string) => void
+  readonly onKey: (key: string, text: string, position: number) => void
 }
 
 export function initializeEditor(config: EditorConfig): Editor {
   let inputEditor: EditorView;
-  const element = document.getElementById(config.elementId)
-  const script = element.innerText;
-  element.innerText = "";
+  const script = config.element.innerText;
+  config.element.innerText = "";
   inputEditor = new EditorView({
     doc: script,
     extensions: [
@@ -46,7 +45,7 @@ export function initializeEditor(config: EditorConfig): Editor {
       basicSetup,
       keymap.of([indentWithTab]),
     ],
-    parent: element,
+    parent: config.element,
   });
   inputEditor.focus();
   

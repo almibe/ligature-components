@@ -1,5 +1,5 @@
 import { createGlobalEmitter } from "@solid-primitives/event-bus";
-import { Applet } from "./Results.tsx";
+import { Applet } from "./shell-results.ts";
 
 export const bus = createGlobalEmitter<{/*@once*/
     RunScript: { script: string }
