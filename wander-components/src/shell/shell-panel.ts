@@ -2,22 +2,22 @@ import { LitElement, css, html } from 'lit';
 import { customElement, query } from 'lit/decorators.js';
 import '@shoelace-style/shoelace/dist/themes/light.css';
 import './shell.css';
-import { Editor, initializeEditor } from '../editor/wander-editor.ts';
-import { Results } from './shell-results.ts';
+import { initializeEditor } from '../editor/wander-editor.ts';
+import {provide} from '@lit/context';
+import { ShellApi, createShellApi, shellApiContext } from './shell-api.ts';
+import { ShellState, createShellState, shellStateContext } from './shell-state.ts';
 
 @customElement('shell-panel')
-export class WanderShell extends LitElement {
+export class ShellPanel extends LitElement {
 
   @query("#editor")
   editor;
 
-//   bus.on("ClearEditor", () => {
-//     editor.setText("");
-//   })
+  @provide({context: shellApiContext})
+  shellApiContext: ShellApi = createShellApi();
 
-//   bus.on("SetEditor", ({ script }) => {
-//     editor.setText(script);
-//   })
+  @provide({context: shellStateContext})
+  shellStateContext: ShellState = createShellState();
 
 //         onRun: (script) => {
 //           editor.setText("")
@@ -28,7 +28,6 @@ export class WanderShell extends LitElement {
 //             bus.emit("RunScript", { script });
 //             setTimeout(() => editor.setText(""))
 //           }
-
 
   render() {
     setTimeout(() => {
@@ -57,6 +56,6 @@ export class WanderShell extends LitElement {
 
 declare global {
   interface HTMLElementTagNameMap {
-    'wander-shell': WanderShell
+    'shell-panel': ShellPanel
   }
 }
