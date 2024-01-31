@@ -1,51 +1,25 @@
-import { LitElement, css, html } from 'lit';
-import { customElement, query } from 'lit/decorators.js';
+import { css, html } from 'lit';
+import { customElement, property } from 'lit/decorators.js';
 import '@shoelace-style/shoelace/dist/themes/light.css';
 import './shell.css';
-import { initializeEditor } from '../editor/wander-editor.ts';
 import {provide} from '@lit/context';
-import { ShellApi, createShellApi, shellApiContext } from './shell-api.ts';
-import { ShellState, createShellState, shellStateContext } from './shell-state.ts';
+import { ShellStore, shellStoreContext } from './shell-store.ts';
+import { MobxLitElement } from '@adobe/lit-mobx';
+import './shell-editor.ts'
+import './shell-results.ts'
 
 @customElement('shell-panel')
-export class ShellPanel extends LitElement {
-
-  @query("#editor")
-  editor;
-
-  @provide({context: shellApiContext})
-  shellApiContext: ShellApi = createShellApi();
-
-  @provide({context: shellStateContext})
-  shellStateContext: ShellState = createShellState();
-
-//         onRun: (script) => {
-//           editor.setText("")
-//           bus.emit("RunScript", { script });
-//         },
-//         onKey: (key, script, position) => {
-//           if (key == "Enter") {
-//             bus.emit("RunScript", { script });
-//             setTimeout(() => editor.setText(""))
-//           }
+export class ShellPanel extends MobxLitElement {
+  @provide({context: shellStoreContext})
+  shellStore = new ShellStore();
 
   render() {
-    setTimeout(() => {
-      console.log(this.editor)
-      initializeEditor({
-        element: this.editor,
-        onRun: (script) => { console.log(script) },
-        onKey(key, text, position) {
-          console.log(key)
-        },
-      })
-    });
-
     return html`
         <div>
           <div class="container">
-            <div id="editor"></div>
+            <shell-editor></shell-editor>
           </div>
+          <shell-results></shell-results>
         </div>
         `
   }

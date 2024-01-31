@@ -37,10 +37,11 @@ export function initializeEditor(config: EditorConfig): Editor {
           if((e.code == "Enter") && (e.metaKey || e.ctrlKey)) {
             config.onRun(v.state.doc.toString());
             e.preventDefault();
-          } else {
-            config.onKey(e.key, v.state.doc.toString(), v.state.selection.main.anchor)
           }
-        }
+        },
+        input: (e, v) => {
+          config.onKey(e.data, v.state.doc.toString(), v.state.selection.main.anchor)
+        },
       }),
       basicSetup,
       keymap.of([indentWithTab]),
