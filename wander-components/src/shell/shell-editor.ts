@@ -2,10 +2,11 @@ import { css, html } from 'lit';
 import { customElement, query } from 'lit/decorators.js';
 import '@shoelace-style/shoelace/dist/themes/light.css';
 import './shell.css';
-import { initializeEditor } from '../editor/wander-editor.ts';
+import { Editor, initializeEditor } from '../editor/wander-editor.ts';
 import {consume} from '@lit/context';
 import { ShellStore, shellStoreContext } from './shell-store.ts';
 import { MobxLitElement } from '@adobe/lit-mobx';
+import { autorun } from 'mobx';
 
 @customElement('shell-editor')
 export class ShellEditor extends MobxLitElement {
@@ -16,10 +17,20 @@ export class ShellEditor extends MobxLitElement {
   @query("#editor")
   editor!: HTMLElement;
 
+  editorObj: Editor | null = null
+
   render() {
+    autorun(() => { 
+      if (this.shellStore.script == "") {
+        if (this.editorObj != null) {
+          this.editorObj.setText("");
+        }
+      }
+    });
+
     const that = this;
     setTimeout(() => {
-      initializeEditor({
+      this.editorObj = initializeEditor({
         element: this.editor,
         onRun: (script) => {
           this.shellStore.runEditor();

@@ -1,7 +1,7 @@
 import {createContext} from '@lit/context';
 import { WanderResult } from '@wander-lang/wander/src/values';
 import { makeAutoObservable } from 'mobx'
-import { Applet } from './applets';
+import { Applet, rawTextApplet } from './applets';
 import { run } from '@wander-lang/wander/src/interpreter';
 import { std } from '@wander-lang/wander/src/host/library';
 
@@ -14,11 +14,24 @@ export class ShellStore {
         makeAutoObservable(this);
     }
 
+    id = 0n;
+
     addResult(script: string, result: WanderResult) {
-        this.results.push({script, result});
+        const id = this.id++;
+        let finalResult: Result = {
+            id,
+            script: script,
+            wanderResult: result,
+            applet: rawTextApplet,
+            content: rawTextApplet.render(result)
+        };
+        this.results.unshift(finalResult);
     }
 
     removeResult(index: number) {
+        setStore(produce((store) => {
+            store.results = store.results.filter(r => r.id != result.id);
+        }))
         this.results = this.results.splice(index, 1);
     }
 
@@ -27,6 +40,7 @@ export class ShellStore {
     }
 
     setScript(script: string) {
+        console.log("in setScript " + script)
         this.script = script
     }
 
@@ -57,8 +71,11 @@ export class ShellStore {
 }
 
 export interface Result {
-    script: string,
-    result: WanderResult
+    readonly id: bigint
+    readonly script: string
+    readonly wanderResult: WanderResult
+    readonly applet: Applet
+    readonly content: Element
 }
 
 export const shellStoreContext = createContext<ShellStore>('shell-store');

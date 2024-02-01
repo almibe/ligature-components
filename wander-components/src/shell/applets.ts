@@ -1,18 +1,5 @@
 import { ModuleValue, WanderResult, WanderValue } from "@wander-lang/wander/src/values"
-import { bus } from "./bus.ts"
 import { printResult, printValue } from "@wander-lang/wander/src/interpreter"
-import { createSignal } from "solid-js";
-
-export const [applets, setApplets] = createSignal<Applet[]>([]);
-
-bus.on("AddApplet", (applet: Applet) => {
-    setApplets([applet, ...applets()])
-})
-
-bus.on("RemoveApplet", (applet: Applet) => {
-      const newResult = applets().filter(r => r != applet);
-      setApplets(newResult);
-})
 
 export interface Applet {
     readonly name: string
@@ -20,7 +7,7 @@ export interface Applet {
     readonly render: (value: WanderResult) => Element
 }
 
-const errorApplet: Applet = {
+export const errorApplet: Applet = {
     name: "Error",
     predicate: (value: WanderResult) => {
          if (value.isRight()) {
@@ -36,7 +23,7 @@ const errorApplet: Applet = {
     }
 }
 
-const textApplet: Applet = {
+export const textApplet: Applet = {
     name: "Text",
     predicate: (value: WanderResult) => {
         if (value.isRight()) {
@@ -54,7 +41,7 @@ const textApplet: Applet = {
     }
 }
 
-const htmlApplet: Applet = {
+export const htmlApplet: Applet = {
     name: "Html",
     predicate: (value: WanderResult) => {
         if (value.isRight()) {
@@ -91,12 +78,6 @@ export const introspectionApplet: Applet = {
         return "Introspection"
     }
 };
-
-bus.emit("AddApplet", rawTextApplet);
-bus.emit("AddApplet", textApplet);
-bus.emit("AddApplet", errorApplet);
-bus.emit("AddApplet", htmlApplet);
-bus.emit("AddApplet", introspectionApplet);
 
 //from lodash https://github.com/lodash/lodash/blob/9d11b48ce5758df247607dc837a98cbfe449784a/escape.js
 const htmlEscapes = {

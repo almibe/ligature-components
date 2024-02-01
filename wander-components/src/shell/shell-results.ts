@@ -13,6 +13,8 @@ import { ShellStore, shellStoreContext } from './shell-store.ts';
 import { MobxLitElement } from '@adobe/lit-mobx';
 import { autorun } from 'mobx';
 import { printResult } from '@wander-lang/wander/src/interpreter.ts';
+import { WanderResult } from '@wander-lang/wander/src/values.ts';
+import { Applet } from './applets.ts';
 
 @customElement('shell-results')
 export class ShellResults extends MobxLitElement {
@@ -20,12 +22,12 @@ export class ShellResults extends MobxLitElement {
   shellStore!: ShellStore
 
   render() {
-    autorun(() => {this.shellStore.results.forEach(result => console.log(printResult(result.result))) })
+//    autorun(() => {this.shellStore.results.forEach(result => console.log(printResult(result.result))) })
 
     return html`
           <div id="results">
           ${this.shellStore.results.map((result) =>
-            html`<div>${printResult(result.result)}</div>`
+            html`<div class="result">${this.renderResult(result)}</div>`
           )}
         </div>
         `
@@ -33,6 +35,46 @@ export class ShellResults extends MobxLitElement {
 
   static styles = css`
   `
+
+  // changeApplet(result: Result, applet: Applet) {
+  //   setStore(produce((store) => {
+  //       let prevResult = store.results.find(r => r.id == result.id)
+  //       prevResult.applet = applet
+  //       prevResult.content = applet.render(result.wanderResult)
+  //   }))
+  // }
+
+  renderResult(result: Result) {
+    
+    const filteredApplets = () => this.shellStore.applets.filter(applet =>
+        applet.predicate(result.wanderResult) 
+    )
+
+    return html`<sl-card style="width:100%; padding:10px;">
+        <span innerHTML=${result.content}></span>
+        <sl-dropdown style="float:right">
+            <sl-button slot="trigger">
+               ${result.applet.name}<sl-icon name="caret" library="system"></sl-icon>
+            </sl-button>
+            <sl-menu id=${"menu" + result.id}>
+                ${filteredApplets().map(applet => {
+                    html`<sl-menu-item @click=${() => result.applet = applet} >${applet.name}</sl-menu-item>`
+                })}
+                <sl-divider></sl-divider>
+                <sl-menu-item @click=${() => this.shellStore.setScript(result.script)}>
+                    <span>
+                        Edit
+                    </span>
+                </sl-menu-item>
+                <sl-menu-item @click=${() => this.shellStore.removeResult(result.id)}>
+                    <span style="float:right">
+                        Remove <sl-icon name="x-lg" library="system"></sl-icon>
+                    </span>
+                </sl-menu-item>
+            </sl-menu>
+        </sl-dropdown>
+    </sl-card>`
+  }
 }
 
 declare global {
@@ -40,90 +82,3 @@ declare global {
     'shell-results': ShellResults
   }
 }
-
-// interface Result {
-//     readonly id: number
-//     readonly script: string
-//     readonly wanderResult: WanderResult
-//     readonly applet: Applet
-//     readonly content: string
-// }
-
-// let id = 0n;
-
-// bus.on("AddResult", ({ result, script} ) => {
-//     id++;
-//     let finalResult = {
-//         id,
-//         script: script,
-//         wanderResult: result,
-//         applet: rawTextApplet,
-//         content: rawTextApplet.render(result)
-//     };
-//     setStore(produce((store) => {
-//         store.results = [finalResult, ...store.results];
-//     }))
-// })
-
-// bus.on("RemoveResult", (result) => {
-//     setStore(produce((store) => {
-//         store.results = store.results.filter(r => r.id != result.id);
-//     }))
-// })
-
-// export function Results() {
-//     return <>
-//         <For each={store.results}>
-//             {(result) =>
-//                 <Result result={result} />
-//             }
-//         </For>
-//     </>;
-// }
-
-// function Result(props: { result: Result}) {
-//     return <div class="result">
-//         {renderResult(props.result)}
-//     </div>
-// }
-
-// function changeApplet(result: Result, applet: Applet) {
-//     setStore(produce((store) => {
-//         let prevResult = store.results.find(r => r.id == result.id)
-//         prevResult.applet = applet
-//         prevResult.content = applet.render(result.wanderResult)
-//     }))
-// }
-
-// function renderResult(result: Result) {
-//     const filteredApplets = () => applets().filter(applet =>
-//         applet.predicate(result.wanderResult) 
-//     )
-
-//     return <sl-card style="width:100%">
-//         <span innerHTML={result.content}></span>
-//         <sl-dropdown style="float:right">
-//             <sl-button slot="trigger">
-//                {result.applet.name}<sl-icon name="caret" library="system"></sl-icon>
-//             </sl-button>
-//             <sl-menu id={"menu" + result.id}>
-//                 <For each={filteredApplets()}>
-//                     {(applet) =>
-//                         <sl-menu-item onClick={() => changeApplet(result, applet)} >{applet.name}</sl-menu-item>
-//                     }
-//                 </For>
-//                 <sl-divider></sl-divider>
-//                 <sl-menu-item onClick={e => bus.emit("SetEditor", {script: result.script})}>
-//                     <span>
-//                         Edit
-//                     </span>
-//                 </sl-menu-item>
-//                 <sl-menu-item onClick={e => bus.emit("RemoveResult", {id: result.id})}>
-//                     <span style="float:right">
-//                         Remove <sl-icon name="x-lg" library="system"></sl-icon>
-//                     </span>
-//                 </sl-menu-item>
-//             </sl-menu>
-//         </sl-dropdown>
-//     </sl-card>
-// }

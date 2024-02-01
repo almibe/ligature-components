@@ -7,11 +7,21 @@ import { ShellStore, shellStoreContext } from './shell-store.ts';
 import { MobxLitElement } from '@adobe/lit-mobx';
 import './shell-editor.ts'
 import './shell-results.ts'
+import { rawTextApplet, errorApplet, introspectionApplet, htmlApplet, textApplet } from './applets.ts';
 
 @customElement('shell-panel')
 export class ShellPanel extends MobxLitElement {
   @provide({context: shellStoreContext})
   shellStore = new ShellStore();
+
+  constructor() {
+    super()
+    this.shellStore.addApplet(errorApplet);
+    this.shellStore.addApplet(rawTextApplet);
+    this.shellStore.addApplet(introspectionApplet);
+    this.shellStore.addApplet(htmlApplet);
+    this.shellStore.addApplet(textApplet);
+  }
 
   render() {
     return html`
