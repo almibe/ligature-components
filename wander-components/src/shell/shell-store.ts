@@ -23,7 +23,6 @@ export class ShellStore {
             script: script,
             wanderResult: result,
             applet: rawTextApplet,
-            content: rawTextApplet.render(result)
         };
         this.results.unshift(finalResult);
     }
@@ -71,7 +70,6 @@ export interface Result {
     readonly script: string
     readonly wanderResult: WanderResult
     applet: Applet
-    content: Element
 }
 
 export const shellStoreContext = createContext<ShellStore>('shell-store');

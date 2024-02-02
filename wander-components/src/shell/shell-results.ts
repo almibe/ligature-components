@@ -11,10 +11,6 @@ import { customElement } from 'lit/decorators.js';
 import { consume } from '@lit/context';
 import { Result, ShellStore, shellStoreContext } from './shell-store.ts';
 import { MobxLitElement } from '@adobe/lit-mobx';
-import { autorun } from 'mobx';
-import { printResult } from '@wander-lang/wander/src/interpreter.ts';
-import { WanderResult } from '@wander-lang/wander/src/values.ts';
-import { Applet } from './applets.ts';
 
 @customElement('shell-results')
 export class ShellResults extends MobxLitElement {
@@ -22,8 +18,6 @@ export class ShellResults extends MobxLitElement {
   shellStore!: ShellStore
 
   render() {
-//    autorun(() => {this.shellStore.results.forEach(result => console.log(printResult(result.result))) })
-
     return html`
           <div id="results">
           ${this.shellStore.results.map((result) =>
@@ -35,29 +29,20 @@ export class ShellResults extends MobxLitElement {
 
   static styles = css`
   `
-
-  // changeApplet(result: Result, applet: Applet) {
-  //   setStore(produce((store) => {
-  //       let prevResult = store.results.find(r => r.id == result.id)
-  //       prevResult.applet = applet
-  //       prevResult.content = applet.render(result.wanderResult)
-  //   }))
-  // }
-
   renderResult(result: Result) {
-    const filteredApplets = () => this.shellStore.applets.filter(applet =>
-        applet.predicate(result.wanderResult) 
-    )
-
+    const filteredApplets = () => this.shellStore.applets.filter((applet) => {
+      return applet.predicate(result.wanderResult)
+    })
+    
     return html`<sl-card style="width:100%; padding:10px;">
-        <span>${printResult(result.wanderResult)}</span>
+        ${result.applet.render(result.wanderResult)}
         <sl-dropdown style="float:right">
             <sl-button slot="trigger">
                ${result.applet.name}<sl-icon name="caret" library="system"></sl-icon>
             </sl-button>
             <sl-menu id=${"menu" + result.id}>
                 ${filteredApplets().map(applet => {
-                    html`<sl-menu-item @click=${() => result.applet = applet} >${applet.name}</sl-menu-item>`
+                    return html`<sl-menu-item @click=${() => result.applet = applet} >${applet.name}</sl-menu-item>`
                 })}
                 <sl-divider></sl-divider>
                 <sl-menu-item @click=${() => this.shellStore.setScript(result.script)}>
