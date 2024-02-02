@@ -21,9 +21,9 @@ export class ShellEditor extends MobxLitElement {
 
   render() {
     autorun(() => { 
-      if (this.shellStore.script == "") {
+      if (this.shellStore.script != this.editorObj?.readText()) {
         if (this.editorObj != null) {
-          this.editorObj.setText("");
+          this.editorObj.setText(this.shellStore.script);
         }
       }
     });
@@ -35,7 +35,7 @@ export class ShellEditor extends MobxLitElement {
         onRun: (script) => {
           this.shellStore.runEditor();
         },
-        onKey(key, text, position) {
+        onChange(text) {
           that.shellStore.setScript(text);
         },
       })

@@ -12,7 +12,7 @@ export interface Editor {
 export interface EditorConfig {
   readonly element: HTMLElement
   readonly onRun: (text: string) => void
-  readonly onKey: (key: string, text: string, position: number) => void
+  readonly onChange: (text: string) => void
 }
 
 export function initializeEditor(config: EditorConfig): Editor {
@@ -29,7 +29,7 @@ export function initializeEditor(config: EditorConfig): Editor {
       }),
       EditorView.updateListener.of((v: ViewUpdate) => {
         if (v.docChanged) {
-          //this.text = v.state.doc.toString();
+          config.onChange(v.state.doc.toString())
         }
       }),
       EditorView.domEventHandlers({
@@ -38,9 +38,6 @@ export function initializeEditor(config: EditorConfig): Editor {
             config.onRun(v.state.doc.toString());
             e.preventDefault();
           }
-        },
-        input: (e, v) => {
-          config.onKey(e.data, v.state.doc.toString(), v.state.selection.main.anchor)
         },
       }),
       basicSetup,

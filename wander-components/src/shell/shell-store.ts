@@ -40,7 +40,6 @@ export class ShellStore {
     }
 
     setScript(script: string) {
-        console.log("in setScript " + script)
         this.script = script
     }
 
@@ -74,8 +73,8 @@ export interface Result {
     readonly id: bigint
     readonly script: string
     readonly wanderResult: WanderResult
-    readonly applet: Applet
-    readonly content: Element
+    applet: Applet
+    content: Element
 }
 
 export const shellStoreContext = createContext<ShellStore>('shell-store');

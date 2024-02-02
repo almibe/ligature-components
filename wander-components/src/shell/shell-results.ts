@@ -9,7 +9,7 @@ import '@shoelace-style/shoelace/dist/components/card/card.js';
 import { css, html } from 'lit';
 import { customElement } from 'lit/decorators.js';
 import { consume } from '@lit/context';
-import { ShellStore, shellStoreContext } from './shell-store.ts';
+import { Result, ShellStore, shellStoreContext } from './shell-store.ts';
 import { MobxLitElement } from '@adobe/lit-mobx';
 import { autorun } from 'mobx';
 import { printResult } from '@wander-lang/wander/src/interpreter.ts';
@@ -45,13 +45,12 @@ export class ShellResults extends MobxLitElement {
   // }
 
   renderResult(result: Result) {
-    
     const filteredApplets = () => this.shellStore.applets.filter(applet =>
         applet.predicate(result.wanderResult) 
     )
 
     return html`<sl-card style="width:100%; padding:10px;">
-        <span innerHTML=${result.content}></span>
+        <span>${printResult(result.wanderResult)}</span>
         <sl-dropdown style="float:right">
             <sl-button slot="trigger">
                ${result.applet.name}<sl-icon name="caret" library="system"></sl-icon>
