@@ -14,7 +14,7 @@ export class ShellStore {
         makeAutoObservable(this);
     }
 
-    id = 0n;
+    id = 0;
 
     addResult(script: string, result: WanderResult) {
         const id = this.id++;
@@ -29,10 +29,7 @@ export class ShellStore {
     }
 
     removeResult(index: number) {
-        setStore(produce((store) => {
-            store.results = store.results.filter(r => r.id != result.id);
-        }))
-        this.results = this.results.splice(index, 1);
+        this.results.remove(this.results[index]);
     }
 
     clearEditor() {
@@ -70,7 +67,7 @@ export class ShellStore {
 }
 
 export interface Result {
-    readonly id: bigint
+    readonly id: number
     readonly script: string
     readonly wanderResult: WanderResult
     applet: Applet
