@@ -27,8 +27,8 @@ export class ShellStore {
         this.results.unshift(finalResult);
     }
 
-    removeResult(index: number) {
-        this.results.remove(this.results[index]);
+    removeResult(id: number) {
+        this.results.replace(this.results.filter(result => result.id !== id));
     }
 
     clearEditor() {
