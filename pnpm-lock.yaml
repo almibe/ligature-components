@@ -42,9 +42,6 @@ importers:
 
   wander-components:
     dependencies:
-      '@adobe/lit-mobx':
-        specifier: ^2.2.2
-        version: 2.2.2(lit@3.1.1)(mobx@6.12.0)
       '@codemirror/commands':
         specifier: ^6.3.0
         version: 6.3.3
@@ -63,9 +60,15 @@ importers:
       '@lezer/lr':
         specifier: ^1.3.13
         version: 1.3.14
+      '@lit-labs/preact-signals':
+        specifier: ^1.0.2
+        version: 1.0.2
       '@lit/context':
         specifier: ^1.1.0
         version: 1.1.0
+      '@preact/signals':
+        specifier: ^1.2.2
+        version: 1.2.2(preact@10.19.3)
       '@shoelace-style/shoelace':
         specifier: ^2.13.1
         version: 2.13.1(@types/react@18.2.48)
@@ -84,15 +87,18 @@ importers:
       lodash:
         specifier: ^4.17.21
         version: 4.17.21
-      mobx:
-        specifier: ^6.12.0
-        version: 6.12.0
       purify-ts:
         specifier: ^2.0.3
         version: 2.0.3
       tabulator-tables:
         specifier: ^5.5.4
         version: 5.5.4
+      xterm:
+        specifier: ^5.3.0
+        version: 5.3.0
+      xterm-readline:
+        specifier: ^1.1.1
+        version: 1.1.1(xterm@5.3.0)
     devDependencies:
       typescript:
         specifier: ^5.2.2
@@ -102,16 +108,6 @@ importers:
         version: 5.0.11
 
 packages:
-
-  /@adobe/lit-mobx@2.2.2(lit@3.1.1)(mobx@6.12.0):
-    resolution: {integrity: sha512-TKmaEgu0m8dxydo0cAhJ5qaNoa/moQr8I3E9DtxVb0OSu/huXps+gUg/6oz7sYllcSl4KFZtzfyfx7EstbQ9tw==}
-    peerDependencies:
-      lit: ^2.0.0 || ^3.0.0
-      mobx: ^5.0.0 || ^6.0.0
-    dependencies:
-      lit: 3.1.1
-      mobx: 6.12.0
-    dev: false
 
   /@codemirror/autocomplete@6.12.0(@codemirror/language@6.10.0)(@codemirror/state@6.4.0)(@codemirror/view@6.23.0)(@lezer/common@1.2.0):
     resolution: {integrity: sha512-r4IjdYFthwbCQyvqnSlx0WBHRHi8nBvU+WjJxFUij81qsBfhNudf/XKKmmC2j3m0LaOYUQTf3qiEK1J8lO1sdg==}
@@ -647,8 +643,19 @@ packages:
     dependencies:
       '@lezer/common': 1.2.0
 
+  /@lit-labs/preact-signals@1.0.2:
+    resolution: {integrity: sha512-HFgIhqLB5IiNbvJxEN3+o6n9x/fNZo7pqfElG56NHrOFBsIFW7wswbp6hHeoGzATQDOB2ZmrH/VrRGYdcgl29g==}
+    dependencies:
+      '@preact/signals-core': 1.5.1
+      lit: 3.1.2
+    dev: false
+
   /@lit-labs/ssr-dom-shim@1.1.2:
     resolution: {integrity: sha512-jnOD+/+dSrfTWYfSXBXlo5l5f0q1UuJo3tkbMDCYA2lKUYq79jaxqtGEvnRoh049nt1vdo1+45RinipU6FGY2g==}
+    dev: false
+
+  /@lit-labs/ssr-dom-shim@1.2.0:
+    resolution: {integrity: sha512-yWJKmpGE6lUURKAaIltoPIE/wrbY3TEkqQt+X0m+7fQNnAv0keydnYvbiJFP1PnMhizmIWRWOG5KLhYyc/xl+g==}
     dev: false
 
   /@lit/context@1.1.0:
@@ -671,12 +678,31 @@ packages:
       '@lit-labs/ssr-dom-shim': 1.1.2
     dev: false
 
+  /@lit/reactive-element@2.0.4:
+    resolution: {integrity: sha512-GFn91inaUa2oHLak8awSIigYz0cU0Payr1rcFsrkf5OJ5eSPxElyZfKh0f2p9FsTiZWXQdWGJeXZICEfXXYSXQ==}
+    dependencies:
+      '@lit-labs/ssr-dom-shim': 1.2.0
+    dev: false
+
   /@pkgjs/parseargs@0.11.0:
     resolution: {integrity: sha512-+1VkjdD0QBLPodGrJUeqarH8VAIvQODIbwh9XpP5Syisf7YoQgsJKPNFoqqLQlu+VQ/tVSshMR6loPMn8U+dPg==}
     engines: {node: '>=14'}
     requiresBuild: true
     dev: false
     optional: true
+
+  /@preact/signals-core@1.5.1:
+    resolution: {integrity: sha512-dE6f+WCX5ZUDwXzUIWNMhhglmuLpqJhuy3X3xHrhZYI0Hm2LyQwOu0l9mdPiWrVNsE+Q7txOnJPgtIqHCYoBVA==}
+    dev: false
+
+  /@preact/signals@1.2.2(preact@10.19.3):
+    resolution: {integrity: sha512-ColCqdo4cRP18bAuIR4Oik5rDpiyFtPIJIygaYPMEAwTnl4buWkBOflGBSzhYyPyJfKpkwlekrvK+1pzQ2ldWw==}
+    peerDependencies:
+      preact: 10.x
+    dependencies:
+      '@preact/signals-core': 1.5.1
+      preact: 10.19.3
+    dev: false
 
   /@rollup/rollup-android-arm-eabi@4.9.5:
     resolution: {integrity: sha512-idWaG8xeSRCfRq9KpRysDHJ/rEHBEXcHuJ82XY0yYFIWnLMjZv9vF/7DOq8djQ2n3Lk6+3qfSH8AqlmHlmi1MA==}
@@ -1197,8 +1223,22 @@ packages:
       lit-html: 3.1.1
     dev: false
 
+  /lit-element@4.0.4:
+    resolution: {integrity: sha512-98CvgulX6eCPs6TyAIQoJZBCQPo80rgXR+dVBs61cstJXqtI+USQZAbA4gFHh6L/mxBx9MrgPLHLsUgDUHAcCQ==}
+    dependencies:
+      '@lit-labs/ssr-dom-shim': 1.2.0
+      '@lit/reactive-element': 2.0.4
+      lit-html: 3.1.2
+    dev: false
+
   /lit-html@3.1.1:
     resolution: {integrity: sha512-x/EwfGk2D/f4odSFM40hcGumzqoKv0/SUh6fBO+1Ragez81APrcAMPo1jIrCDd9Sn+Z4CT867HWKViByvkDZUA==}
+    dependencies:
+      '@types/trusted-types': 2.0.7
+    dev: false
+
+  /lit-html@3.1.2:
+    resolution: {integrity: sha512-3OBZSUrPnAHoKJ9AMjRL/m01YJxQMf+TMHanNtTHG68ubjnZxK0RFl102DPzsw4mWnHibfZIBJm3LWCZ/LmMvg==}
     dependencies:
       '@types/trusted-types': 2.0.7
     dev: false
@@ -1209,6 +1249,14 @@ packages:
       '@lit/reactive-element': 2.0.3
       lit-element: 4.0.3
       lit-html: 3.1.1
+    dev: false
+
+  /lit@3.1.2:
+    resolution: {integrity: sha512-VZx5iAyMtX7CV4K8iTLdCkMaYZ7ipjJZ0JcSdJ0zIdGxxyurjIn7yuuSxNBD7QmjvcNJwr0JS4cAdAtsy7gZ6w==}
+    dependencies:
+      '@lit/reactive-element': 2.0.4
+      lit-element: 4.0.4
+      lit-html: 3.1.2
     dev: false
 
   /local-pkg@0.5.0:
@@ -1270,10 +1318,6 @@ packages:
       pkg-types: 1.0.3
       ufo: 1.3.2
     dev: true
-
-  /mobx@6.12.0:
-    resolution: {integrity: sha512-Mn6CN6meXEnMa0a5u6a5+RKrqRedHBhZGd15AWLk9O6uFY4KYHzImdt8JI8WODo1bjTSRnwXhJox+FCUZhCKCQ==}
-    dev: false
 
   /ms@2.1.2:
     resolution: {integrity: sha512-sGkPx+VjMtmA6MX27oA4FBFELFCZZ4S4XqeGOXCv68tT+jb3vk/RyaKWP0PTKyWtmLSM0b+adUTEvbs1PEaH2w==}
@@ -1351,6 +1395,10 @@ packages:
       picocolors: 1.0.0
       source-map-js: 1.0.2
     dev: true
+
+  /preact@10.19.3:
+    resolution: {integrity: sha512-nHHTeFVBTHRGxJXKkKu5hT8C/YWBkPso4/Gad6xuj5dbptt9iF9NZr9pHbPhBrnT2klheu7mHTxTZ/LjwJiEiQ==}
+    dev: false
 
   /pretty-format@29.7.0:
     resolution: {integrity: sha512-Pdlw/oPxN+aXdmM9R00JVC9WVFoCLTKJvDVLgmJ+qAffBMxsV85l/Lu7sNx4zSzPyoL2euImuEwHhOXdEgNFZQ==}
@@ -1700,6 +1748,19 @@ packages:
       ansi-styles: 6.2.1
       string-width: 5.1.2
       strip-ansi: 7.1.0
+    dev: false
+
+  /xterm-readline@1.1.1(xterm@5.3.0):
+    resolution: {integrity: sha512-f87S2/jKwRZoZTxE2vkPgBCipDl6k6tTkMTb9pmwC4R6XkfR491fWBuToZd/nZasp6seD2u0jdABinUDWsK6dw==}
+    peerDependencies:
+      xterm: ^5.0.0
+    dependencies:
+      string-width: 4.2.3
+      xterm: 5.3.0
+    dev: false
+
+  /xterm@5.3.0:
+    resolution: {integrity: sha512-8QqjlekLUFTrU6x7xck1MsPzPA571K5zNqWm0M0oroYEWVOptZ0+ubQSkQ3uxIEhcIHRujJy6emDWX4A7qyFzg==}
     dev: false
 
   /yocto-queue@1.0.0:
