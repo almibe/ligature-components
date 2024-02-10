@@ -3,6 +3,7 @@ import { Field, WanderError, WanderValue } from './values.js';
 import { parser } from './wander-lezer-parser.js';
 import { Either, Left, Right } from 'purify-ts/Either';
 import { _ } from "lodash";
+
 export function parse(script: string): Either<WanderError, Expression[]> {
     const parseResults = parser.parse(script);
     return parseExpressions(parseResults.topNode, script);

@@ -1,7 +1,7 @@
 import { Immutable, enableMapSet, produce } from "immer";
 import { Either, Just, Left, Right } from "purify-ts";
 import { Field, FieldPath, WanderError, WanderValue } from "./values";
-import { ModuleLibrary } from "./libraries/module-library";
+import { ModuleLibrary } from "./libraries/function-library";
 
 enableMapSet()
 
@@ -27,23 +27,26 @@ export function bindVariable(environment: Environment, field: Field, value: Wand
 }
 
 export function read(environment: Environment, fieldPath: FieldPath): Either<WanderError, WanderValue> {
-    //TODO this doesn't read into modules, so x.y.z won't work but x will
-    if (fieldPath.parts.length == 1) {
-        const field = fieldPath.parts[0];
-        let offset = environment.scope.length - 1;
-        while (offset >= 0) {
-            let currentScope = environment.scope[offset];
-            if (currentScope.has(field.name)) {
+    const field = fieldPath.parts[0];
+    let offset = environment.scope.length - 1;
+    while (offset >= 0) {
+        let currentScope = environment.scope[offset];
+        if (currentScope.has(field.name)) {
+            if (fieldPath.parts.length == 1) {
                 return Right(currentScope.get(field.name));
+            } else {
+                //TODO this doesn't read into modules, so x.y.z won't work but x will
+                throw "TODO"
             }
-            offset = offset - 1;
         }
+        offset = offset - 1;
     }
+    console.log(environment.libraries.length)
     for (const library of environment.libraries) {
         const lookup = library.lookup(fieldPath);
         if (lookup.isRight()) {
-            return Just(lookup.unsafeCoerce());
+            return lookup;
         }
     }
-    return Left(`Could not find ${fieldPath}`);
+    return Left(`Could not find ${fieldPath.parts.map(name => name.name).join(".")}`);
 }

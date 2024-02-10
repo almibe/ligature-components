@@ -1,14 +1,18 @@
-import { Right } from "purify-ts";
+import { Left, Right } from "purify-ts";
 import { HostFunction } from "../values";
 
 export const boolFunctions: HostFunction[] = [
     {
         fieldPath: {parts: [{name: "Bool"}, {name: "not"}]},
-        docString: "",
-        parameters: [{field:{name:"bool"}, tag: {}}],
+        docString: "Perform a not operation on a Bool value.",
+        parameters: [{field:{name:"Bool"}, tag: {}}],
         resultTag: {},
         fn: (args, environment) => {
-            return Right([{type: "bool", value: true}, environment])
+            if (args.length == 1 && args[0].type == "Bool") {
+                return Right([{type: "Bool", value: !args[0].value}, environment])
+            } else {
+                return Left("Incorrect arguments to Bool.not. " + JSON.stringify(args));
+            }
         },
         type: "HostFunction",
     }

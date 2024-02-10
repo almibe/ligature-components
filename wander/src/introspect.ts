@@ -1,9 +1,16 @@
-import { WanderValue } from "./values";
+import { Either } from "purify-ts";
+import { Expression } from "./expressions";
+import { WanderError } from "./values";
+import { parse } from "./parser";
 
-export function introspect(script: string): WanderValue {
-    const value = new Map<string, WanderValue>();
-    value.set("script", {type: "String", value: script});
-    value.set("tokens", {type: "Array", value: []});
-    value.set("expressions", {type: "Array", value: []});
-    return {type: "Module", value};
+export interface IntrospectionResult {
+    readonly script: string
+    readonly expressions: Either<WanderError, Expression[]>
+}
+
+export function introspect(script: string): IntrospectionResult {
+    return {
+        script,
+        expressions: parse(script)
+    }
 }
