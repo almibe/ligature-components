@@ -1,20 +1,18 @@
 import {createContext} from '@lit/context';
 import { WanderResult } from '@wander-lang/wander/src/values';
-import { makeAutoObservable } from 'mobx'
 import { Applet, rawTextApplet } from './applets';
 import { run } from '@wander-lang/wander/src/interpreter';
 import { std } from '@wander-lang/wander/src/host/library';
+import { signal, Signal } from "@preact/signals";
 
-export class ShellStore {
-    results: Result[] = [];
-    applets: Applet[] = [];
-    script: string = "";
+export class ShellState {
+    private results: Signal<Result[]> = signal([]);
+    private applets: Signal<Applet[]> = signal([]);
+    private script: Signal<string> = signal("");
+    private id = 0;
 
     constructor() {
-        makeAutoObservable(this);
     }
-
-    id = 0;
 
     addResult(script: string, result: WanderResult) {
         const id = this.id++;
@@ -69,7 +67,7 @@ export interface Result {
     readonly id: number
     readonly script: string
     readonly wanderResult: WanderResult
-    applet: Applet
+    readonly applet: Applet
 }
 
-export const shellStoreContext = createContext<ShellStore>('shell-store');
+export const shellStoreContext = createContext<ShellState>('shell-store');

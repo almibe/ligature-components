@@ -4,7 +4,7 @@ import '@shoelace-style/shoelace/dist/themes/light.css';
 import './shell.css';
 import { Editor, initializeEditor } from '../editor/wander-editor.ts';
 import {consume} from '@lit/context';
-import { ShellStore, shellStoreContext } from './shell-store.ts';
+import { ShellState, shellStoreContext } from './shell-state.ts';
 import { MobxLitElement } from '@adobe/lit-mobx';
 import { autorun } from 'mobx';
 
@@ -12,7 +12,7 @@ import { autorun } from 'mobx';
 export class ShellEditor extends MobxLitElement {
 
   @consume({context: shellStoreContext})
-  shellStore!: ShellStore
+  shellStore!: ShellState
 
   @query("#editor")
   editor!: HTMLElement;

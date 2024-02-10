@@ -9,13 +9,13 @@ import '@shoelace-style/shoelace/dist/components/card/card.js';
 import { css, html } from 'lit';
 import { customElement } from 'lit/decorators.js';
 import { consume } from '@lit/context';
-import { Result, ShellStore, shellStoreContext } from './shell-store.ts';
+import { Result, ShellState, shellStoreContext } from './shell-state.ts';
 import { MobxLitElement } from '@adobe/lit-mobx';
 
 @customElement('shell-results')
 export class ShellResults extends MobxLitElement {
   @consume({context: shellStoreContext})
-  shellStore!: ShellStore
+  shellStore!: ShellState
 
   render() {
     return html`
