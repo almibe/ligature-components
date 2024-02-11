@@ -1,10 +1,18 @@
 import express from "express";
 import ViteExpress from "vite-express";
+import * as zmq from "zeromq"
 
 const app = express();
 
-app.get("/hello", (_, res) => {
-  res.send("Hello Vite + TypeScript!");
+app.post("/wander", express.text({type: '*/*'}), async (req, res) => {
+  console.log(req.body)
+  const sock = new zmq.Request()
+  sock.connect("tcp://127.0.0.1:4200");
+  let script = await req.body;
+  await sock.send(script);
+  let [result] = await sock.receive();
+  console.log(result)
+  res.send(result);
 });
 
 ViteExpress.listen(app, 3000, () =>

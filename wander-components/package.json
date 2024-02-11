@@ -1,5 +1,5 @@
 {
-  "name": "wander-components-new",
+  "name": "@wander-lang/wander-components",
   "private": true,
   "version": "0.0.0",
   "type": "module",

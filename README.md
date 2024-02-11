@@ -1,21 +1,10 @@
-# Wander Components
+# Wander Web
 
-## Developing
+This repo contains projects related to working with Wander on the web.
+See each project's directory for notes.
 
-This project requires [node](https://nodejs.org/en/download/) and [pnpm](https://pnpm.io/) to be installed on your machine.
-Once you check out this project run the following commands.
-
-```bash
-cd wander-components
-pnpm install
-pnpm run dev
-```
-
-## Generated Files
-
-The /wander/ project uses the parser generator [Lezer](https://lezer.codemirror.net/) and generates two files,
-wander-lezer-parser.js and wander-lezer-parser.terms.js.
-These files are generated during build automatically and are in the gitignore file.
-
-The grammar used for Wander is based off of Lezer's example JSON grammar.
-https://github.com/lezer-parser/json/blob/main/src/json.grammar
+| Project           | Description                                |
+| ----------------- | ------------------------------------------ |
+| wander            | Basic support for Wander in TypeScript.    |
+| wander-components | Web Components for working with Wander.    |
+| wander-lab        | A web application for working with Wander. |
