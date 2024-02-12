@@ -1,6 +1,7 @@
 import "xterm/css/xterm.css";
 import { Terminal } from 'xterm';
 import { Readline } from "xterm-readline";
+import { FitAddon } from '@xterm/addon-fit';
 
 BigInt.prototype.toJSON = function() { return this.toString() }
 
@@ -13,12 +14,15 @@ export function initializeRepl(elementId: string, onRun: any) {
     cursorBlink: true,
     cursorStyle: "block"
   });
-  
+
+  const fitAddon = new FitAddon();
   const rl = new Readline();
   
   term.loadAddon(rl);
+  term.loadAddon(fitAddon);
   term.open(document.getElementById(elementId));
   term.focus();
+  fitAddon.fit();
   
   rl.setCheckHandler((text) => {
     let trimmedText = text.trimEnd();
