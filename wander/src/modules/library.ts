@@ -1,11 +1,13 @@
 import { Right } from "purify-ts";
 import { Environment, bindVariable, newEnvironment } from "../environment";
 import { _ } from 'lodash';
-import { boolFunctions } from "./bool";
+import { boolModule } from "./bool";
 import { hostLibrary } from "../libraries/host-library";
 
 export function std(): Environment {
-    let env = newEnvironment([hostLibrary(boolFunctions)]);
+    //let env = newEnvironment([hostLibrary(boolFunctions)]);
+    let env = newEnvironment([]);
+    env = bindVariable(env, {name: "Bool"}, boolModule)
     // env = bindVariable(env, "eq", {
     //     type: "HostFunction",
     //     docString: "Test if two values are equal.",

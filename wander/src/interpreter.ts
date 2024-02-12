@@ -4,7 +4,7 @@ import { parse } from './parser.js';
 import { ArrayValue, HostFunction, LambdaValue, ModuleValue, WanderResult, WanderValue, empty } from './values.js';
 import { Left, Right } from 'purify-ts/Either';
 import { _ } from 'lodash';
-import { std } from './host/library.js';
+import { std } from './modules/library.js';
 
 export function evaluateScript(expressions: Expression[], environment: Environment): WanderResult {
     let result: WanderResult = Left("No result.");

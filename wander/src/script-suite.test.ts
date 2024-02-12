@@ -5,7 +5,7 @@ import { newEnvironment } from './environment.ts';
 import { WanderValue } from './values.ts';
 import { glob, globSync, globStream, globStreamSync, Glob } from 'glob';
 import * as fs from 'fs';
-import { std } from './host/library.ts';
+import { std } from './modules/library.ts';
 
 function evaluateResults(results: WanderValue, scriptName: string) {
 	if (results.type == "Array") {

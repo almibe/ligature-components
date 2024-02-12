@@ -1,7 +1,7 @@
 import { Immutable, enableMapSet, produce } from "immer";
 import { Either, Just, Left, Right } from "purify-ts";
 import { Field, FieldPath, WanderError, WanderValue } from "./values";
-import { ModuleLibrary } from "./libraries/function-library";
+import { ModuleLibrary } from "./libraries/module-library";
 
 enableMapSet()
 
@@ -35,18 +35,23 @@ export function read(environment: Environment, fieldPath: FieldPath): Either<Wan
             if (fieldPath.parts.length == 1) {
                 return Right(currentScope.get(field.name));
             } else {
-                //TODO this doesn't read into modules, so x.y.z won't work but x will
-                throw "TODO"
+                let res = currentScope.get(field.name);
+                if (res.type == "Module") {
+                    //TODO this doesn't read more than one level deep
+                    return Right(res.value.get(fieldPath.parts[1].name))
+                } else {
+                    return Left(`Couldn't read ${fieldPath}.`);
+                }
             }
         }
         offset = offset - 1;
     }
-    console.log(environment.libraries.length)
-    for (const library of environment.libraries) {
-        const lookup = library.lookup(fieldPath);
-        if (lookup.isRight()) {
-            return lookup;
-        }
-    }
+    // console.log(environment.libraries.length)
+    // for (const library of environment.libraries) {
+    //     const lookup = library.lookup(fieldPath);
+    //     if (lookup.isRight()) {
+    //         return lookup;
+    //     }
+    // }
     return Left(`Could not find ${fieldPath.parts.map(name => name.name).join(".")}`);
 }

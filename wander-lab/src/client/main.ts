@@ -1,3 +1,4 @@
+import { std } from "../../../wander/src/modules/library";
 import { printResult, run } from "../../../wander/src/interpreter";
 import { parse } from "../../../wander/src/parser";
 import "./style.css";
@@ -15,7 +16,7 @@ initializeRepl("app", async (script) => {
         script = script.slice(1);
         return JSON.stringify(parse(script), null, 2);
     } else {
-        const result = printResult(run(script));
+        const result = printResult(run(script, std()));
         return result;
     }
 });
