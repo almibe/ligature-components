@@ -5,8 +5,8 @@ import "./style.css";
 import { initializeRepl } from "wander-components/src/repl/repl.ts"
 
 initializeRepl("app", async (script) => {
-    if (script.trim().startsWith("!")) {
-        const finalScript = `{action="inspect", script=${JSON.stringify(script)}}`
+    if (script.startsWith("!")) {
+        const finalScript = `{action="inspect", script=${JSON.stringify(script.slice(1))}}`
         console.log("Running", finalScript);
         let result = await fetch("/wander", {
             method: "POST",
