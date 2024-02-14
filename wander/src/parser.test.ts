@@ -17,15 +17,15 @@ test("parse Bool", () => {
 	expect(result).toStrictEqual(Right([{ value: true, type: "Bool"}]));
 });
 
-// test("parse Module", () => {
-// 	const result = parse(`{x = 5}`);
-// 	expect(result).toStrictEqual(Right([{ value: new Map([[{name: "x"}, {value: 5n, type: "Int"}]]), type: "Module"}]));
-// })
+test("parse Module", () => {
+	const result = parse(`{x = 5}`);
+	expect(result).toStrictEqual(Right([{ value: new Map([[{name: "x"}, {value: 5n, type: "Int"}]]), type: "Module"}]));
+})
 
-// test("parse Binding", () => {
-// 	const result = parse("x = 5");
-// 	expect(result).toStrictEqual(Right([ {name: {name: "x"}, value: {value: 5n, type: "Int"}, type: "Binding"}]))
-// })
+test("parse Binding", () => {
+	const result = parse("x = 5");
+	expect(result).toStrictEqual(Right([ {name: {name: "x"}, value: {value: 5n, type: "Int"}, type: "Binding"}]))
+})
 
 test("parse Grouping", () => {
 	const result = parse("(1,2,3)");

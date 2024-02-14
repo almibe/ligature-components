@@ -118,3 +118,9 @@ test("eval when", () => {
 		type: "Int", value: 5n
 	})
 })
+
+test("eval pipe", () => {
+	evalAndCheck("false | Bool.not", {
+		type: "Bool", value: true
+	})
+})

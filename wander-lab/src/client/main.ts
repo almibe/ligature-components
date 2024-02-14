@@ -5,18 +5,33 @@ import "./style.css";
 import { initializeRepl } from "wander-components/src/repl/repl.ts"
 
 initializeRepl("app", async (script) => {
-    // let result = await fetch("/wander", {
-    //     method: "POST",
-    //     body: script
-    // });
-    // let resultText = await result.text();
-    // return resultText;
-    // printResult(run(script));
-    if (script.startsWith("!")) {
-        script = script.slice(1);
-        return JSON.stringify(parse(script), null, 2);
+    if (script.trim().startsWith("!")) {
+        const finalScript = `{action="inspect", script=${JSON.stringify(script)}}`
+        console.log("Running", finalScript);
+        let result = await fetch("/wander", {
+            method: "POST",
+            body: finalScript
+        });
+        let resultText = await result.text();
+        return resultText;
     } else {
-        const result = printResult(run(script, std()));
-        return result;
+        const finalScript = `{action="run", script=${JSON.stringify(script)}}`
+        console.log("Running", finalScript);
+        let result = await fetch("/wander", {
+            method: "POST",
+            body: finalScript
+        });
+        let resultText = await result.text();
+        return resultText;
     }
+    
+    // printResult(run(script));
+
+    // if (script.startsWith("!")) {
+    //     script = script.slice(1);
+    //     return JSON.stringify(parse(script), null, 2);
+    // } else {
+    //     const result = printResult(run(script, std()));
+    //     return result;
+    // }
 });

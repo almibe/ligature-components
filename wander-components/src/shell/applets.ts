@@ -1,6 +1,6 @@
 import { ModuleValue, WanderResult, WanderValue } from "@wander-lang/wander/src/values"
 import { printResult, printValue } from "@wander-lang/wander/src/interpreter"
-import { introspect } from "@wander-lang/wander/src/introspect"
+import { inspect } from "@wander-lang/wander/src/inspect"
 import { html } from "lit"
 
 export interface Applet {
@@ -73,15 +73,15 @@ export const rawTextApplet: Applet = {
     }
 }
 
-export const introspectionApplet: Applet = {
-    name: "Introspect",
+export const inspectionApplet: Applet = {
+    name: "Inspect",
     predicate: (value) => true,
     render: (value: WanderResult, script: string) => {
-        const intro = introspect(script);
+        const intro = inspect(script);
 
         return html`
             <div>
-                Introspection
+                Inspection
                 <hr>
                 Expressions: 
             </div>

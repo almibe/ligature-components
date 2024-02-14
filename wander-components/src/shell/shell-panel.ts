@@ -7,7 +7,7 @@ import { ShellState, shellStoreContext } from './shell-state.ts';
 import { MobxLitElement } from '@adobe/lit-mobx';
 import './shell-editor.ts'
 import './shell-results.ts'
-import { rawTextApplet, errorApplet, introspectionApplet, htmlApplet, textApplet } from './applets.ts';
+import { rawTextApplet, errorApplet, inspectionApplet, htmlApplet, textApplet } from './applets.ts';
 
 @customElement('shell-panel')
 export class ShellPanel extends MobxLitElement {
@@ -18,7 +18,7 @@ export class ShellPanel extends MobxLitElement {
     super()
     this.shellStore.addApplet(errorApplet);
     this.shellStore.addApplet(rawTextApplet);
-    this.shellStore.addApplet(introspectionApplet);
+    this.shellStore.addApplet(inspectionApplet);
     this.shellStore.addApplet(htmlApplet);
     this.shellStore.addApplet(textApplet);
   }

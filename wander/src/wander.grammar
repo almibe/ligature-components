@@ -2,7 +2,7 @@
 
 @top Script { list<Expression> }
 
-single { Name | Field | !high Bool | !high Int | String | Module | Array | Grouping | When | Lambda }
+single { Field | !high Bool | !high Int | String | Module | Array | Grouping | When | Lambda | !high Pipe | Name }
 Expression { single | Application }
 
 String { !high string }
@@ -11,11 +11,12 @@ Array  { !high "[" list<Expression>? "]" }
 Grouping { !high "(" list<Expression>? ")" }
 When { !high "when" list<(Expression "=>" Expression ",")> "end" }
 Lambda { !high "\\" Name+ "->" Expression }
-Application { Name single+ }
+Application { single single+ }
 
 Field { !high Name "=" Expression }
 
 @tokens {
+  Pipe { '|' }
   Bool { "true" | "false" }
   Int { '-'? int }
   int  { '0' | $[1-9] @digit* }
@@ -29,7 +30,7 @@ Field { !high Name "=" Expression }
 
   whitespace { $[ \n\r\t] }
 
-  @precedence { "when", "end", Bool, "->", string, Name }
+  @precedence { "when", "end", Bool, "->", string, Name, Pipe }
 }
 
 @skip { whitespace | Comment }
