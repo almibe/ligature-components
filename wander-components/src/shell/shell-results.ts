@@ -6,14 +6,13 @@ import '@shoelace-style/shoelace/dist/components/menu-item/menu-item.js';
 import '@shoelace-style/shoelace/dist/components/divider/divider.js';
 import '@shoelace-style/shoelace/dist/components/card/card.js';
 
-import { css, html } from 'lit';
+import { LitElement, css, html } from 'lit';
 import { customElement } from 'lit/decorators.js';
 import { consume } from '@lit/context';
 import { Result, ShellState, shellStoreContext } from './shell-state.ts';
-import { MobxLitElement } from '@adobe/lit-mobx';
 
 @customElement('shell-results')
-export class ShellResults extends MobxLitElement {
+export class ShellResults extends LitElement {
   @consume({context: shellStoreContext})
   shellStore!: ShellState
 

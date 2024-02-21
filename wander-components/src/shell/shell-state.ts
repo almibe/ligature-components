@@ -1,8 +1,6 @@
 import {createContext} from '@lit/context';
 import { WanderResult } from '@wander-lang/wander/src/values';
 import { Applet, rawTextApplet } from './applets';
-import { run } from '@wander-lang/wander/src/interpreter';
-import { std } from '@wander-lang/wander/src/host/library';
 import { signal, Signal } from "@preact/signals";
 
 export class ShellState {
@@ -52,7 +50,7 @@ export class ShellState {
     }
 
     addApplet(applet: Applet) {
-        this.applets.push(applet);
+      //  this.applets.push(applet);
     }
 
     removeApplet(applet: Applet) {

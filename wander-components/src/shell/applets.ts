@@ -1,6 +1,5 @@
 import { ModuleValue, WanderResult, WanderValue } from "@wander-lang/wander/src/values"
 import { printResult, printValue } from "@wander-lang/wander/src/interpreter"
-import { inspect } from "@wander-lang/wander/src/inspect"
 import { html } from "lit"
 
 export interface Applet {
