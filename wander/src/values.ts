@@ -15,11 +15,6 @@ export interface StringValue {
     readonly type: "String"
 }
 
-export interface BoolValue {
-    readonly value: boolean
-    readonly type: "Bool"
-}
-
 export interface ArrayValue {
     readonly value: WanderValue[]
     readonly type: "Array"
@@ -28,12 +23,6 @@ export interface ArrayValue {
 export interface ModuleValue {
     readonly value: Immutable<Map<Field, WanderValue>>
     readonly type: "Module"
-}
-
-export interface LambdaValue {
-    readonly parameters: TaggedField[]
-    readonly body: Expression
-    readonly type: "Lambda"
 }
 
 export type Tag = {} | { tag: Function } | { chain: Function[] }
@@ -60,9 +49,9 @@ export interface HostFunction {
     readonly type: "HostFunction"
 }
 
-export type Function = HostFunction | LambdaValue
+export type Function = HostFunction
 
-export type WanderValue = ModuleValue | ArrayValue | IntegerValue | StringValue | BoolValue | LambdaValue | HostFunction;
+export type WanderValue = ModuleValue | ArrayValue | IntegerValue | StringValue | HostFunction;
 
 export type WanderResult = Either<WanderError, [WanderValue, Environment]>;
 

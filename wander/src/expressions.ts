@@ -1,5 +1,5 @@
 import { Immutable } from "immer"
-import { Field, FieldPath, TaggedField } from "./values"
+import { Field, FieldPath } from "./values"
 
 export interface BindingExpr {
     readonly field: Field
@@ -42,22 +42,5 @@ export interface FieldPathExpr {
     readonly type: "FieldPath"
 }
 
-export interface LambdaExpr {
-    readonly parameters: TaggedField[]
-    readonly body: Expression
-    readonly type: "Lambda"
-}
-
-export interface ApplicationExpr {
-    readonly fieldPath: FieldPath
-    readonly args: Expression[]
-    readonly type: "Application"
-}
-
-export interface WhenExpr {
-    readonly body: Immutable<{condition: Expression, body: Expression}[]>
-    readonly type: "When"
-}
-
-export type Expression = BindingExpr | ModuleExpr | ArrayExpr | GroupingExpr | WhenExpr
-    | IntegerExpr | StringExpr | BoolExpr | FieldPathExpr | LambdaExpr | ApplicationExpr;
+export type Expression = BindingExpr | ModuleExpr | ArrayExpr | GroupingExpr
+    | IntegerExpr | StringExpr | BoolExpr | FieldPathExpr;

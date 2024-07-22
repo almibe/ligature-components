@@ -7,4 +7,3 @@ See each project's directory for notes.
 | ----------------- | ------------------------------------------ |
 | wander            | Basic support for Wander in TypeScript.    |
 | wander-components | Web Components for working with Wander.    |
-| wander-lab        | A web application for working with Wander. |

@@ -26,7 +26,7 @@ export function evaluateScript(expressions: Expression[], environment: Environme
 export function evaluate(expression: Expression, environment: Environment): WanderResult {
     if (expression.type != undefined) {
         switch ((expression as Expression).type) {
-            case "Int": case "String": case "Bool": case "Lambda":
+            case "Int": case "String": case "Bool":
                 return Right([expression, environment]);
             case "Array":
                 return evalArray(expression, environment);
@@ -102,14 +102,6 @@ function callArray(array: ArrayValue, args: WanderValue[], environment: Environm
     } else {
         return Left(`Cannot call Array with value passed. ${args}`)
     }
-}
-
-function runLambda(fn: LambdaValue, args: WanderValue[], environment: Environment): WanderResult {
-    let newEnv = environment;
-    fn.parameters.forEach((param, i) => {
-        newEnv = bindVariable(newEnv, param, args[i]);
-    })
-    return evaluate(fn.body, newEnv);
 }
 
 function runHostFunction(fn: HostFunction, args: WanderValue[], environment: Environment): WanderResult {

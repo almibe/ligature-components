@@ -7,12 +7,13 @@ Once you check out this project run the following commands.
 
 ```bash
 pnpm install
+pnpm test
 pnpm run dev
 ```
 
 ## Generated Files
 
-Thuis project uses the parser generator [Lezer](https://lezer.codemirror.net/) and generates two files,
+This project uses the parser generator [Lezer](https://lezer.codemirror.net/) and generates two files,
 wander-lezer-parser.js and wander-lezer-parser.terms.js.
 These files are generated during build automatically and are in the gitignore file.
 

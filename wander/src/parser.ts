@@ -1,4 +1,4 @@
-import { ApplicationExpr, Expression, FieldPathExpr, LambdaExpr, WhenExpr } from './expressions.js';
+import { Expression, FieldPathExpr } from './expressions.js';
 import { Field, WanderError, WanderValue } from './values.js';
 import { parser } from './wander-lezer-parser.js';
 import { Either, Left, Right } from 'purify-ts/Either';
@@ -58,14 +58,8 @@ function parseExpression(expressionNode: any, script: string): Either<WanderErro
             case "Grouping": {
                 return parseGrouping(childNode, script);
             }
-            case "Lambda": {
-                return parseLambda(childNode, script);
-            }
             case "Expression": {
                 return parseApplication(childNode, script);
-            }
-            case "When": {
-                return parseWhen(childNode, script);
             }
             case "Application": {
                 return parseApplication(childNode, script);
@@ -112,31 +106,10 @@ function parseSingleExpression(childNode: any, script: string): Either<WanderErr
             case "Grouping": {
                 return parseGrouping(childNode, script);
             }
-            case "Lambda": {
-                return parseLambda(childNode, script);
-            }
-            case "Expression": {
-                return parseApplication(childNode, script);
-            }
-            case "When": {
-                return parseWhen(childNode, script);
-            }
-            case "Application": {
-                return parseApplication(childNode, script);
-            }
             default: {
                 return Left(`Error: Unexpected type ${childNode.type.name}`);
             }
         }
-}
-
-function parseWhen(whenNode: any, script: string): Either<WanderError, WhenExpr> {
-    let body = _.chunk(
-        whenNode
-        .getChildren("Expression")
-        .map(e => parseExpression(e, script).unsafeCoerce()
-        ), 2)
-    return Right({type: "When", body});
 }
 
 function parseFieldPath(node: any, script: string): Either<WanderError, FieldPathExpr> {
@@ -145,34 +118,6 @@ function parseFieldPath(node: any, script: string): Either<WanderError, FieldPat
     return Right(name)
 }
 
-function parseApplication(applicationNode: any, script: string): Either<WanderError, ApplicationExpr> {
-    let child = applicationNode.firstChild;
-    const name = script.substring(child.from, child.to);
-    const fullName = name.split(".").map(name => {return {name}});
-    child = child.nextSibling;
-    const args = [];
-    while (child != null) {
-        const res = parseSingleExpression(child, script);
-        if (res.isLeft()) {
-            return res;
-        } else {
-            args.push(res.unsafeCoerce());
-            child = child.nextSibling;
-        }    
-    }
-    return Right({type: "Application", fieldPath: {type: "FieldPath", value: {parts: fullName}}, args });
-}
-
-function parseLambda(lambdaNode: any, script: string): Either<WanderError, LambdaExpr> {
-    let parameters = lambdaNode.getChildren("Name")
-        .map(childNode => {return {name: script.substring(childNode.from, childNode.to)}})
-    let body = parseExpression(lambdaNode.getChild("Expression"), script)
-    if (body.isLeft()) {
-        return body;
-    } else {
-        return Right({ type: "Lambda", parameters, body: body.unsafeCoerce() });
-    }
-}
 
 function parseBinding(bindingNode: any, script: string): Either<WanderError, Expression> {
     let result = parseField(bindingNode, script);

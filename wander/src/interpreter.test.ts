@@ -35,10 +35,6 @@ test('eval String', () => {
 	evalAndCheck(`"Hello, World!"`, { value: "Hello, World!", type: "String"});
 });
 
-test("eval Bool", () => {
-	evalAndCheck(`true`, { value: true, type: "Bool"});
-});
-
 test('eval Int as expression', () => {
 	evalAndCheck("45,", { value: 45n, type: "Int" });
 });
@@ -47,12 +43,8 @@ test('eval String as expression', () => {
 	evalAndCheck(`"Hello, World!",`, { value: "Hello, World!", type: "String"});
 });
 
-test("eval Bool as expression", () => {
-	evalAndCheck(`true,`, { value: true, type: "Bool"});
-});
-
 test("eval script of literals", () => {
-	evalAndCheck(`true, 5, "hello"`, { value: "hello", type: "String"});
+	evalAndCheck(`5, "hello"`, { value: "hello", type: "String"});
 });
 
 test("eval empty Array", () => {
@@ -64,7 +56,7 @@ test("eval Array with 1 value", () => {
 });
 
 test("eval Array", () => {
-	evalAndCheck(`[true, 4]`, { value: [{type: "Bool", value: true}, {type: "Int", value: 4n}], type: "Array"});
+	evalAndCheck(`[1, 4]`, { value: [{type: "Int", value: 1n}, {type: "Int", value: 4n}], type: "Array"});
 });
 
 test("eval empty Module", () => {
@@ -98,29 +90,5 @@ test("eval binding with reference", () => {
 test("eval Grouping", () => {
 	evalAndCheck("(1,2,3)", {
 		type: "Int", value: 3n
-	})
-})
-
-test("eval Lambda", () => {
-	evalAndCheck("\\x -> x", {
-		type: "Lambda", parameters: [{name: "x"}], body: {type: "FieldPath", value: { parts: [{ name: "x" }]}}
-	})
-})
-
-test("eval Lambda application", () => {
-	evalAndCheck("id = \\x -> x, id 1", {
-		type: "Int", value: 1n
-	})
-})
-
-test("eval when", () => {
-	evalAndCheck("when false => 4, true => 5 end", {
-		type: "Int", value: 5n
-	})
-})
-
-test("eval pipe", () => {
-	evalAndCheck("false | Bool.not", {
-		type: "Bool", value: true
 	})
 })
