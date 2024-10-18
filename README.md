@@ -1,9 +1,13 @@
-# Wander Web
+# Ligature Components
 
-This repo contains projects related to working with Wander on the web.
-See each project's directory for notes.
+Web components for working with Ligature.
 
-| Project           | Description                                |
-| ----------------- | ------------------------------------------ |
-| wander            | Basic support for Wander in TypeScript.    |
-| wander-components | Web Components for working with Wander.    |
+## Developing
+
+This project requires [node](https://nodejs.org/en/download/) and [pnpm](https://pnpm.io/) to be installed on your machine.
+Once you check out this project run the following commands.
+
+```bash
+pnpm install
+pnpm run dev
+```
