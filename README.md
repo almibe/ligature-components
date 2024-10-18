@@ -1,6 +1,6 @@
 # Ligature Components
 
-Web components for working with Ligature.
+UI components for working with Ligature in the browser.
 
 ## Developing
 
@@ -11,3 +11,7 @@ Once you check out this project run the following commands.
 pnpm install
 pnpm run dev
 ```
+
+## Credits
+
+This project contains a fork of https://github.com/dhotson/springy/.

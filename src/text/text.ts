@@ -23,5 +23,4 @@ export function showText(elementSelector: string, network: Entry[]) {
         code.textContent = printNetwork(network)
         el.appendChild(pre)
     }
-    throw "TODO"
 }
