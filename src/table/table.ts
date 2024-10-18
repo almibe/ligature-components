@@ -1,17 +1,51 @@
-import Tabulator from "tabulator-tables"
+import { Entry } from '@ligature/ligature'
+import {TabulatorFull as Tabulator} from 'tabulator-tables'
+import  "tabulator-tables/dist/css/tabulator.min.css"
 
-function networkToTableData(network) {
-    return [
-        {id:1, name:"Oli Bob", progress:12, gender:"male", rating:1, col:"red", dob:"19/02/1984", car:1},
-        {id:2, name:"Mary May", progress:1, gender:"female", rating:2, col:"blue", dob:"14/05/1982", car:true},
-        {id:3, name:"Christine Lobowski", progress:42, gender:"female", rating:0, col:"green", dob:"22/05/1982", car:"true"},
-        {id:4, name:"Brendon Philips", progress:100, gender:"male", rating:1, col:"orange", dob:"01/08/1980"},
-        {id:5, name:"Margret Marmajuke", progress:16, gender:"female", rating:5, col:"yellow", dob:"31/01/1999"},
-        {id:6, name:"Frank Harbours", progress:38, gender:"male", rating:4, col:"red", dob:"12/05/1966", car:1},
-    ]
+function networkToTableData(network: Entry[]): any[] {
+    let results: any[] = []
+    network.forEach((entry) => {
+        if (entry.type == "extension") {
+            let res = results.find((i:any) => i.element == entry.element)
+            if (res == undefined) {
+                results.push({element: entry.element.symbol, extends: [entry.concept.symbol]})
+            } else {
+                if (res.extends != undefined) {
+                    res.extends.push(entry.concept.symbol)
+                } else {
+                    res.extends = [entry.concept.symbol]
+                }
+            }
+        } else if (entry.type == "nonextension") {
+            let res = results.find((i:any) => i.element == entry.element)
+            if (res == undefined) {
+                results.push({element: entry.element.symbol, extendsNot: [entry.concept.symbol]})
+            } else {
+                if (res.extendsNot != undefined) {
+                    res.extends.push(entry.concept.symbol)
+                } else {
+                    res.extendsNot = [entry.concept.symbol]
+                }
+            }
+        } else {
+            let res = results.find((i:any) => i.element = entry.first)
+            if (res == undefined) {
+                const newEntry = {element: entry.first.symbol}
+                newEntry[entry.role.symbol] = [entry.second.symbol]
+                results.push(newEntry)
+            } else {
+                if (res[entry.role.symbol] != undefined) {
+                    res[entry.role.symbol].push(entry.second.symbol)
+                } else {
+                    res[entry.role.symbol] = entry.second.symbol
+                }
+            }
+        }
+    })
+    return results
 }
 
-export function showTable(elementSelector: string, network) {
+export function showTable(elementSelector: string, network: Entry[]) {
     return new Tabulator(elementSelector, {
         data: networkToTableData(network),
         autoColumns: true
