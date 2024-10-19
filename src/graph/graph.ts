@@ -1,56 +1,57 @@
 import { Entry } from "@ligature/ligature";
-import {Springy, Graph} from "./springy.js";
-import {springy } from "./springyui.js";
+import cytoscape from "cytoscape"
 
-function translateNetwork(network: Entry[]): any {
-    let result = {
-		"nodes": [],
-		"edges": []
-	}
+function translateNetwork(network: Entry[]): any[] {
+    const results: any[] = []
+    const nodes = new Set<string>()
+
 
     network.forEach((entry) => {
         if (entry.type == "extension") {
-            //todo mark concepts
+            //todo add concept labels
         } else if (entry.type == "nonextension") {
-            //todo mark concepts
+            //todo add concept labels
         } else {
-            if (!result.nodes.includes(entry.first.symbol)) {
-                result.nodes.push(entry.first.symbol)
-            }
-            if (!result.nodes.includes(entry.second.symbol)) {
-                result.nodes.push(entry.second.symbol)
-            }
-            result.edges.push([entry.first.symbol, entry.second.symbol])
+            nodes.add(entry.first.symbol)
+            nodes.add(entry.second.symbol)
+            results.push({data: {id: entry.role.symbol, source: entry.first.symbol, target: entry.second.symbol}})
         }
     })
+    // return [
+    //     { data: { id: 'a' } },
+    //     { data: { id: 'b' } },
+    //     {
+    //       data: {
+    //         id: 'ab',
+    //         source: 'a',
+    //         target: 'b'
+    //       }
+    //     }]
 
-    return result
+    nodes.forEach((node) => {
+        results.push({data: {id: node}})
+    })
 
-    // return {
-	// 	"nodes": [
-	// 		"center",
-	// 		"left",
-	// 		"right",
-	// 		"up",
-	// 		"satellite"
-	// 	],
-	// 	"edges": [
-	// 		["center", "left"],
-	// 		["center", "right"],
-	// 		["center", "up"]
-	// 	]
-	// }
+    return results
 }
 
 export function showGraph(elementSelector: string, network: Entry[]) {
-   let graph = new Graph();
-
-    graph.loadJSON(translateNetwork(network));
-
-    springy(document.querySelector(elementSelector), {
-        graph: graph,
-        nodeSelected: function(node){
-            //console.log('Node selected: ' + JSON.stringify(node.data));
-        }
-    });
+    return cytoscape({
+        container: document.querySelector(elementSelector),
+        elements: translateNetwork(network),
+        style: [
+            {
+                selector: 'node',
+                style: {
+                    label: 'data(id)'
+                }
+            },
+            {
+                selector: 'edge',
+                style: {
+                    label: 'data(id)'
+                }
+            }
+        ]
+      });    
 }

@@ -11,6 +11,9 @@ importers:
       '@ligature/ligature':
         specifier: link:..\ligature-fs\src\LigatureFable\package
         version: link:../ligature-fs/src/LigatureFable/package
+      cytoscape:
+        specifier: ^3.30.2
+        version: 3.30.2
       tabulator-tables:
         specifier: ^6.3.0
         version: 6.3.0
@@ -245,6 +248,10 @@ packages:
   '@types/estree@1.0.6':
     resolution: {integrity: sha512-AYnb1nQyY49te+VRAVgmzfcgjYS91mY5P0TKUDCLEM+gNnA+3T6rWITXRLYCpahpqSQbN5cE+gHpnPyXjHWxcw==}
 
+  cytoscape@3.30.2:
+    resolution: {integrity: sha512-oICxQsjW8uSaRmn4UK/jkczKOqTrVqt5/1WL0POiJUT2EKNc9STM4hYFHv917yu55aTBMFNRzymlJhVAiWPCxw==}
+    engines: {node: '>=0.10'}
+
   esbuild@0.21.5:
     resolution: {integrity: sha512-mg3OPMV4hXywwpoDxu3Qda5xCKQi+vCTZq8S9J/EpkhB2HzKXq4SNFZE3+NK93JYxc8VMSep+lOUSC/RVKaBqw==}
     engines: {node: '>=12'}
@@ -435,6 +442,8 @@ snapshots:
     optional: true
 
   '@types/estree@1.0.6': {}
+
+  cytoscape@3.30.2: {}
 
   esbuild@0.21.5:
     optionalDependencies:

@@ -17,6 +17,6 @@ showText(
 )
 
 showGraph(
-  "#graphCanvas",
+  "#graph",
   entries
 )
