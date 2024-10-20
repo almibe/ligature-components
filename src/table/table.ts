@@ -7,7 +7,7 @@ function networkToTableData(network: Entry[]): any[] {
     let results: any[] = []
     network.forEach((entry) => {
         if (entry.type == "extension") {
-            let res = results.find((i:any) => i.element == entry.element)
+            let res = results.find((i:any) => i.element == entry.element.symbol)
             if (res == undefined) {
                 results.push({element: entry.element.symbol, extends: [entry.concept.symbol]})
             } else {
@@ -18,7 +18,7 @@ function networkToTableData(network: Entry[]): any[] {
                 }
             }
         } else if (entry.type == "nonextension") {
-            let res = results.find((i:any) => i.element == entry.element)
+            let res = results.find((i:any) => i.element == entry.element.symbol)
             if (res == undefined) {
                 results.push({element: entry.element.symbol, extendsNot: [entry.concept.symbol]})
             } else {

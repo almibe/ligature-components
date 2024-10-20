@@ -18,8 +18,8 @@ importers:
         specifier: ^6.34.1
         version: 6.34.1
       '@ligature/ligature':
-        specifier: ^0.7.0
-        version: 0.7.0
+        specifier: ^0.8.0
+        version: 0.8.0
       codemirror:
         specifier: ^6.0.1
         version: 6.0.1(@lezer/common@1.2.3)
@@ -212,8 +212,8 @@ packages:
   '@lezer/lr@1.4.2':
     resolution: {integrity: sha512-pu0K1jCIdnQ12aWNaAVU5bzi7Bd1w54J3ECgANPmYLtQKP0HBj2cE/5coBD66MT10xbtIuUr7tg0Shbsvk0mDA==}
 
-  '@ligature/ligature@0.7.0':
-    resolution: {integrity: sha512-5WLqU6Jbg49I8n/EpRu3LkWk5ybAtfQg+NzTmTwfcuAwU90Ku3q1U5rQRgOf2m7A4Tv17gD3+apIfuh+cMFFtw==}
+  '@ligature/ligature@0.8.0':
+    resolution: {integrity: sha512-0//PmXxbw5JM6JOeT8F8E4RBJmaA5aTSn8Zs7rvWxfpqKYT7XTaXzOxrpoT9ebugAC8FdL5BZJQqwyKQSxPlvw==}
 
   '@rollup/rollup-android-arm-eabi@4.24.0':
     resolution: {integrity: sha512-Q6HJd7Y6xdB48x8ZNVDOqsbh2uByBhgK8PiQgPhwkIw/HC/YX5Ghq2mQY5sRMZWHb3VsFkWooUVOZHKr7DmDIA==}
@@ -511,7 +511,7 @@ snapshots:
     dependencies:
       '@lezer/common': 1.2.3
 
-  '@ligature/ligature@0.7.0':
+  '@ligature/ligature@0.8.0':
     dependencies:
       immutable: 4.3.7
 
