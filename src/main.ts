@@ -5,7 +5,9 @@ import { showText } from './text/text'
 import { showGraph } from './graph/graph'
 import { showEditor } from './editor/editor'
 
-let editor = showEditor("#editor", "(id {a b c})")
+const initalScript = "(id {a b c, d e f})"
+
+let editor = showEditor("#editor", initalScript)
 
 function runAndUpdate(text) {
   const entries = run(text)
@@ -30,4 +32,4 @@ document.querySelector("#runButton")?.addEventListener("click", (e) => {
   runAndUpdate(editor.state.doc.toString())
 })
 
-runAndUpdate("(id {a b c})")
+runAndUpdate(initalScript)
