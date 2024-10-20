@@ -3,20 +3,31 @@ import { run } from "@ligature/ligature"
 import { showTable } from "./table/table"
 import { showText } from './text/text'
 import { showGraph } from './graph/graph'
+import { showEditor } from './editor/editor'
 
-const entries = run("test {a b c} (read test)")
+let editor = showEditor("#editor", "(id {a b c})")
 
-showTable(
-  "#table", 
-  entries
-)
+function runAndUpdate(text) {
+  const entries = run(text)
 
-showText(
-  "#text",
-  entries
-)
+  showTable(
+    "#table", 
+    entries
+  )
+  
+  showText(
+    "#text",
+    entries
+  )
+  
+  showGraph(
+    "#graph",
+    entries
+  )
+}
 
-showGraph(
-  "#graph",
-  entries
-)
+document.querySelector("#runButton")?.addEventListener("click", (e) => {
+  runAndUpdate(editor.state.doc.toString())
+})
+
+runAndUpdate("(id {a b c})")

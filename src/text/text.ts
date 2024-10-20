@@ -17,6 +17,7 @@ export function printNetwork(result: Entry[]): string {
 export function showText(elementSelector: string, network: Entry[]) {
     const el = document.querySelector(elementSelector)
     if (el != null) {
+        el.replaceChildren()
         const pre = document.createElement("pre")
         const code = document.createElement("code")
         pre.appendChild(code)
