@@ -15,4 +15,4 @@ pnpm run dev
 ## Credits
 
 This project contains a fork of https://github.com/dhotson/springy/
-and uses https://tabulator.info/ and https://js.cytoscape.org/.
+and uses https://codemirror.net/, https://tabulator.info/, and https://js.cytoscape.org/.
