@@ -5,7 +5,7 @@ import { showText } from './text/text'
 import { showGraph } from './graph/graph'
 import { showEditor } from './editor/editor'
 
-const initalScript = "(id {a : B, a : C, a b c})"
+const initalScript = "set test {a : B, a : C, a b c}"
 
 let editor = showEditor("#editor", initalScript)
 
@@ -14,17 +14,17 @@ function runAndUpdate(text) {
 
   showTable(
     "#table", 
-    entries
+    entries.test
   )
   
   showText(
     "#text",
-    entries
+    entries.test
   )
   
   showGraph(
     "#graph",
-    entries
+    entries.test
   )
 }
 

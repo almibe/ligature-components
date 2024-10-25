@@ -17,7 +17,7 @@
     "@codemirror/commands": "^6.7.0",
     "@codemirror/state": "^6.4.1",
     "@codemirror/view": "^6.34.1",
-    "@ligature/ligature": "^0.8.0",
+    "@ligature/ligature": "^0.10.0",
     "codemirror": "^6.0.1",
     "cytoscape": "^3.30.2",
     "tabulator-tables": "^6.3.0"
