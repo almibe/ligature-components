@@ -57,8 +57,8 @@ function networkToTableData(network: Entry[]): any[] {
     return results
 }
 
-export function showTable(elementSelector: string, network: Entry[]) {
-    return new Tabulator(elementSelector, {
+export function showTable(element: HTMLElement, network: Entry[]) {
+    return new Tabulator(element, {
         data: networkToTableData(network),
         autoColumns: true
     })

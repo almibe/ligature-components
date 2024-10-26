@@ -4,28 +4,33 @@ import { showTable } from "./table/table"
 import { showText } from './text/text'
 import { showGraph } from './graph/graph'
 import { showEditor } from './editor/editor'
+import { defaultDisplays, display } from './display/display'
 
-const initalScript = "set test {a : B, a : C, a b c}"
+const initalScript = "set meta { display = graph},\nset display { a : B, a : C, a b c }"
 
-let editor = showEditor("#editor", initalScript)
+let editor = showEditor(document.querySelector("#editor"), initalScript)
+
+const displays = defaultDisplays()
 
 function runAndUpdate(text) {
   const entries = run(text)
 
   showTable(
-    "#table", 
-    entries.test
+    document.querySelector("#table"),
+    entries.display
   )
   
   showText(
-    "#text",
-    entries.test
+    document.querySelector("#text"),
+    entries.display
   )
   
   showGraph(
-    "#graph",
-    entries.test
+    document.querySelector("#graph"),
+    entries.display
   )
+
+  display(document.querySelector("#display"), entries, displays)
 }
 
 document.querySelector("#runButton")?.addEventListener("click", (e) => {

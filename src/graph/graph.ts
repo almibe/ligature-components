@@ -29,9 +29,9 @@ function translateNetwork(network: Entry[]): any[] {
     return results
 }
 
-export function showGraph(elementSelector: string, network: Entry[]) {
+export function showGraph(element: HTMLElement, network: Entry[]) {
     return cytoscape({
-        container: document.querySelector(elementSelector),
+        container: element,
         elements: translateNetwork(network),
         style: [
             {
