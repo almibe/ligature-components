@@ -1,4 +1,4 @@
-import { Entry } from "@ligature/ligature";
+import { Entry, run } from "@ligature/ligature";
 
 export function printNetwork(result: Entry[]): string {
     let res = "{\n"
@@ -24,3 +24,16 @@ export function showText(element: HTMLElement, network: Entry[]) {
         element.appendChild(pre)
     }
 }
+
+class LigatureTextComponent extends HTMLElement {
+    constructor() {
+      super();
+      const el = document.createElement("div")
+      const script = this.textContent;
+      this.textContent = "";
+      showText(el, run(script)["result"]);
+      this.appendChild(el);
+    }
+}
+      
+customElements.define('ligature-text', LigatureTextComponent);

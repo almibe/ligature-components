@@ -1,4 +1,4 @@
-import { Entry, Role } from "@ligature/ligature";
+import { Entry, Role, run } from "@ligature/ligature";
 import { showText } from "../text/text";
 import { showTable } from "../table/table";
 import { showGraph } from "../graph/graph";
@@ -13,7 +13,7 @@ export function defaultDisplays(): Map<string, (element: HTMLElement, network: E
 
 export function display(el: HTMLElement, content: any, displays: Map<string, (element: HTMLElement, network: Entry[]) => void>) {
     if (el != null) {
-        if (content["meta"] != undefined && content["display"] != undefined) {
+        if (content["meta"] != undefined && content["result"] != undefined) {
             const meta = content["meta"] as Entry[]
             const res = meta.filter((entry) => 
                 entry.type == "role" && 
@@ -23,7 +23,7 @@ export function display(el: HTMLElement, content: any, displays: Map<string, (el
                 const displayType = (res[0] as Role).second.symbol
                 const display = displays.get(displayType)
                 if (display != undefined) {
-                    display(el, content["display"])
+                    display(el, content["result"])
                 } else {
                     throw "Invalid display metadata provided, only text, graph, or table display supported currently."
                 }
@@ -37,3 +37,16 @@ export function display(el: HTMLElement, content: any, displays: Map<string, (el
         throw "Invalid dom element."
     }
 }
+
+class LigatureDisplayComponent extends HTMLElement {
+    constructor() {
+      super();
+      const el = document.createElement("div")
+      const script = this.textContent;
+      this.textContent = "";
+      this.appendChild(el);
+      display(el, run(script), defaultDisplays());
+    }
+}
+
+customElements.define('ligature-display', LigatureDisplayComponent);

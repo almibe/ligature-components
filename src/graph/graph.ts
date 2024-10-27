@@ -1,4 +1,4 @@
-import { Entry } from "@ligature/ligature";
+import { Entry, run } from "@ligature/ligature";
 import cytoscape from "cytoscape"
 
 function translateNetwork(network: Entry[]): any[] {
@@ -49,3 +49,17 @@ export function showGraph(element: HTMLElement, network: Entry[]) {
         ]
       });    
 }
+
+class LigatureGraphComponent extends HTMLElement {
+    constructor() {
+      super();
+      const el = document.createElement("div")
+      el.setAttribute("style", "width: 400px; height: 400px;")
+      const script = this.textContent;
+      this.textContent = "";
+      this.appendChild(el);
+      showGraph(el, run(script)["result"]);
+    }
+}
+      
+customElements.define('ligature-graph', LigatureGraphComponent);

@@ -11,14 +11,25 @@
       <div>
         <button id="runButton">Run</button>
       </div>
-      <p>Display</p>
+      <p>Dynamic Display</p>
       <div id="display"></div>
+      <p>Display Component</p>
+      <ligature-display>
+        let result {a b c, a d e},
+        let meta { display = text }
+      </ligature-display>
       <p>Table</p>
-      <div id="table"></div>
+      <ligature-table>
+        let result {a b c},
+      </ligature-table>
       <p>Text</p>
-      <div id="text"></div>
+      <ligature-text>
+        let result {a b c},
+      </ligature-text>
       <p>Graph</p>
-      <div id="graph"></div>
+      <ligature-graph>
+        let result {a b c},
+      </ligature-graph>
     </div>
     <script type="module" src="/src/main.ts"></script>
   </body>

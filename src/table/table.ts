@@ -1,4 +1,4 @@
-import { Entry } from '@ligature/ligature'
+import { Entry, run } from '@ligature/ligature'
 import {TabulatorFull as Tabulator} from 'tabulator-tables'
 import  "tabulator-tables/dist/css/tabulator.min.css"
 
@@ -63,3 +63,16 @@ export function showTable(element: HTMLElement, network: Entry[]) {
         autoColumns: true
     })
 }
+
+class LigatureTableComponent extends HTMLElement {
+    constructor() {
+      super();
+      const el = document.createElement("div")
+      const script = this.textContent;
+      this.textContent = "";
+      showTable(el, run(script)["result"]);
+      this.appendChild(el);
+    }
+}
+      
+customElements.define('ligature-table', LigatureTableComponent);
