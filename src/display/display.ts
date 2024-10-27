@@ -23,6 +23,7 @@ export function display(el: HTMLElement, content: any, displays: Map<string, (el
                 const displayType = (res[0] as Role).second.symbol
                 const display = displays.get(displayType)
                 if (display != undefined) {
+                    el.classList.add("ligature-display-" + displayType)
                     display(el, content["result"])
                 } else {
                     throw "Invalid display metadata provided, only text, graph, or table display supported currently."
@@ -42,6 +43,7 @@ class LigatureDisplayComponent extends HTMLElement {
     constructor() {
       super();
       const el = document.createElement("div")
+      el.classList.add('ligature-display')
       const script = this.textContent;
       this.textContent = "";
       this.appendChild(el);
@@ -49,4 +51,6 @@ class LigatureDisplayComponent extends HTMLElement {
     }
 }
 
-customElements.define('ligature-display', LigatureDisplayComponent);
+if (!customElements.get('ligature-display')) {
+    customElements.define('ligature-display', LigatureDisplayComponent);
+}

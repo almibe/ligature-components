@@ -68,11 +68,14 @@ class LigatureTableComponent extends HTMLElement {
     constructor() {
       super();
       const el = document.createElement("div")
+      el.classList.add('ligature-display-table')
       const script = this.textContent;
       this.textContent = "";
       showTable(el, run(script)["result"]);
       this.appendChild(el);
     }
 }
-      
-customElements.define('ligature-table', LigatureTableComponent);
+
+if (!customElements.get('ligature-table')) {
+    customElements.define('ligature-table', LigatureTableComponent);
+}

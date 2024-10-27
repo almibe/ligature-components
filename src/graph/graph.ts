@@ -54,12 +54,14 @@ class LigatureGraphComponent extends HTMLElement {
     constructor() {
       super();
       const el = document.createElement("div")
-      el.setAttribute("style", "width: 400px; height: 400px;")
       const script = this.textContent;
+      el.classList.add('ligature-display-graph')
       this.textContent = "";
       this.appendChild(el);
       showGraph(el, run(script)["result"]);
     }
 }
-      
-customElements.define('ligature-graph', LigatureGraphComponent);
+
+if (!customElements.get("ligature-graph")) {
+    customElements.define('ligature-graph', LigatureGraphComponent);
+}

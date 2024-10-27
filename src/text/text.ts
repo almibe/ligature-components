@@ -29,11 +29,14 @@ class LigatureTextComponent extends HTMLElement {
     constructor() {
       super();
       const el = document.createElement("div")
+      el.classList.add('ligature-display-text')
       const script = this.textContent;
       this.textContent = "";
       showText(el, run(script)["result"]);
       this.appendChild(el);
     }
 }
-      
-customElements.define('ligature-text', LigatureTextComponent);
+
+if (!customElements.get('ligature-text')) {
+    customElements.define('ligature-text', LigatureTextComponent);
+}

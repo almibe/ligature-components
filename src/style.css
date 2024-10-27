@@ -1,8 +1,4 @@
-#table {
-    width: 400px;
-}
-
-#graph, #display {
+.ligature-display-graph {
     width: 400px;
     height: 400px;
 }
