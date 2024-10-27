@@ -1,8 +1,8 @@
 {
   "name": "@ligature/ligature-components",
   "license": "MPL-2.0",
+  "version": "0.10.0",
   "private": true,
-  "version": "0.9.0",
   "type": "module",
   "scripts": {
     "dev": "vite",
@@ -17,7 +17,7 @@
     "@codemirror/commands": "^6.7.0",
     "@codemirror/state": "^6.4.1",
     "@codemirror/view": "^6.34.1",
-    "@ligature/ligature": "^0.10.0",
+    "@ligature/ligature": "^0.11.0",
     "codemirror": "^6.0.1",
     "cytoscape": "^3.30.2",
     "tabulator-tables": "^6.3.0"
