@@ -1,29 +1,47 @@
 import { Entry, Role, run } from "@ligature/ligature";
 import { toGraph } from "@ligature/ligature"
 import Graph from "graphology";
+import markdownit from 'markdown-it'
+const md = markdownit()
 
 function getType(graph: Graph, node: string): "MarkdownCell" | "WanderCell" | null {
+    let res = null
     graph.edges(node).forEach(edge => {
         const target = graph.target(edge)
         const attrs = graph.getEdgeAttributes(edge)
         if (attrs.type == "extension" && target == "MarkdownCell") {
-            return "MarkdownCell"
+            res = "MarkdownCell"
         }
         if (attrs.type == "extension" && target == "WanderCell") {
-            return "WanderCell"
+            res = "WanderCell"
         }
     })
-    return null
+    return res
 }
 
 function getSource(graph: Graph, node: string): string | null {
+    let source = null
     graph.edges(node).forEach(edge => {
         const attrs = graph.getEdgeAttributes(edge)
-        if (attrs.type == "role" && attrs.role == "source") {
-            return graph.target(edge)
+        if (attrs.type == "role" && attrs.roleName == "source") {
+            source = graph.target(edge)
         }
     })
-    return null
+    return source
+}
+
+function getNext(graph: Graph, node: string): string | null {
+    let next = null
+    graph.edges(node).forEach(edge => {
+        const attrs = graph.getEdgeAttributes(edge)
+        const source = graph.source(edge)
+        if (source == node && attrs.type == "role" && attrs.roleName == "next") {
+            console.log("inner", graph.target(edge))
+            next = graph.target(edge)
+        }
+    })
+    console.log("next", next)
+    return next
 }
 
 export function showNotebook(el: HTMLElement, network: Entry[]) {
@@ -43,20 +61,22 @@ export function showNotebook(el: HTMLElement, network: Entry[]) {
     if (start != null) {
         let currentNode: string | null = start
         while (currentNode != null) {
-            const div = document.createElement("div")
             const type = getType(graph, currentNode)
             console.log("type", type)
             if (type == "MarkdownCell") {
+                const div = document.createElement("div")
                 const source = getSource(graph, currentNode)
-                div.textContent = source
+                div.innerHTML = md.render(source)
                 el.appendChild(div)
             } else if (type == "WanderCell") {
-    
+                console.log("!!!")
+                const display = document.createElement("ligature-display")
+                display.innerText = getSource(graph, currentNode)
+                el.appendChild(display)
             } else {
                 throw "TODO"
             }
-
-            currentNode = null
+            currentNode = getNext(graph, currentNode)
         }
     } else {
         const root = document.createElement("div")
