@@ -20,16 +20,27 @@
       </ligature-display>
       <p>Table</p>
       <ligature-table>
-        let result {a b c},
+        let result {a b c, a d e},
       </ligature-table>
       <p>Text</p>
       <ligature-text>
-        let result {a b c},
+        let result {a b c, a d e},
       </ligature-text>
       <p>Graph</p>
       <ligature-graph>
-        let result {a b c},
+        let result {a b c, a d e},
       </ligature-graph>
+      <p>Notebook</p>
+      <ligature-notebook>
+        let result {
+          cell0 : NotebookStart,
+          cell0 : MarkdownCell,
+          cell0 source "*Hello*",
+          cell0 next cell1,
+          cell1 : WanderCell,
+          cell1 source "docs"
+        },
+      </ligature-notebook>
     </div>
     <script type="module" src="/src/main.ts"></script>
   </body>

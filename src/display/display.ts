@@ -2,12 +2,14 @@ import { Entry, Role, run } from "@ligature/ligature";
 import { showText } from "../text/text";
 import { showTable } from "../table/table";
 import { showGraph } from "../graph/graph";
+import { showNotebook } from "../notebook/notebook";
 
 export function defaultDisplays(): Map<string, (element: HTMLElement, network: Entry[]) => void> {
     const displays = new Map()
     displays.set('text', showText)
     displays.set('graph', showGraph)
     displays.set('table', showTable)
+    displays.set('notebook', showNotebook)
     return displays
 }
 
