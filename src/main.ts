@@ -3,7 +3,24 @@ import { run } from "@ligature/ligature"
 import { showEditor } from './editor/editor'
 import { defaultDisplays, display } from './display/display'
 
-const initalScript = "let meta { display = graph},\nlet result { a : B, a : C, a b c }"
+//const initalScript = "let meta { display = graph},\nlet result { a : B, a : C, a b c }"
+
+// const initalScript = `
+//   let meta { display = notebook},
+//   let result { cell : NotebookStart, cell : MarkdownCell, cell source \"*hey*\", cell next cell1, cell1 : WanderCell, cell1 source "let result {a b c}, let meta {display = graph}" }
+// `
+
+const initalScript = `
+let result {
+  cell0 : NotebookStart,
+  cell0 : MarkdownCell,
+  cell0 source "*Hello*",
+  cell0 next cell1,
+  cell1 : WanderCell,
+  cell1 source "let result (docs), let meta { display = table }",
+},
+let meta { display = notebook }
+`
 
 let editor = showEditor(document.querySelector("#editor"), initalScript)
 

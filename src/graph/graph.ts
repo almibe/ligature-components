@@ -53,12 +53,15 @@ export function showGraph(element: HTMLElement, network: Entry[]) {
 class LigatureGraphComponent extends HTMLElement {
     constructor() {
       super();
-      const el = document.createElement("div")
-      const script = this.textContent;
-      el.classList.add('ligature-display-graph')
-      this.textContent = "";
-      this.appendChild(el);
-      showGraph(el, run(script)["result"]);
+    }
+
+    connectedCallback() {
+        const el = document.createElement("div")
+        const script = this.textContent;
+        el.classList.add('ligature-display-graph')
+        this.textContent = "";
+        this.appendChild(el);
+        showGraph(el, run(script)["result"]);      
     }
 }
 

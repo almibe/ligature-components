@@ -15,6 +15,8 @@ export function defaultDisplays(): Map<string, (element: HTMLElement, network: E
 
 export function display(el: HTMLElement, content: any, displays: Map<string, (element: HTMLElement, network: Entry[]) => void>) {
     if (el != null) {
+        el.removeAttribute("class")
+        el.replaceChildren()
         if (content["meta"] != undefined && content["result"] != undefined) {
             const meta = content["meta"] as Entry[]
             const res = meta.filter((entry) => 
@@ -44,12 +46,16 @@ export function display(el: HTMLElement, content: any, displays: Map<string, (el
 class LigatureDisplayComponent extends HTMLElement {
     constructor() {
       super();
-      const el = document.createElement("div")
-      el.classList.add('ligature-display')
-      const script = this.textContent;
-      this.textContent = "";
-      this.appendChild(el);
-      display(el, run(script), defaultDisplays());
+    }
+
+    connectedCallback() {
+        const el = document.createElement("div")
+        el.classList.add('ligature-display')
+        const script = this.textContent;
+        this.textContent = "";
+        this.appendChild(el);
+        const res = run(script)
+        display(el, res, defaultDisplays());  
     }
 }
 

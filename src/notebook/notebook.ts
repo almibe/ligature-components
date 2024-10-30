@@ -36,11 +36,9 @@ function getNext(graph: Graph, node: string): string | null {
         const attrs = graph.getEdgeAttributes(edge)
         const source = graph.source(edge)
         if (source == node && attrs.type == "role" && attrs.roleName == "next") {
-            console.log("inner", graph.target(edge))
             next = graph.target(edge)
         }
     })
-    console.log("next", next)
     return next
 }
 
@@ -62,14 +60,12 @@ export function showNotebook(el: HTMLElement, network: Entry[]) {
         let currentNode: string | null = start
         while (currentNode != null) {
             const type = getType(graph, currentNode)
-            console.log("type", type)
             if (type == "MarkdownCell") {
                 const div = document.createElement("div")
                 const source = getSource(graph, currentNode)
                 div.innerHTML = md.render(source)
                 el.appendChild(div)
             } else if (type == "WanderCell") {
-                console.log("!!!")
                 const display = document.createElement("ligature-display")
                 display.innerText = getSource(graph, currentNode)
                 el.appendChild(display)
@@ -88,12 +84,15 @@ export function showNotebook(el: HTMLElement, network: Entry[]) {
 class LigatureNotebookComponent extends HTMLElement {
     constructor() {
       super();
-      const el = document.createElement("div")
-      el.classList.add('ligature-display-notebook')
-      const script = this.textContent;
-      this.textContent = "";
-      showNotebook(el, run(script)["result"]);
-      this.appendChild(el);
+    }
+
+    connectedCallback() {
+        const el = document.createElement("div")
+        el.classList.add('ligature-display-notebook')
+        const script = this.textContent;
+        this.textContent = "";
+        showNotebook(el, run(script)["result"]);
+        this.appendChild(el);  
     }
 }
 

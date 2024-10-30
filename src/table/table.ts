@@ -67,12 +67,15 @@ export function showTable(element: HTMLElement, network: Entry[]) {
 class LigatureTableComponent extends HTMLElement {
     constructor() {
       super();
-      const el = document.createElement("div")
-      el.classList.add('ligature-display-table')
-      const script = this.textContent;
-      this.textContent = "";
-      showTable(el, run(script)["result"]);
-      this.appendChild(el);
+    }
+
+    connectedCallback() {
+        const el = document.createElement("div")
+        el.classList.add('ligature-display-table')
+        const script = this.textContent;
+        this.textContent = "";
+        showTable(el, run(script)["result"]);
+        this.appendChild(el);
     }
 }
 
