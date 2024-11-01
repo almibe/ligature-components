@@ -42,23 +42,3 @@ export function display(el: HTMLElement, content: any, displays: Map<string, (el
         throw "Invalid dom element."
     }
 }
-
-class LigatureDisplayComponent extends HTMLElement {
-    constructor() {
-      super();
-    }
-
-    connectedCallback() {
-        const el = document.createElement("div")
-        el.classList.add('ligature-display')
-        const script = this.textContent;
-        this.textContent = "";
-        this.appendChild(el);
-        const res = run(script)
-        display(el, res, defaultDisplays());  
-    }
-}
-
-if (!customElements.get('ligature-display')) {
-    customElements.define('ligature-display', LigatureDisplayComponent);
-}

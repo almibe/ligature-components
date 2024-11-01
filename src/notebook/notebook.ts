@@ -69,6 +69,8 @@ export function showNotebook(el: HTMLElement, network: Entry[]) {
                 const display = document.createElement("ligature-display")
                 display.innerText = getSource(graph, currentNode)
                 el.appendChild(display)
+            } else if (type == "NetworkCell") {
+                throw "TODO"
             } else {
                 throw "TODO"
             }
@@ -79,23 +81,4 @@ export function showNotebook(el: HTMLElement, network: Entry[]) {
         root.textContent = "Invalid network passed to showNotebook."
         el.appendChild(root)
     }
-}
-
-class LigatureNotebookComponent extends HTMLElement {
-    constructor() {
-      super();
-    }
-
-    connectedCallback() {
-        const el = document.createElement("div")
-        el.classList.add('ligature-display-notebook')
-        const script = this.textContent;
-        this.textContent = "";
-        showNotebook(el, run(script)["result"]);
-        this.appendChild(el);  
-    }
-}
-
-if (!customElements.get('ligature-notebook')) {
-    customElements.define('ligature-notebook', LigatureNotebookComponent);
 }
