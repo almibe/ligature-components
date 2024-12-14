@@ -1,4 +1,4 @@
-import { Entry, Role, run } from "@ligature/ligature";
+import { run } from "@ligature/ligature";
 import { showText } from "../text/text";
 import { showTable } from "../table/table";
 import { showGraph } from "../graph/graph";

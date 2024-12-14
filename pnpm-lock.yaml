@@ -18,8 +18,8 @@ importers:
         specifier: ^6.34.1
         version: 6.34.1
       '@ligature/ligature':
-        specifier: ^0.12.0
-        version: 0.12.0(graphology-types@0.24.7)
+        specifier: 0.13.0
+        version: 0.13.0(graphology-types@0.24.7)
       codemirror:
         specifier: ^6.0.1
         version: 6.0.1(@lezer/common@1.2.3)
@@ -32,6 +32,9 @@ importers:
       markdown-it:
         specifier: ^14.1.0
         version: 14.1.0
+      sigma:
+        specifier: 3.0.0-beta.39
+        version: 3.0.0-beta.39(graphology-types@0.24.7)
       tabulator-tables:
         specifier: ^6.3.0
         version: 6.3.0
@@ -218,8 +221,8 @@ packages:
   '@lezer/lr@1.4.2':
     resolution: {integrity: sha512-pu0K1jCIdnQ12aWNaAVU5bzi7Bd1w54J3ECgANPmYLtQKP0HBj2cE/5coBD66MT10xbtIuUr7tg0Shbsvk0mDA==}
 
-  '@ligature/ligature@0.12.0':
-    resolution: {integrity: sha512-KTYTxIeXpoqLUcZUZwnDqo9D1kQRCWwoD9zD0TqrYHsOydYYLZdCwnwXYniThJNotMcJd7tetju6Fv78CYGfAg==}
+  '@ligature/ligature@0.13.0':
+    resolution: {integrity: sha512-6EDC/6no+c5ApEwShVV3pV4Zsxnmsl0uxKoPXMVY/OIHwrcnsVFuVvliIFcpJcaEd2gaxM5Y3l3R9zwcDpwDRg==}
 
   '@rollup/rollup-android-arm-eabi@4.24.0':
     resolution: {integrity: sha512-Q6HJd7Y6xdB48x8ZNVDOqsbh2uByBhgK8PiQgPhwkIw/HC/YX5Ghq2mQY5sRMZWHb3VsFkWooUVOZHKr7DmDIA==}
@@ -338,13 +341,15 @@ packages:
   graphology-types@0.24.7:
     resolution: {integrity: sha512-tdcqOOpwArNjEr0gNQKCXwaNCWnQJrog14nJNQPeemcLnXQUUGrsCWpWkVKt46zLjcS6/KGoayeJfHHyPDlvwA==}
 
+  graphology-utils@2.5.2:
+    resolution: {integrity: sha512-ckHg8MXrXJkOARk56ZaSCM1g1Wihe2d6iTmz1enGOz4W/l831MBCKSayeFQfowgF8wd+PQ4rlch/56Vs/VZLDQ==}
+    peerDependencies:
+      graphology-types: '>=0.23.0'
+
   graphology@0.25.4:
     resolution: {integrity: sha512-33g0Ol9nkWdD6ulw687viS8YJQBxqG5LWII6FI6nul0pq6iM2t5EKquOTFDbyTblRB3O9I+7KX4xI8u5ffekAQ==}
     peerDependencies:
       graphology-types: '>=0.24.0'
-
-  immutable@4.3.7:
-    resolution: {integrity: sha512-1hqclzwYwjRDFLjcFxOM5AYkkG0rpFPpr1RLPMEuGczoS7YA8gLhy8SWXYRAA/XwfEHpfo3cw5JGioS32fnMRw==}
 
   linkify-it@5.0.0:
     resolution: {integrity: sha512-5aHCbzQRADcdP+ATqnDuhhJ/MRIqDkZX5pyjFHRRysS8vZ5AbqGEoFIb6pYHPZ+L/OC2Lc+xT8uHVVR5CAK/wQ==}
@@ -379,6 +384,9 @@ packages:
     resolution: {integrity: sha512-DOmrlGSXNk1DM0ljiQA+i+o0rSLhtii1je5wgk60j49d1jHT5YYttBv1iWOnYSTG+fZZESUOSNiAl89SIet+Cg==}
     engines: {node: '>=18.0.0', npm: '>=8.0.0'}
     hasBin: true
+
+  sigma@3.0.0-beta.39:
+    resolution: {integrity: sha512-HmTx+HWqNC+CX5SkRAlikKiXMlJdKWWQun+OlnYnz4ApcOalvapLXyNCaJFZuVOFheOaMIwlt2iZd0Fk014eSQ==}
 
   source-map-js@1.2.1:
     resolution: {integrity: sha512-UXWMKhLOwVKb728IUtQPXxfYU+usdybtUrK/8uGE8CQMvrhOpwvzDBwj0QhSL7MQc7vIsISBG8VQ8+IDQxpfQA==}
@@ -556,10 +564,9 @@ snapshots:
     dependencies:
       '@lezer/common': 1.2.3
 
-  '@ligature/ligature@0.12.0(graphology-types@0.24.7)':
+  '@ligature/ligature@0.13.0(graphology-types@0.24.7)':
     dependencies:
       graphology: 0.25.4(graphology-types@0.24.7)
-      immutable: 4.3.7
     transitivePeerDependencies:
       - graphology-types
 
@@ -666,13 +673,15 @@ snapshots:
 
   graphology-types@0.24.7: {}
 
+  graphology-utils@2.5.2(graphology-types@0.24.7):
+    dependencies:
+      graphology-types: 0.24.7
+
   graphology@0.25.4(graphology-types@0.24.7):
     dependencies:
       events: 3.3.0
       graphology-types: 0.24.7
       obliterator: 2.0.4
-
-  immutable@4.3.7: {}
 
   linkify-it@5.0.0:
     dependencies:
@@ -724,6 +733,13 @@ snapshots:
       '@rollup/rollup-win32-ia32-msvc': 4.24.0
       '@rollup/rollup-win32-x64-msvc': 4.24.0
       fsevents: 2.3.3
+
+  sigma@3.0.0-beta.39(graphology-types@0.24.7):
+    dependencies:
+      events: 3.3.0
+      graphology-utils: 2.5.2(graphology-types@0.24.7)
+    transitivePeerDependencies:
+      - graphology-types
 
   source-map-js@1.2.1: {}
 

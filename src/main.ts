@@ -10,14 +10,8 @@ import { defaultDisplays, display } from './display/display'
 //   let result { cell : NotebookStart, cell : MarkdownCell, cell source \"*hey*\", cell next cell1, cell1 : WanderCell, cell1 source "let result {a b c}, let meta {display = graph}" }
 // `
 
-const initalScript = `
-let result {
-  cell0 : NotebookStart,
-  cell0 : MarkdownCell,
-  cell0 source "*Hello*",
-  cell0 next cell1,
-  cell1 : WanderCell,
-  cell1 source "let result (docs), let meta { display = table }",
+const initalScript = 
+`let result {
 },
 let meta { display = notebook }
 `
@@ -26,13 +20,13 @@ let editor = showEditor(document.querySelector("#editor"), initalScript)
 
 const displays = defaultDisplays()
 
-function runAndUpdate(text) {
-  const entries = run(text)
-  display(document.querySelector("#display"), entries, displays)
-}
+// function runAndUpdate(text) {
+//   const entries = run(text)
+//   display(document.querySelector("#display"), entries, displays)
+// }
 
-document.querySelector("#runButton")?.addEventListener("click", (e) => {
-  runAndUpdate(editor.state.doc.toString())
-})
+// document.querySelector("#runButton")?.addEventListener("click", (e) => {
+//   runAndUpdate(editor.state.doc.toString())
+// })
 
-runAndUpdate(initalScript)
+// runAndUpdate(initalScript)
