@@ -1,46 +1,21 @@
-import { Entry, run } from '@ligature/ligature'
 import {TabulatorFull as Tabulator} from 'tabulator-tables'
 import  "tabulator-tables/dist/css/tabulator.min.css"
 
-function networkToTableData(network: Entry[]): any[] {
+function networkToTableData(network: any): any[] {
     let roles = new Set<string>()
     let results: any[] = []
-    network.forEach((entry) => {
-        if (entry.type == "extension") {
-            let res = results.find((i:any) => i.element == entry.element.symbol)
-            if (res == undefined) {
-                results.push({element: entry.element.symbol, extends: [entry.concept.symbol]})
-            } else {
-                if (res.extends != undefined) {
-                    res.extends.push(entry.concept.symbol)
-                } else {
-                    res.extends = [entry.concept.symbol]
-                }
-            }
-        } else if (entry.type == "nonextension") {
-            let res = results.find((i:any) => i.element == entry.element.symbol)
-            if (res == undefined) {
-                results.push({element: entry.element.symbol, extendsNot: [entry.concept.symbol]})
-            } else {
-                if (res.extendsNot != undefined) {
-                    res.extends.push(entry.concept.symbol)
-                } else {
-                    res.extendsNot = [entry.concept.symbol]
-                }
-            }
+    network.forEach((triple) => {
+        let res = results.find((i:any) => i.element == triple[0].value)
+        if (res == undefined) {
+            const newEntry = {element: triple[0].value}
+            newEntry[triple[1].value] = [triple[2].value]
+            results.push(newEntry)
+            roles.add(triple[1].value)
         } else {
-            let res = results.find((i:any) => i.element == entry.first.symbol)
-            if (res == undefined) {
-                const newEntry = {element: entry.first.symbol}
-                newEntry[entry.role.symbol] = [entry.second.symbol]
-                results.push(newEntry)
-                roles.add(entry.role.symbol)
+            if (res[triple[1].value] != undefined) {
+                res[triple[1].value].push(triple[2].value)
             } else {
-                if (res[entry.role.symbol] != undefined) {
-                    res[entry.role.symbol].push(entry.second.symbol)
-                } else {
-                    res[entry.role.symbol] = [entry.second.symbol]
-                }
+                res[triple[1].value] = [triple[2].value]
             }
         }
     })
@@ -57,9 +32,13 @@ function networkToTableData(network: Entry[]): any[] {
     return results
 }
 
-export function showTable(element: HTMLElement, network: Entry[]) {
-    return new Tabulator(element, {
-        data: networkToTableData(network),
-        autoColumns: true
-    })
+export function showTable(element: HTMLElement, network: any) {
+    if (network.type == "network") {
+        return new Tabulator(element, {
+            data: networkToTableData(network.value),
+            autoColumns: true
+        })    
+    } else {
+        throw "unexpected value"
+    }
 }

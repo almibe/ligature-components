@@ -1,20 +1,18 @@
-import Sigma from "sigma";
-import Graph from "graphology";
 import cytoscape from "cytoscape"
 
 function translateNetwork(network: any): any[] {
     const results: any[] = []
-//    const nodes = new Set<string>()
+    const nodes = new Set<string>()
     let id = 0
 
-    network.edges.forEach((edge) => {
+    network.forEach((triple) => {
         // if (entry.type == "extension") {
         //     nodes.add(entry.element.symbol)
         //     nodes.add(entry.concept.symbol)
-            results.push({data: {id: "id" + (++id), label: edge.key, source: edge.source, target: edge.target}})
+            results.push({data: {id: "id" + (++id), label: triple[1].value, source: triple[0].value, target: triple[2].value}})
         // } else if (entry.type == "nonextension") {
-        //     nodes.add(entry.element.symbol)
-        //     nodes.add(entry.concept.symbol)
+            nodes.add(triple[0].value)
+            nodes.add(triple[2].value)
         //    results.push({data: {id: "extendsNot::" + (++id), label: "extendsNot", source: entry.element.symbol, target: entry.concept.symbol}})
         // } else {
         //     nodes.add(entry.first.symbol)
@@ -23,7 +21,7 @@ function translateNetwork(network: any): any[] {
         // }
     })
 
-    network.nodes.forEach((node) => {
+    nodes.forEach((node) => {
         results.push({data: {id: node}})
     })
 
@@ -31,25 +29,26 @@ function translateNetwork(network: any): any[] {
 }
 
 export function showGraph(element: HTMLElement, network: any) {
-    // const graph = new Graph();
-    // graph.import(network)
-    // return new Sigma(graph, element)
-    return cytoscape({
-        container: element,
-        elements: translateNetwork(network),
-        style: [
-            {
-                selector: 'node',
-                style: {
-                    label: 'data(id)'
+    if (network.type == "network") {
+        return cytoscape({
+            container: element,
+            elements: translateNetwork(network.value),
+            style: [
+                {
+                    selector: 'node',
+                    style: {
+                        label: 'data(id)'
+                    }
+                },
+                {
+                    selector: 'edge',
+                    style: {
+                        label: 'data(label)'
+                    }
                 }
-            },
-            {
-                selector: 'edge',
-                style: {
-                    label: 'data(label)'
-                }
-            }
-        ]
-      });    
+            ]
+          });    
+    } else {
+        throw "unexpected value"
+    }
 }
