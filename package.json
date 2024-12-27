@@ -7,11 +7,13 @@
   "scripts": {
     "dev": "vite",
     "build": "tsc && vite build",
-    "preview": "vite preview"
+    "preview": "vite preview",
+    "test": "vitest"
   },
   "devDependencies": {
     "typescript": "^5.5.3",
-    "vite": "^5.4.8"
+    "vite": "^5.4.8",
+    "vitest": "^2.1.8"
   },
   "dependencies": {
     "@codemirror/commands": "^6.7.0",
@@ -20,7 +22,9 @@
     "@ligature/ligature": "^0.16.0",
     "codemirror": "^6.0.1",
     "cytoscape": "^3.30.2",
+    "immutable": "^5.0.3",
     "markdown-it": "^14.1.0",
+    "moo": "^0.5.2",
     "tabulator-tables": "^6.3.0"
   }
 }
