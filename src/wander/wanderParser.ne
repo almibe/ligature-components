@@ -32,21 +32,41 @@ Script -> Statement:? %WS:? (%comma %WS:? Statement %WS:?):? %comma:? {%
 
 Statement -> Call {%
   function(d) {
-    return d[0]
+    return d
   }
 %}
 
-Call -> Element (%WS Any):* {%
+Call -> Element Arguments {%
   function(d) {
+    let args = []
+    if (d[1] != undefined) {
+      args = d[1]
+    }
     return {
       type: "call",
       commandName: d[0].value,
-      arguments: [],
+      arguments: args,
     }
   }
 %}
 
-Any -> Element | %variable | %literal | Network
+Arguments -> Argument:* {%
+  function(d) {
+    return d[0]
+  }
+%}
+
+Argument -> %WS Any {%
+  function(d) {
+    return (d[1][0])
+  }
+%}
+
+Any -> Element | %variable | %literal | Network | Quote {%
+  function(d) {
+    return d[0]
+  }
+%}
 
 Element -> %element {%
   function(d) {
@@ -57,6 +77,12 @@ Element -> %element {%
 Network -> %obrace %WS:? %cbrace {%
   function (d) {
     return {type: "network", triples: []}
+  }
+%}
+
+Quote -> %oparen %WS:? %cparen {%
+  function (d) {
+    return {type: "quote", values: []}
   }
 %}
 
