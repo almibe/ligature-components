@@ -3,6 +3,7 @@
 function id(x) { return x[0]; }
 
 import moo from "moo"
+import { element } from "../ligature/ligature"
 
 const lexer = moo.compile({
     WS:        { match: /[ \t\n\r]+/, lineBreaks: true },
@@ -82,7 +83,7 @@ let ParserRules = [
         },
     {"name": "Element", "symbols": [(lexer.has("element") ? {type: "element"} : element)], "postprocess": 
         function(d) {
-          return { type: "element", value: d[0].value }
+          return element(d[0].value)
         } 
         },
     {"name": "Network$ebnf$1", "symbols": [(lexer.has("WS") ? {type: "WS"} : WS)], "postprocess": id},

@@ -2,6 +2,7 @@
 
 @{%
 import moo from "moo"
+import { element } from "../ligature/ligature"
 
 const lexer = moo.compile({
     WS:        { match: /[ \t\n\r]+/, lineBreaks: true },
@@ -70,7 +71,7 @@ Any -> Element | %variable | %literal | Network | Quote {%
 
 Element -> %element {%
   function(d) {
-    return { type: "element", value: d[0].value }
+    return element(d[0].value)
   } 
 %}
 

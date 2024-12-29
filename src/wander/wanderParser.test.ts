@@ -1,3 +1,4 @@
+import { element } from '../ligature/ligature.ts'
 import { run, parse } from './wander.ts'
 import { expect, test } from 'vitest'
 
@@ -17,15 +18,6 @@ test('parse script with single call, multiple args', () => {
   expect(parse("test 1 2 3")).toStrictEqual([{
     type: "call",
     commandName: "test",
-    arguments: [{
-      type: "element",
-      value: "1"
-    }, {
-      type: "element",
-      value: "2"
-    }, {
-      type: "element",
-      value: "3"
-    }]
+    arguments: [element("1"),element("2"),element("3") ]
   }])
 })

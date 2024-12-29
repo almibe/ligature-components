@@ -8,6 +8,8 @@ test('run empty script', () => {
 
 test('call id command', () => {
   expect(run("id test")).toStrictEqual(element("test"))
+  expect(run("id test2")).toStrictEqual(element("test2"))
+
 })
 
 // test('parse script with single call, multiple args', () => {
