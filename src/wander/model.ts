@@ -1,14 +1,18 @@
 import { Map } from "immutable"
-import nearley from "nearley"
-import { defaultLocals, stdModules } from "./commands"
-import grammar from "./wanderParser.ts"
 import { Variable, Network, Literal } from "../ligature/ligature.js"
+import {  }
 
 export type Call = {
   type: "call",
   commandName: string,
   arguments: WanderValue[]
 }
+
+export type Assignment = {
+
+}
+
+export type Statement = Call | Assignment
 
 export type WanderValue = Element | Variable | Network | Literal | Quote
 

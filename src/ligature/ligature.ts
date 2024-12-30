@@ -17,4 +17,6 @@ export type Triple = Record<{ type:string, element: Element | Variable, role: El
 export const triple = (element: Element | Variable, role: Element | Variable, value: Element | Variable | Literal) =>
         Triple({element: element, role: role, value: value})
 
-export type Network = Set<Triple>
+const Network = Record({type: "network", value: Set<Triple>()})
+export type Network = Record<{ type:string, value: Set<Triple> }>
+export const network = (value: Set<Triple>) => Network({value: value})

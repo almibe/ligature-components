@@ -1,6 +1,7 @@
-import { element } from '../ligature/ligature.ts'
-import { parse } from './wander.ts'
+import { element, network } from '../ligature/ligature.ts'
+import { parse } from './wanderParser.ts'
 import { expect, test } from 'vitest'
+import { Set } from 'immutable'
 
 test('parse empty script', () => {
   expect(parse("")).toStrictEqual([])
@@ -14,15 +15,20 @@ test('parse script with single call, no args', () => {
   }])
 })
 
+test('parse script with single call, single arg', () => {
+  expect(parse("test 1")).toStrictEqual([{
+    type: "call",
+    commandName: "test",
+    arguments: [element("1") ]
+  }])
+})
+
 test('parse empty network', () => {
   expect(parse("test {}")).toStrictEqual([{
     type: "call",
     commandName: "test",
     arguments: [
-      {
-        type: "network",
-        triples: [],
-      }
+      network(Set())
     ]
   }])
 })
@@ -35,14 +41,14 @@ test('parse script with single call, multiple args', () => {
   }])
 })
 
-// test('parse script with multiple calls', () => {
-//   expect(parse("test 1, test 2")).toStrictEqual([{
-//     type: "call",
-//     commandName: "test",
-//     arguments: [element("1") ]
-//   }, {
-//     type: "call",
-//     commandName: "test",
-//     arguments: [element("2") ]
-//   }])
-// })
+test('parse script with multiple calls', () => {
+  expect(parse("test 1, test 2")).toStrictEqual([{
+    type: "call",
+    commandName: "test",
+    arguments: [element("1") ]
+  }, {
+    type: "call",
+    commandName: "test",
+    arguments: [element("2") ]
+  }])
+})
