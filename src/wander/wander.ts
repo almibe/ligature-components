@@ -1,16 +1,8 @@
-import nearley from "nearley"
-import grammar from "./wanderParser.js"
-import { Record, Set, Map } from "immutable";
-import { Literal, Network, Variable } from "@ligature/ligature";
+import { Map } from "immutable";
 import { element } from "../ligature/ligature.js";
 import { defaultLocals, stdModules } from "./commands.js";
-
-
-export function parse(script: string) {
-  const parser = new nearley.Parser(nearley.Grammar.fromCompiled(grammar));
-  parser.feed(script)
-  return parser.results[0]
-}
+import { Command } from "./model.js";
+import { parse } from "./wanderParser.js";
 
 export function run(
       script: string, 
@@ -30,7 +22,6 @@ export function run(
     } else {
       throw "unexpected type " + JSON.stringify(statement)
     }
-    console.log("running", statement)
   }
   return result
 }
