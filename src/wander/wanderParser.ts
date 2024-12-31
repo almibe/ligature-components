@@ -1,5 +1,5 @@
 import moo from "moo"
-import { element, Element, network, Network } from "../ligature/ligature"
+import { element, Element, network, Network, triple, Triple, variable } from "../ligature/ligature"
 import { Call, WanderValue } from "./model"
 import { Set } from "immutable"
 
@@ -19,16 +19,18 @@ const lexer = moo.compile({
 
 function readArguments(): WanderValue[] | null {
   let token = readToken()
-  let args = []
+  let args: WanderValue[] = []
   let cont = true
   while (cont) {
     if (token != null && (token.type == "element" || token.type == "network")) {
       args.push(token)
       token = readToken()
     } else if (token == null) {
-      return args
-    } else {
-      throw "TODO"
+      cont = false
+    } else if (token.type == "comma") {
+      cont = false
+     }else {
+      return null
     }
   }
   return args
@@ -53,17 +55,44 @@ function readCall(): Call | null {
   }
 }
 
-type Token = Element | Network
+type Token = Element | Network | { type: "comma" }
 
 //Note this function assumes that the opening brace has been read before calling
 function readNetwork(): Network | null {
-  console.log("in read network")
   let next = readIgnoreWS()
-  if (next != null && next.type == "cbrace") {
-    return network(Set())
-  } else {
-    throw "TODO"
+  let cont = true
+  let results = Set<Triple>()
+  while(cont) {
+    if (next == null) {
+      return null
+    } else if (next.type == "comma") {
+      next = readIgnoreWS()
+    } else if (next.type == "element" || next.type == "variable") {
+      let tokenToModel = (token) => {
+        if (token.type == "element") {
+          return element(token.value)
+        } else if (token.type =="variable") {
+          return variable(token.value)
+        } else {
+          throw "unexpected value"
+        }
+      }
+      let el = tokenToModel(next)
+      let attribute = readElementVariable()
+      let value = readValue()
+      if (attribute != null && value != null) {
+        results = results.add(triple(el, attribute, value))
+        next = readIgnoreWS()
+      } else {
+        return null
+      }
+    } else if (next.type == "cbrace") {
+      cont = false
+    } else {
+      throw "unexpected token in readNetwork"
+    }
   }
+  return network(results)
 }
 
 function readIgnoreWS(): any | null {
@@ -81,6 +110,44 @@ function readIgnoreWS(): any | null {
   return null
 }
 
+//Reads an element or variable.
+function readElementVariable() {
+  let next = readIgnoreWS()
+  let cont = true
+  while (cont) {
+    if (next == null) {
+      return null
+    } else if (next.type == 'element') {
+      return element(next.value)
+    } else if (next.type == 'variable') {
+      return variable(next.value)
+    } else {
+      return null
+    }
+  }
+  return null
+}
+
+//Reads an element, literal, or variable.
+function readValue() {
+  let next = readIgnoreWS()
+  let cont = true
+  while (cont) {
+    if (next == null) {
+      return null
+    } else if (next.type == 'element') {
+      return element(next.value)
+    } else if (next.type == 'variable') {
+      return variable(next.value)
+    } else if (next.type == 'literal') {
+      return variable(next.value)
+    } else {
+      return null
+    }
+  }
+  return null
+}
+
 function readToken(): Token | null {
   let next = readIgnoreWS()
   let cont = true
@@ -91,8 +158,10 @@ function readToken(): Token | null {
       return element(next.value)
     } else if (next.type == 'obrace') {
       return readNetwork()
+    } else if (next.type == 'comma') {
+      return next
     } else {
-      throw "TODO"
+      throw "TODO unexpected token " + next.type
     }
   }
   return null

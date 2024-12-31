@@ -1,4 +1,4 @@
-import { element, network } from '../ligature/ligature.ts'
+import { element, network, triple, variable } from '../ligature/ligature.ts'
 import { parse } from './wanderParser.ts'
 import { expect, test } from 'vitest'
 import { Set } from 'immutable'
@@ -29,6 +29,44 @@ test('parse empty network', () => {
     commandName: "test",
     arguments: [
       network(Set())
+    ]
+  }])
+})
+
+test('parse single triple network', () => {
+  expect(parse("test {a b c}")).toStrictEqual([{
+    type: "call",
+    commandName: "test",
+    arguments: [
+      network(Set([
+        triple(element("a"), element("b"), element("c"))
+      ]))
+    ]
+  }])
+})
+
+test('parse network', () => {
+  expect(parse("test {a b c, d e f}")).toStrictEqual([{
+    type: "call",
+    commandName: "test",
+    arguments: [
+      network(Set([
+        triple(element("a"), element("b"), element("c")),
+        triple(element("d"), element("e"), element("f"))
+      ]))
+    ]
+  }])
+})
+
+test('parse network with variables', () => {
+  expect(parse("test {?a b ?c, d ?e f}")).toStrictEqual([{
+    type: "call",
+    commandName: "test",
+    arguments: [
+      network(Set([
+        triple(variable("?a"), element("b"), variable("?c")),
+        triple(element("d"), variable("?e"), element("f"))
+      ]))
     ]
   }])
 })
