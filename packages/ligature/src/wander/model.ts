@@ -1,6 +1,5 @@
 import { Map } from "immutable"
 import { Variable, Network, Literal } from "../ligature/ligature.js"
-import {  }
 
 export type Call = {
   type: "call",
