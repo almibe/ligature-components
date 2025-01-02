@@ -2,7 +2,10 @@ module Ligature
   (
     element,
     variable,
-    literal
+    literal,
+    Variable,
+    Element,
+    Literal
   )
 where
 
