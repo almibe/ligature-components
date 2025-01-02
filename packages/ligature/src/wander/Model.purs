@@ -30,7 +30,7 @@ data Statement = Call | Assignment
 
 type Script = List Statement
 
-data WanderValue = Element Element | Pipe | Variable | Network | Literal | Quote
+data WanderValue = Element Element | Pipe | Variable Variable | Network Network | Literal Literal | Quote Quote
 
 derive instance eqWanderValue :: Eq WanderValue
 

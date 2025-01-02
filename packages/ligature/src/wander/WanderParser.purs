@@ -24,6 +24,9 @@ parseTokens :: Unit -> Array WanderValue
 parseTokens _ =
   case next unit of
     { type: "element", value: value } -> [ Element (element value) ]
+    { type: "variable", value: value } -> [ Variable (variable value) ]
+    { type: "literal", value: value } -> [ Literal (literal value) ]
+    { type: "pipe" } -> [ Pipe ]
     _ -> []
 
 -- function readArguments(): WanderValue[] | null {

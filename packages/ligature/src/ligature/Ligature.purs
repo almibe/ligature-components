@@ -2,9 +2,14 @@ module Ligature
   ( element
   , variable
   , literal
+  , network
   , Variable
   , Element
   , Literal
+  , Network
+  , ElementPattern
+  , Triple
+  , Value
   ) where
 
 import Prelude
@@ -36,7 +41,11 @@ literal value = { value: value, type: "literal" }
 
 data ElementPattern = Element Element | Variable Variable
 
+derive instance eqElementPattern :: Eq ElementPattern
+
 data Value = VElement Element | VVariable Variable | VLiteral Literal
+
+derive instance eqValue :: Eq Value
 
 type Triple =
   { element :: ElementPattern
