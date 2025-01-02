@@ -1,6 +1,6 @@
-module Wander (
-  run
-) where
+module Wander
+  ( run
+  ) where
 
 import Ligature
 import Wander.Model

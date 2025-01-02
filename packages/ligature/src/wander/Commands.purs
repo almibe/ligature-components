@@ -1,6 +1,5 @@
 module Wander.Commands where
 
-
 -- import { Map } from "immutable"
 -- import { Command, WanderValue, parse } from "./wander"
 -- import { element } from "../ligature/ligature"
@@ -15,7 +14,7 @@ module Wander.Commands where
 --   }],
 --   [element("union"), (l, m, v, a) => {
 --     if (a.length == 2) {
-      
+
 --       return a[0]
 --     } else {
 --       throw "union command expects two arguments."

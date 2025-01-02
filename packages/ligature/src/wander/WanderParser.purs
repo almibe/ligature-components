@@ -1,12 +1,13 @@
-module Wander.Parser (
-    parse
-) where
+module Wander.Parser
+  ( parse
+  ) where
 
 import Data.Unit
 
-type Token = 
-    { type :: String 
-    , value :: String }
+type Token =
+  { type :: String
+  , value :: String
+  }
 
 foreign import reset :: String -> Unit
 
@@ -14,8 +15,8 @@ foreign import next :: Unit -> Token
 
 parse :: String -> Token
 parse script = do
-    let _ = reset script
-    next unit
+  let _ = reset script
+  next unit
 
 -- function readArguments(): WanderValue[] | null {
 --   let token = readToken()
