@@ -2,7 +2,7 @@ import { Map } from "immutable";
 import { element } from "../ligature/ligature.js";
 import { defaultLocals, stdModules } from "./commands.js";
 import { Command } from "./model.js";
-import { parse } from "./wanderParser.js";
+import { parse } from "./WanderParser.js";
 
 export function run(
       script: string, 

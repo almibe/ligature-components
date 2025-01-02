@@ -7,7 +7,7 @@ module Ligature
 where
 
 import Prelude
-import Data.Set as Set
+import Data.Set
 
 type Element =
   { value :: String 
@@ -17,11 +17,9 @@ type Variable =
   { value :: String 
   , type :: String }
 
-
 type Literal =
   { value :: String 
   , type :: String }
-
 
 element :: String -> Element
 element value = { value : value, type : "element" }
