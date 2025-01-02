@@ -13,7 +13,9 @@ import Test.Unit.Assert as Assert
 main = runTest do
   suite "parser tests" do
     test "empty script" do
-      Assert.assert "Parse Empty Script" $ (parse "hello") == { type : "element", value : "hello" }
+      Assert.assert "parse empty script" $ (parse "") == []
+      Assert.assert "parse single element" $ (parse "hello") == [Element (element "hello")]
+    
       -- Assert.assertFalse "2 + 2 shouldn't be 5" $ (2 + 2) == 5
       -- Assert.equal 4 (2 + 2)
       -- Assert.expectFailure "2 + 2 shouldn't be 5" $ Assert.equal 5 (2 + 2)

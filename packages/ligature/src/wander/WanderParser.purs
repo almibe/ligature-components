@@ -3,6 +3,8 @@ module Wander.Parser
   ) where
 
 import Data.Unit
+import Ligature
+import Wander.Model
 
 type Token =
   { type :: String
@@ -13,10 +15,16 @@ foreign import reset :: String -> Unit
 
 foreign import next :: Unit -> Token
 
-parse :: String -> Token
+parse :: String -> Array WanderValue
 parse script = do
   let _ = reset script
-  next unit
+  parseTokens unit
+
+parseTokens :: Unit -> Array WanderValue
+parseTokens _ =
+  case next unit of
+    { type: "element", value: value } -> [ Element (element value) ]
+    _ -> []
 
 -- function readArguments(): WanderValue[] | null {
 --   let token = readToken()
