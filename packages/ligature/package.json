@@ -1,22 +1,30 @@
 {
-  "name": "@ligature/ligature",
-  "license": "MPL-2.0",
-  "private": true,
-  "version": "0.14.0",
-  "type": "module",
+  "name": "ligature-re",
+  "version": "0.0.0",
   "scripts": {
-    "dev": "vite",
-    "build": "tsc && vite build",
-    "preview": "vite preview",
-    "test": "vitest"
+    "res:build": "rescript",
+    "res:clean": "rescript clean",
+    "res:dev": "rescript -w",
+    "test": "ava"
+  },
+  "keywords": [
+    "rescript"
+  ],
+  "ava": {
+    "files": [
+      "test/**/*_test.res.mjs",
+      "test/**/*_test.bs.js"
+    ]
+  },
+  "author": "",
+  "license": "MPL-2.0",
+  "dependencies": {
+    "@rescript/core": "^1.3.0",
+    "moo": "^0.5.2",
+    "rescript": "^11.1.0"
   },
   "devDependencies": {
-    "typescript": "^5.5.3",
-    "vite": "^5.4.8",
-    "vitest": "^2.1.8"
-  },
-  "dependencies": {
-    "immutable": "^5.0.3",
-    "moo": "^0.5.2"
+    "@dzakh/rescript-ava": "^3.1.0",
+    "ava": "^6.2.0"
   }
 }

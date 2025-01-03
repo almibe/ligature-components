@@ -3,6 +3,7 @@ module Ligature
   , variable
   , literal
   , network
+  , emptyNetwork
   , Variable
   , Element
   , Literal
@@ -60,3 +61,6 @@ type Network =
 
 network :: Set Triple -> Network
 network value = { value: value, type: "network" }
+
+emptyNetwork :: Network
+emptyNetwork = network empty
