@@ -1,22 +1,20 @@
-@module("../WanderTokenizer.js") external reset: string => unit = "reset"
+@module("./WanderTokenizer.js") external reset: string => unit = "reset"
 
 type token = {
-  "type": string,
-  "value": string,
+  \"type": string,
+  \"value": string,
 }
 
-@module("../WanderTokenizer.js") external next: unit => token = "next" //TODO add token type
+@module("./WanderTokenizer.js") external next: unit => token = "next" //TODO add token type
 
 let parseTokens = () => {
-  ()
-  // switch next() {
-
-  // }
-  //   { type: "element", value: value } -> [ Element (element value) ]
-  //   { type: "variable", value: value } -> [ Variable (variable value) ]
-  //   { type: "literal", value: value } -> [ Literal (literal value) ]
-  //   { type: "pipe" } -> [ Pipe ]
-  //   _ -> []
+  switch next() {
+  | { \"type": "element", value: value } => [ Model.Element (Ligature.element(value)) ]
+  | { \"type": "variable", value: value } => [ Model.Variable (Ligature.variable(value)) ]
+  | { \"type": "literal", value: value } => [ Model.Literal (Ligature.literal(value)) ]
+  | { \"type": "pipe" } => [ Pipe ]
+  |  _ => []
+  }
 }
 
 let parse = (script) => {

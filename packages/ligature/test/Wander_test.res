@@ -1,3 +1,9 @@
+open Ava
+
+test("parse empty string", t => {
+  t->Assert.deepEqual((WanderParser.parse("")), [])
+})
+
 // import { element } from '../ligature/ligature.ts'
 // import { run } from './wander.ts'
 // import { expect, test } from 'vitest'
