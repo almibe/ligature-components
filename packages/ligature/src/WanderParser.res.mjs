@@ -10,8 +10,18 @@ function next(prim) {
   return WanderTokenizerJs.next();
 }
 
+function parseTokens() {
+  
+}
+
+function parse(script) {
+  WanderTokenizerJs.reset(script);
+}
+
 export {
   reset ,
   next ,
+  parseTokens ,
+  parse ,
 }
 /* ../WanderTokenizer.js Not a pure module */

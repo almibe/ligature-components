@@ -1,12 +1,6 @@
 // __tests__/Main_test.res
 open Ava
 
-test("foo", t => {
-  t->Assert.pass
-})
-
-asyncTest("bar", t => {
-  Promise.resolve("bar")->Promise.thenResolve(bar => {
-    t->Assert.is(bar, "bar")
-  })
+test("parse empty string", t => {
+  t->Assert.is((WanderParser.parse("")), ())
 })
