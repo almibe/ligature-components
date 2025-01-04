@@ -25,6 +25,12 @@ type triple = {
   value: value,
 }
 
+let triple = (e, r, v) => {
+  element: e,
+  role: r,
+  value: v,
+}
+
 type network = {"value": array<triple>, "type": string} //TODO make a set
 
 let network = value => {"value": value, "type": "network"}
