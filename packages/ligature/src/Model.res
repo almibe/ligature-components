@@ -1,12 +1,6 @@
-type rec call = {"type": string, "commandName": string, "arguments": array<wanderValue>}
+type rec call = {\"type": string, commandName: string, arguments: array<wanderValue>}
 
-and assignment = {"type": string, "variable": Ligature.variable, "value": wanderValue}
-
-and statement =
-  | Call
-  | Assignment
-
-and script = array<statement>
+and script = array<call>
 
 and wanderValue =
   | Element(Ligature.element)
@@ -20,3 +14,9 @@ and wanderValue =
 and quote = array<wanderValue>
 
 type command = unit => unit //--(local: Map<Element, Command>, modules: Map<Element, Map<Element, Command>>, variables: Map<Variable, Element | Literal>, args: WanderValue[]) => WanderValue
+
+let call: (string, array<wanderValue>) => call = (name, args) => {
+  \"type": "call",
+  commandName: name,
+  arguments: args,
+}

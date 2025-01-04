@@ -44,6 +44,7 @@ let rec readNetwork: array<Ligature.triple> => Nullable.t<Ligature.network> = tr
   switch readIgnoreWS() {
   | Null | Undefined => Null
   | Value({\"type": "cbrace"}) => Value(Ligature.network(triples))
+  | Value({\"type": "comma"}) => readNetwork(triples)
   | Value({\"type": "element", value: element}) =>
     switch (readElementPattern(), readValue()) {
     | (Value(role), Value(value)) => {
@@ -65,64 +66,53 @@ let rec readNetwork: array<Ligature.triple> => Nullable.t<Ligature.network> = tr
     | (_, _) => Null
     }
   }
-
-  // let results = Set<Triple>()
-  // while(cont) {
-  //   switch next {
-  //     | Null => {
-  //       cont := false
-  //     }
-  //     | Value(value) => {
-
-  //     }
-  //   }
-
-  //   if (next == null) {
-  //     return null
-  //   } else if (next.type == "comma") {
-  //     next = readIgnoreWS()
-  //   } else if (next.type == "element" || next.type == "variable") {
-  //     let tokenToModel = (token) => {
-  //       if (token.type == "element") {
-  //         return element(token.value)
-  //       } else if (token.type =="variable") {
-  //         return variable(token.value)
-  //       } else {
-  //         throw "unexpected value"
-  //       }
-  //     }
-  //     let el = tokenToModel(next)
-  //     let attribute = readElementVariable()
-  //     let value = readValue()
-  //     if (attribute != null && value != null) {
-  //       results = results.add(triple(el, attribute, value))
-  //       next = readIgnoreWS()
-  //     } else {
-  //       return null
-  //     }
-  //   } else if (next.type == "cbrace") {
-  //     cont = false
-  //   } else {
-  //     throw "unexpected token in readNetwork"
-  //   }
-  // }
-  // return network(results)
 }
 
-let parseTokens: unit => array<Model.wanderValue> = () => {
+let readArguments: unit => array<Model.wanderValue> = () => {
+  let token = readIgnoreWS()
+  let args: array<Model.wanderValue> = []
+  let cont = ref(true)
+  while cont.contents {
+    switch token {
+    | Value({\"type": "element", value}) => args->Array.push(Model.Element(Ligature.element(value)))
+    | Null => cont := false
+    }
+  }
+  args
+}
+
+let readCall: string => Nullable.t<Model.call> = name => {
+  // switch readArguments() {
+  // | Null => {
+  //     commandName: commandName,
+  //     \"type": "call",
+  //     arguments: []
+  // }
+  // | Value(args) => {
+  let args = readArguments()
+  Value(Model.call(name, args))
+}
+
+let parseScript: unit => Model.script = () => {
   let res = []
   switch next() {
-  | Value({\"type": "element", value}) => res->Array.push(Model.Element(Ligature.element(value)))
-  | Value({\"type": "variable", value}) => res->Array.push(Model.Variable(Ligature.variable(value)))
-  | Value({\"type": "literal", value}) => res->Array.push(Model.Literal(Ligature.literal(value)))
-  | Value({\"type": "pipe"}) => res->Array.push(Pipe)
-  | Value({\"type": "comma"}) => res->Array.push(Comma)
-  | Undefined | Null => ()
-  | Value({\"type": "obrace"}) =>
-    switch readNetwork([]) {
-    | Value(value) => res->Array.push(Model.Network(value))
-    | Null | Undefined => raise(Failure("Unexpected value while reading network."))
+  | Value({\"type": "element", value}) => {
+      let c = readCall(value) //res->Array.push(Model.Element(Ligature.element(value)))
+      switch c {
+      | Null => ()
+      | Value(c) => res->Array.push(c)
+      }
     }
+  | Value({\"type": "variable", value}) => () //res->Array.push(Model.Variable(Ligature.variable(value)))
+  //  | Value({\"type": "literal", value}) => res->Array.push(Model.Literal(Ligature.literal(value)))
+  //  | Value({\"type": "pipe"}) => res->Array.push(Pipe)
+  | Value({\"type": "comma"}) => () //res->Array.push(Comma)
+  | Undefined | Null => ()
+  // | Value({\"type": "obrace"}) =>
+  //   switch readNetwork([]) {
+  //   | Value(value) => res->Array.push(Ligature.Network(value))
+  //   | Null | Undefined => raise(Failure("Unexpected value while reading network."))
+  //   }
   | _ => raise(Failure("Unexpected value while reading tokens."))
   }
   res
@@ -130,46 +120,8 @@ let parseTokens: unit => array<Model.wanderValue> = () => {
 
 let parse = script => {
   reset(script)
-  parseTokens()
+  parseScript()
 }
-
-// function readArguments(): WanderValue[] | null {
-//   let token = readToken()
-//   let args: WanderValue[] = []
-//   let cont = true
-//   while (cont) {
-//     if (token != null && (token.type == "element" || token.type == "network")) {
-//       args.push(token)
-//       token = readToken()
-//     } else if (token == null) {
-//       cont = false
-//     } else if (token.type == "comma") {
-//       cont = false
-//      }else {
-//       return null
-//     }
-//   }
-//   return args
-// }
-
-// function readCall(): Call | null {
-//   let token = readToken()
-//   if (token != null && token.type == "element") {
-//     let commandName = token.value
-//     let args = readArguments()
-//     if (args == null) {
-//       return null
-//     } else {
-//       return {
-//         commandName: commandName,
-//         type: "call",
-//         arguments: args
-//       }
-//     }
-//   } else {
-//     return null
-//   }
-// }
 
 let readTriple: unit => Nullable.t<Ligature.triple> = () => {
   Null

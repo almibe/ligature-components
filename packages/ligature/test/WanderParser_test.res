@@ -5,66 +5,69 @@ test("parse empty string", t => {
 })
 
 test("basic parsing", t => {
-  t->Assert.deepEqual(WanderParser.parse("test"), [Model.Element(Ligature.element("test"))])
-  t->Assert.deepEqual(WanderParser.parse("?hello"), [Model.Variable(Ligature.variable("?hello"))])
   t->Assert.deepEqual(
-    WanderParser.parse("\"hello literal\""),
-    [Model.Literal(Ligature.literal("\"hello literal\""))],
-  )
-  t->Assert.deepEqual(WanderParser.parse("|"), [Model.Pipe])
-  t->Assert.deepEqual(WanderParser.parse(","), [Model.Comma])
-})
-
-test("parse empty network", t => {
-  t->Assert.deepEqual(WanderParser.parse("{}"), [Model.Network(Ligature.network([]))])
-})
-
-test("parse network with single triple", t => {
-  t->Assert.deepEqual(
-    WanderParser.parse("{a b c}"),
+    WanderParser.parse("test"),
     [
-      Model.Network(
-        Ligature.network([
-          Ligature.triple(
-            Ligature.Element(Ligature.element("a")),
-            Ligature.Element(Ligature.element("b")),
-            Ligature.VElement(Ligature.element("c")),
-          ),
-        ]),
-      ),
+      {
+        \"type": "call",
+        commandName: "test",
+        arguments: [],
+      },
     ],
   )
+
+  // t->Assert.deepEqual(WanderParser.parse("?hello"), [Model.Variable(Ligature.variable("?hello"))])
+
+  // t->Assert.deepEqual(
+  //   WanderParser.parse("\"hello literal\""),
+  //   [Model.Literal(Ligature.literal("\"hello literal\""))],
+  // )
+  // t->Assert.deepEqual(WanderParser.parse("|"), [Model.Pipe])
+  // t->Assert.deepEqual(WanderParser.parse(","), [Model.Comma])
 })
 
-test("parse network with two triples", t => {
-  t->Assert.deepEqual(
-    WanderParser.parse("{a b c, a b d}"),
-    [
-      Model.Network(
-        Ligature.network([
-          Ligature.triple(
-            Ligature.Element(Ligature.element("a")),
-            Ligature.Element(Ligature.element("b")),
-            Ligature.VElement(Ligature.element("c")),
-          ),
-          Ligature.triple(
-            Ligature.Element(Ligature.element("a")),
-            Ligature.Element(Ligature.element("b")),
-            Ligature.VElement(Ligature.element("d")),
-          ),
-        ]),
-      ),
-    ],
-  )
-})
+// test("parse empty network", t => {
+//   t->Assert.deepEqual(WanderParser.parse("{}"), [Model.Network(Ligature.network([]))])
+// })
 
-// suite "parser tests" do
-//   test "parse empty network" do
-//     Assert.equal' "" (parse "{}") [Network emptyNetwork]
-//   test "parse network with one triple" do
-//     Assert.equal' "" (parse "{a b c}") [Network emptyNetwork]
-//   test "parse network with multiple triples" do
-//     Assert.equal' "" (parse "{a b c, d e f, g h i}") [Network emptyNetwork]
+// test("parse network with single triple", t => {
+//   t->Assert.deepEqual(
+//     WanderParser.parse("{a b c}"),
+//     [
+//       Model.Network(
+//         Ligature.network([
+//           Ligature.triple(
+//             Ligature.Element(Ligature.element("a")),
+//             Ligature.Element(Ligature.element("b")),
+//             Ligature.VElement(Ligature.element("c")),
+//           ),
+//         ]),
+//       ),
+//     ],
+//   )
+// })
+
+// test("parse network with two triples", t => {
+//   t->Assert.deepEqual(
+//     WanderParser.parse("{a b c, a b d}"),
+//     [
+//       Model.Network(
+//         Ligature.network([
+//           Ligature.triple(
+//             Ligature.Element(Ligature.element("a")),
+//             Ligature.Element(Ligature.element("b")),
+//             Ligature.VElement(Ligature.element("c")),
+//           ),
+//           Ligature.triple(
+//             Ligature.Element(Ligature.element("a")),
+//             Ligature.Element(Ligature.element("b")),
+//             Ligature.VElement(Ligature.element("d")),
+//           ),
+//         ]),
+//       ),
+//     ],
+//   )
+// })
 
 // test("parse script with single call, no args", t => {
 //   t->Assert.deepEqual(WanderParser.parse("test"), [{
