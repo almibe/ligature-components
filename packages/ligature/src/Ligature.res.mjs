@@ -22,6 +22,14 @@ function literal(value) {
         };
 }
 
+function triple(e, r, v) {
+  return {
+          element: e,
+          role: r,
+          value: v
+        };
+}
+
 function network(value) {
   return {
           value: value,
@@ -35,6 +43,7 @@ export {
   element ,
   variable ,
   literal ,
+  triple ,
   network ,
   emptyNetwork ,
 }
