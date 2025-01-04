@@ -25,10 +25,54 @@ Ava("basic parsing", (function (t) {
         t.deepEqual(WanderParser.parse(","), ["Comma"]);
       }));
 
-Ava("parse networks", (function (t) {
+Ava("parse empty network", (function (t) {
         t.deepEqual(WanderParser.parse("{}"), [{
                 TAG: "Network",
                 _0: Ligature.network([])
+              }]);
+      }));
+
+Ava("parse network with single triple", (function (t) {
+        t.deepEqual(WanderParser.parse("{a b c}"), [{
+                TAG: "Network",
+                _0: Ligature.network([Ligature.triple({
+                            TAG: "Element",
+                            _0: Ligature.element("a")
+                          }, {
+                            TAG: "Element",
+                            _0: Ligature.element("b")
+                          }, {
+                            TAG: "VElement",
+                            _0: Ligature.element("c")
+                          })])
+              }]);
+      }));
+
+Ava("parse network with two triples", (function (t) {
+        t.deepEqual(WanderParser.parse("{a b c, a b d}"), [{
+                TAG: "Network",
+                _0: Ligature.network([
+                      Ligature.triple({
+                            TAG: "Element",
+                            _0: Ligature.element("a")
+                          }, {
+                            TAG: "Element",
+                            _0: Ligature.element("b")
+                          }, {
+                            TAG: "VElement",
+                            _0: Ligature.element("c")
+                          }),
+                      Ligature.triple({
+                            TAG: "Element",
+                            _0: Ligature.element("a")
+                          }, {
+                            TAG: "Element",
+                            _0: Ligature.element("b")
+                          }, {
+                            TAG: "VElement",
+                            _0: Ligature.element("d")
+                          })
+                    ])
               }]);
       }));
 

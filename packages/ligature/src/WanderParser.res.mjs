@@ -24,8 +24,25 @@ function readIgnoreWS() {
   };
 }
 
-function readElementVariable() {
-  readIgnoreWS();
+function readElementPattern() {
+  var match = readIgnoreWS();
+  if (match === null || match === undefined) {
+    return null;
+  }
+  switch (match.type) {
+    case "element" :
+        return {
+                TAG: "Element",
+                _0: Ligature.element(match.value)
+              };
+    case "variable" :
+        return {
+                TAG: "Variable",
+                _0: Ligature.variable(match.value)
+              };
+    default:
+      return null;
+  }
 }
 
 function readValue() {
@@ -55,38 +72,54 @@ function readValue() {
 }
 
 function readNetwork(triples) {
-  var match = readIgnoreWS();
-  if (match === null || match === undefined) {
-    return null;
-  }
-  switch (match.type) {
-    case "cbrace" :
-        return Ligature.network(triples);
-    case "element" :
-        readElementVariable();
-        readValue();
+  while(true) {
+    var match = readIgnoreWS();
+    if (match === null || match === undefined) {
+      return null;
+    }
+    switch (match.type) {
+      case "cbrace" :
+          return Ligature.network(triples);
+      case "element" :
+          var match$1 = readElementPattern();
+          var match$2 = readValue();
+          if (match$1 === null || match$1 === undefined) {
+            return null;
+          }
+          if (match$2 === null || match$2 === undefined) {
+            return null;
+          }
+          triples.push(Ligature.triple({
+                    TAG: "Element",
+                    _0: Ligature.element(match.value)
+                  }, match$1, match$2));
+          continue ;
+      case "variable" :
+          var match$3 = readElementPattern();
+          var match$4 = readValue();
+          if (match$3 === null || match$3 === undefined) {
+            return null;
+          }
+          if (match$4 === null || match$4 === undefined) {
+            return null;
+          }
+          triples.push(Ligature.triple({
+                    TAG: "Variable",
+                    _0: Ligature.variable(match.value)
+                  }, match$3, match$4));
+          continue ;
+      default:
         throw {
-              RE_EXN_ID: "Failure",
-              _1: "TODO",
+              RE_EXN_ID: "Match_failure",
+              _1: [
+                "WanderParser.res",
+                44,
+                2
+              ],
               Error: new Error()
             };
-    case "variable" :
-        throw {
-              RE_EXN_ID: "Failure",
-              _1: "TODO",
-              Error: new Error()
-            };
-    default:
-      throw {
-            RE_EXN_ID: "Match_failure",
-            _1: [
-              "WanderParser.res",
-              57,
-              2
-            ],
-            Error: new Error()
-          };
-  }
+    }
+  };
 }
 
 function parseTokens() {
@@ -116,22 +149,14 @@ function parseTokens() {
           if (value === null || value === undefined) {
             if (value === null) {
               throw {
-                    RE_EXN_ID: "Match_failure",
-                    _1: [
-                      "WanderParser.res",
-                      118,
-                      34
-                    ],
+                    RE_EXN_ID: "Failure",
+                    _1: "Unexpected value while reading network.",
                     Error: new Error()
                   };
             }
             throw {
-                  RE_EXN_ID: "Match_failure",
-                  _1: [
-                    "WanderParser.res",
-                    118,
-                    34
-                  ],
+                  RE_EXN_ID: "Failure",
+                  _1: "Unexpected value while reading network.",
                   Error: new Error()
                 };
           } else {
@@ -153,7 +178,7 @@ function parseTokens() {
       default:
         throw {
               RE_EXN_ID: "Failure",
-              _1: "Unexpected value.",
+              _1: "Unexpected value while reading tokens.",
               Error: new Error()
             };
     }
@@ -178,7 +203,7 @@ export {
   reset ,
   next ,
   readIgnoreWS ,
-  readElementVariable ,
+  readElementPattern ,
   readValue ,
   readNetwork ,
   parseTokens ,

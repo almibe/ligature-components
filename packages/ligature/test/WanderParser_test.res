@@ -15,8 +15,47 @@ test("basic parsing", t => {
   t->Assert.deepEqual(WanderParser.parse(","), [Model.Comma])
 })
 
-test("parse networks", t => {
+test("parse empty network", t => {
   t->Assert.deepEqual(WanderParser.parse("{}"), [Model.Network(Ligature.network([]))])
+})
+
+test("parse network with single triple", t => {
+  t->Assert.deepEqual(
+    WanderParser.parse("{a b c}"),
+    [
+      Model.Network(
+        Ligature.network([
+          Ligature.triple(
+            Ligature.Element(Ligature.element("a")),
+            Ligature.Element(Ligature.element("b")),
+            Ligature.VElement(Ligature.element("c")),
+          ),
+        ]),
+      ),
+    ],
+  )
+})
+
+test("parse network with two triples", t => {
+  t->Assert.deepEqual(
+    WanderParser.parse("{a b c, a b d}"),
+    [
+      Model.Network(
+        Ligature.network([
+          Ligature.triple(
+            Ligature.Element(Ligature.element("a")),
+            Ligature.Element(Ligature.element("b")),
+            Ligature.VElement(Ligature.element("c")),
+          ),
+          Ligature.triple(
+            Ligature.Element(Ligature.element("a")),
+            Ligature.Element(Ligature.element("b")),
+            Ligature.VElement(Ligature.element("d")),
+          ),
+        ]),
+      ),
+    ],
+  )
 })
 
 // suite "parser tests" do

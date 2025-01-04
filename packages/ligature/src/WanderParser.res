@@ -20,23 +20,12 @@ let rec readIgnoreWS: unit => Nullable.t<token> = () => {
 }
 
 //Reads an element or variable.
-let readElementVariable: unit => option<Ligature.elementPattern> = () => {
+let readElementPattern: unit => Nullable.t<Ligature.elementPattern> = () => {
   switch readIgnoreWS() {
-  | _ => None
+  | Value({\"type": "element", value}) => Value(Ligature.Element(Ligature.element(value)))
+  | Value({\"type": "variable", value}) => Value(Ligature.Variable(Ligature.variable(value)))
+  | _ => Null
   }
-  // let cont = true
-  // while (cont) {
-  //   if (next == null) {
-  //     return null
-  //   } else if (next.type == 'element') {
-  //     return element(next.value)
-  //   } else if (next.type == 'variable') {
-  //     return variable(next.value)
-  //   } else {
-  //     return null
-  //   }
-  // }
-  // return null
 }
 
 //Reads an element, literal, or variable.
@@ -51,17 +40,30 @@ let readValue: unit => Nullable.t<Ligature.value> = () => {
 }
 
 //Note this function assumes that the opening brace has been read before calling
-let readNetwork: array<Ligature.triple> => Nullable.t<Ligature.network> = triples => {
-  //TODO while next element is not close brace
-
+let rec readNetwork: array<Ligature.triple> => Nullable.t<Ligature.network> = triples => {
   switch readIgnoreWS() {
   | Null | Undefined => Null
   | Value({\"type": "cbrace"}) => Value(Ligature.network(triples))
-  | Value({\"type": "element", value}) =>
-    switch (readElementVariable(), readValue()) {
-    | (_, _) => raise(Failure("TODO"))
+  | Value({\"type": "element", value: element}) =>
+    switch (readElementPattern(), readValue()) {
+    | (Value(role), Value(value)) => {
+        triples->Array.push(
+          Ligature.triple(Ligature.Element(Ligature.element(element)), role, value),
+        )
+        readNetwork(triples)
+      }
+    | (_, _) => Null
     }
-  | Value({\"type": "variable", value}) => raise(Failure("TODO"))
+  | Value({\"type": "variable", value: variable}) =>
+    switch (readElementPattern(), readValue()) {
+    | (Value(role), Value(value)) => {
+        triples->Array.push(
+          Ligature.triple(Ligature.Variable(Ligature.variable(variable)), role, value),
+        )
+        readNetwork(triples)
+      }
+    | (_, _) => Null
+    }
   }
 
   // let results = Set<Triple>()
@@ -119,9 +121,9 @@ let parseTokens: unit => array<Model.wanderValue> = () => {
   | Value({\"type": "obrace"}) =>
     switch readNetwork([]) {
     | Value(value) => res->Array.push(Model.Network(value))
-    | Null | Undefined => raise(Failure("Unexpected value."))
+    | Null | Undefined => raise(Failure("Unexpected value while reading network."))
     }
-  | _ => raise(Failure("Unexpected value."))
+  | _ => raise(Failure("Unexpected value while reading tokens."))
   }
   res
 }
