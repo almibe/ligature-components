@@ -1,13 +1,12 @@
-
-let run: (string) => option<Model.wanderValue> = (script) => {
-    // let 
-    // Model.Element (Ligature.element("result"))
-    raise(Failure("TODO"))
+let run: string => option<Model.wanderValue> = script => {
+  // let
+  // Model.Element (Ligature.element("result"))
+  raise(Failure("TODO"))
 }
 
 // -- export function run(
-// --       script: string, 
-// --       local: Map<Element, Command> = defaultLocals, 
+// --       script: string,
+// --       local: Map<Element, Command> = defaultLocals,
 // --       modules: Map<Element, Map<Element, Command>> = stdModules) {
 // --   let ast = parse(script)
 // --   let result = {}

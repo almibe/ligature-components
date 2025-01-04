@@ -5,6 +5,7 @@
     "res:build": "rescript",
     "res:clean": "rescript clean",
     "res:dev": "rescript -w",
+    "res:format": "rescript format -all",
     "test": "ava",
     "build-test": "run-s res:build test"
   },

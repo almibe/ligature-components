@@ -1,7 +1,7 @@
 open Ava
 
 test("parse empty string", t => {
-  t->Assert.deepEqual((WanderParser.parse("")), [])
+  t->Assert.deepEqual(WanderParser.parse(""), [])
 })
 
 // import { element } from '../ligature/ligature.ts'

@@ -1,25 +1,25 @@
 type token = {
   \"type": string,
-  \"value": string,
+  value: string,
 }
 
 @module("./WanderTokenizer.js") external reset: string => unit = "reset"
 
 @module("./WanderTokenizer.js") external next: unit => Nullable.t<token> = "next"
 
-let parseTokens: (unit) => array<Model.wanderValue> = () => {
+let parseTokens: unit => array<Model.wanderValue> = () => {
   switch next() {
-  | Value({ \"type": "element", value: value }) => [ Model.Element (Ligature.element(value)) ]
-  | Value({ \"type": "variable", value: value }) => [ Model.Variable (Ligature.variable(value)) ]
-  | Value({ \"type": "literal", value: value }) => [ Model.Literal (Ligature.literal(value)) ]
-  | Value({ \"type": "pipe" }) => [ Pipe ]
-  | Value({ \"type": "comma"}) => [ Comma ]
+  | Value({\"type": "element", value}) => [Model.Element(Ligature.element(value))]
+  | Value({\"type": "variable", value}) => [Model.Variable(Ligature.variable(value))]
+  | Value({\"type": "literal", value}) => [Model.Literal(Ligature.literal(value))]
+  | Value({\"type": "pipe"}) => [Pipe]
+  | Value({\"type": "comma"}) => [Comma]
   | Undefined | Null => []
   | _ => raise(Failure("Unexpected value."))
   }
 }
 
-let parse = (script) => {
+let parse = script => {
   reset(script)
   parseTokens()
 }
@@ -62,13 +62,12 @@ let parse = (script) => {
 //   }
 // }
 
-let readTriple: () => Nullable.t<Ligature.triple> = () => {
+let readTriple: unit => Nullable.t<Ligature.triple> = () => {
   Null
 }
 
 //Note this function assumes that the opening brace has been read before calling
-let readNetwork: () => Nullable.t<Ligature.network> = () => {
-
+let readNetwork: unit => Nullable.t<Ligature.network> = () => {
   Null
   // let next = readIgnoreWS()
   // let cont = ref(true)
@@ -82,7 +81,6 @@ let readNetwork: () => Nullable.t<Ligature.network> = () => {
 
   //     }
   //   }
-
 
   //   if (next == null) {
   //     return null
@@ -116,23 +114,20 @@ let readNetwork: () => Nullable.t<Ligature.network> = () => {
   // return network(results)
 }
 
-let rec readIgnoreWS: () => Nullable.t<token> = () => {
+let rec readIgnoreWS: unit => Nullable.t<token> = () => {
   switch next() {
-    | Value(value) => {
-      if (value.\"type" == "ws") {
-        readIgnoreWS()
-      } else {
-        Value(value)
-      }
+  | Value(value) =>
+    if value.\"type" == "ws" {
+      readIgnoreWS()
+    } else {
+      Value(value)
     }
-    | Undefined | Null => {
-      Null
-    }
+  | Undefined | Null => Null
   }
 }
 
 //Reads an element or variable.
-let readElementVariable: () => option<Ligature.elementPattern> = () => {
+let readElementVariable: unit => option<Ligature.elementPattern> = () => {
   switch readIgnoreWS() {
   | _ => None
   }
@@ -171,7 +166,7 @@ let readElementVariable: () => option<Ligature.elementPattern> = () => {
 //   return null
 // }
 
-let readToken: () => option<Model.wanderValue> = () => {
+let readToken: unit => option<Model.wanderValue> = () => {
   None
   // let next = readIgnoreWS()
   // let cont = ref(true)

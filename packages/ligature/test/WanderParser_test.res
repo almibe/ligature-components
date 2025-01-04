@@ -1,29 +1,31 @@
 open Ava
 
 test("parse empty string", t => {
-  t->Assert.deepEqual((WanderParser.parse("")), [])
+  t->Assert.deepEqual(WanderParser.parse(""), [])
 })
 
 test("basic parsing", t => {
-  t->Assert.deepEqual((WanderParser.parse("test")), [Model.Element(Ligature.element("test"))])
-  t->Assert.deepEqual((WanderParser.parse("?hello")), [Model.Variable(Ligature.variable("?hello"))])
-  t->Assert.deepEqual((WanderParser.parse("\"hello literal\"")), [Model.Literal(Ligature.literal("\"hello literal\""))])
-  t->Assert.deepEqual((WanderParser.parse("|")), [Model.Pipe])
-  t->Assert.deepEqual((WanderParser.parse(",")), [Model.Comma])
+  t->Assert.deepEqual(WanderParser.parse("test"), [Model.Element(Ligature.element("test"))])
+  t->Assert.deepEqual(WanderParser.parse("?hello"), [Model.Variable(Ligature.variable("?hello"))])
+  t->Assert.deepEqual(
+    WanderParser.parse("\"hello literal\""),
+    [Model.Literal(Ligature.literal("\"hello literal\""))],
+  )
+  t->Assert.deepEqual(WanderParser.parse("|"), [Model.Pipe])
+  t->Assert.deepEqual(WanderParser.parse(","), [Model.Comma])
 })
 
 // test("parse networks", t => {
-  
+
 // })
 
-  // suite "parser tests" do
-  //   test "parse empty network" do
-  //     Assert.equal' "" (parse "{}") [Network emptyNetwork]
-  //   test "parse network with one triple" do
-  //     Assert.equal' "" (parse "{a b c}") [Network emptyNetwork]
-  //   test "parse network with multiple triples" do
-  //     Assert.equal' "" (parse "{a b c, d e f, g h i}") [Network emptyNetwork]
-
+// suite "parser tests" do
+//   test "parse empty network" do
+//     Assert.equal' "" (parse "{}") [Network emptyNetwork]
+//   test "parse network with one triple" do
+//     Assert.equal' "" (parse "{a b c}") [Network emptyNetwork]
+//   test "parse network with multiple triples" do
+//     Assert.equal' "" (parse "{a b c, d e f, g h i}") [Network emptyNetwork]
 
 // test("parse script with single call, no args", t => {
 //   t->Assert.deepEqual(WanderParser.parse("test"), [{
