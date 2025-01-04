@@ -1,23 +1,9 @@
-# ReScript Project Template
-
-- [Installation](../../README.md)
-
-Official ReScript starter template.
-
-## Installation
-
-```sh
-npm install
-```
+# Ligature JS
 
 ## Build
 
-- Build: `npm run res:build`
-- Clean: `npm run res:clean`
-- Build & watch: `npm run res:dev`
-
-## Run
-
-```sh
-node src/Demo.res.js
-```
+- Build: `pnpm run res:build`
+- Clean: `pnpm run res:clean`
+- Build & watch: `pnpm run res:dev`
+- Test `pnpm test`
+- Build and Test `pnpm run build-test`

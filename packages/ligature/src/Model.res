@@ -1,9 +1,9 @@
-type rec call = { _type: string, commandName : string, arguments : array<wanderValue>}
+type rec call = { "type": string, "commandName" : string, "arguments" : array<wanderValue>}
 
 and assignment =
-  { _type : string
-  , variable : Ligature.variable
-  , value : wanderValue
+  { "type" : string
+  , "variable" : Ligature.variable
+  , "value" : wanderValue
   }
 
 and statement = 
@@ -15,6 +15,7 @@ and script = array<statement>
 and wanderValue = 
   | Element(Ligature.element) 
   | Pipe 
+  | Comma
   | Variable(Ligature.variable) 
   | Network(Ligature.network) 
   | Literal(Ligature.literal) 

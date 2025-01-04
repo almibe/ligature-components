@@ -1,11 +1,9 @@
 
-let run = (script) => Model.Element (Ligature.element("result"))
-
-// -- import { Map } from "immutable";
-// -- import { element } from "../ligature/ligature.js";
-// -- import { defaultLocals, stdModules } from "./commands.js";
-// -- import { Command } from "./model.js";
-// -- import { parse } from "./WanderParser.js";
+let run: (string) => option<Model.wanderValue> = (script) => {
+    // let 
+    // Model.Element (Ligature.element("result"))
+    raise(Failure("TODO"))
+}
 
 // -- export function run(
 // --       script: string, 

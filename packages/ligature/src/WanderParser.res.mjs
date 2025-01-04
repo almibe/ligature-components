@@ -13,7 +13,16 @@ function next(prim) {
 
 function parseTokens() {
   var match = WanderTokenizerJs.next();
+  if (match === null || match === undefined) {
+    if (match === null) {
+      return [];
+    } else {
+      return [];
+    }
+  }
   switch (match.type) {
+    case "comma" :
+        return ["Comma"];
     case "element" :
         return [{
                   TAG: "Element",
@@ -32,7 +41,11 @@ function parseTokens() {
                   _0: Ligature.variable(match.value)
                 }];
     default:
-      return [];
+      throw {
+            RE_EXN_ID: "Failure",
+            _1: "Unexpected value.",
+            Error: new Error()
+          };
   }
 }
 
@@ -41,10 +54,44 @@ function parse(script) {
   return parseTokens();
 }
 
+function readTriple() {
+  return null;
+}
+
+function readNetwork() {
+  return null;
+}
+
+function readIgnoreWS() {
+  while(true) {
+    var value = WanderTokenizerJs.next();
+    if (value === null || value === undefined) {
+      return null;
+    }
+    if (value.type !== "ws") {
+      return value;
+    }
+    continue ;
+  };
+}
+
+function readElementVariable() {
+  readIgnoreWS();
+}
+
+function readToken() {
+  
+}
+
 export {
   reset ,
   next ,
   parseTokens ,
   parse ,
+  readTriple ,
+  readNetwork ,
+  readIgnoreWS ,
+  readElementVariable ,
+  readToken ,
 }
 /* Ligature Not a pure module */

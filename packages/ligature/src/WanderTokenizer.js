@@ -20,13 +20,5 @@ export function reset(input) {
 }
 
 export function next() {
-  let next = lexer.next()
-  if (next == null) {
-    return {
-      type: "end",
-      value: ""
-    }
-  } else {
-    return next
-  }
+  return lexer.next()
 }

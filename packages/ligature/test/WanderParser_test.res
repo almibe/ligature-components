@@ -4,46 +4,58 @@ test("parse empty string", t => {
   t->Assert.deepEqual((WanderParser.parse("")), [])
 })
 
-// import { element, network, triple, variable } from '../ligature/ligature.ts'
-// import { parse } from './wanderParser.ts'
-// import { expect, test } from 'vitest'
-// import { Set } from 'immutable'
+test("basic parsing", t => {
+  t->Assert.deepEqual((WanderParser.parse("test")), [Model.Element(Ligature.element("test"))])
+  t->Assert.deepEqual((WanderParser.parse("?hello")), [Model.Variable(Ligature.variable("?hello"))])
+  t->Assert.deepEqual((WanderParser.parse("\"hello literal\"")), [Model.Literal(Ligature.literal("\"hello literal\""))])
+  t->Assert.deepEqual((WanderParser.parse("|")), [Model.Pipe])
+  t->Assert.deepEqual((WanderParser.parse(",")), [Model.Comma])
+})
 
-// test('parse empty script', () => {
-//   expect(parse("")).toStrictEqual([])
+// test("parse networks", t => {
+  
 // })
 
-// test('parse script with single call, no args', () => {
-//   expect(parse("test")).toStrictEqual([{
-//     type: "call",
-//     commandName: "test",
-//     arguments: []
+  // suite "parser tests" do
+  //   test "parse empty network" do
+  //     Assert.equal' "" (parse "{}") [Network emptyNetwork]
+  //   test "parse network with one triple" do
+  //     Assert.equal' "" (parse "{a b c}") [Network emptyNetwork]
+  //   test "parse network with multiple triples" do
+  //     Assert.equal' "" (parse "{a b c, d e f, g h i}") [Network emptyNetwork]
+
+
+// test("parse script with single call, no args", t => {
+//   t->Assert.deepEqual(WanderParser.parse("test"), [{
+//     "type": "call",
+//     "commandName": "test",
+//     "arguments": []
 //   }])
 // })
 
-// test('parse script with single call, single arg', () => {
-//   expect(parse("test 1")).toStrictEqual([{
-//     type: "call",
-//     commandName: "test",
-//     arguments: [element("1") ]
+// test("parse script with single call, single arg", t => {
+//   t->Assert.deepEqual(WanderParser.parse("test 1"), [{
+//     "type": "call",
+//     "commandName": "test",
+//     "arguments": [element("1") ]
 //   }])
 // })
 
-// test('parse empty network', () => {
-//   expect(parse("test {}")).toStrictEqual([{
-//     type: "call",
-//     commandName: "test",
-//     arguments: [
+// test("parse empty network", t => {
+//   t->Assert.deepEqual(WanderParser.parse("test {}"), [{
+//     "type": "call",
+//     "commandName": "test",
+//     "arguments": [
 //       network(Set())
 //     ]
 //   }])
 // })
 
-// test('parse single triple network', () => {
-//   expect(parse("test {a b c}")).toStrictEqual([{
-//     type: "call",
-//     commandName: "test",
-//     arguments: [
+// test("parse single triple network", t => {
+//   t->Assert.deepEqual(WanderParser.parse("test {a b c}"), [{
+//     "type": "call",
+//     "commandName": "test",
+//     "arguments": [
 //       network(Set([
 //         triple(element("a"), element("b"), element("c"))
 //       ]))
@@ -51,11 +63,11 @@ test("parse empty string", t => {
 //   }])
 // })
 
-// test('parse network', () => {
-//   expect(parse("test {a b c, d e f}")).toStrictEqual([{
-//     type: "call",
-//     commandName: "test",
-//     arguments: [
+// test("parse network", t => {
+//   t->Assert.deepEqual(WanderParser.parse("test {a b c, d e f}"), [{
+//     "type": "call",
+//     "commandName": "test",
+//     "arguments": [
 //       network(Set([
 //         triple(element("a"), element("b"), element("c")),
 //         triple(element("d"), element("e"), element("f"))
@@ -64,11 +76,11 @@ test("parse empty string", t => {
 //   }])
 // })
 
-// test('parse network with variables', () => {
-//   expect(parse("test {?a b ?c, d ?e f}")).toStrictEqual([{
-//     type: "call",
-//     commandName: "test",
-//     arguments: [
+// test("parse network with variables", t => {
+//   t->Assert.deepEqual(WanderParser.parse("test {?a b ?c, d ?e f}"), [{
+//     "type": "call",
+//     "commandName": "test",
+//     "arguments": [
 //       network(Set([
 //         triple(variable("?a"), element("b"), variable("?c")),
 //         triple(element("d"), variable("?e"), element("f"))
@@ -77,22 +89,22 @@ test("parse empty string", t => {
 //   }])
 // })
 
-// test('parse script with single call, multiple args', () => {
-//   expect(parse("test 1 2 3")).toStrictEqual([{
-//     type: "call",
-//     commandName: "test",
-//     arguments: [element("1"),element("2"),element("3") ]
+// test("parse script with single call, multiple args", t => {
+//   t->Assert.deepEqual(WanderParser.parse("test 1 2 3"), [{
+//     "type": "call",
+//     "commandName": "test",
+//     "arguments": [element("1"),element("2"),element("3") ]
 //   }])
 // })
 
-// test('parse script with multiple calls', () => {
-//   expect(parse("test 1, test 2")).toStrictEqual([{
-//     type: "call",
-//     commandName: "test",
-//     arguments: [element("1") ]
+// test("parse script with multiple calls", t => {
+//   t->Assert.deepEqual(WanderParser.parse("test 1, test 2"), [{
+//     "type": "call",
+//     "commandName": "test",
+//     "arguments": [element("1") ]
 //   }, {
-//     type: "call",
-//     commandName: "test",
-//     arguments: [element("2") ]
+//     "type": "call",
+//     "commandName": "test",
+//     "arguments": [element("2") ]
 //   }])
 // })
