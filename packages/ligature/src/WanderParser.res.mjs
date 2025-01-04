@@ -11,57 +11,6 @@ function next(prim) {
   return WanderTokenizerJs.next();
 }
 
-function parseTokens() {
-  var match = WanderTokenizerJs.next();
-  if (match === null || match === undefined) {
-    if (match === null) {
-      return [];
-    } else {
-      return [];
-    }
-  }
-  switch (match.type) {
-    case "comma" :
-        return ["Comma"];
-    case "element" :
-        return [{
-                  TAG: "Element",
-                  _0: Ligature.element(match.value)
-                }];
-    case "literal" :
-        return [{
-                  TAG: "Literal",
-                  _0: Ligature.literal(match.value)
-                }];
-    case "pipe" :
-        return ["Pipe"];
-    case "variable" :
-        return [{
-                  TAG: "Variable",
-                  _0: Ligature.variable(match.value)
-                }];
-    default:
-      throw {
-            RE_EXN_ID: "Failure",
-            _1: "Unexpected value.",
-            Error: new Error()
-          };
-  }
-}
-
-function parse(script) {
-  WanderTokenizerJs.reset(script);
-  return parseTokens();
-}
-
-function readTriple() {
-  return null;
-}
-
-function readNetwork() {
-  return null;
-}
-
 function readIgnoreWS() {
   while(true) {
     var value = WanderTokenizerJs.next();
@@ -79,6 +28,148 @@ function readElementVariable() {
   readIgnoreWS();
 }
 
+function readValue() {
+  var match = readIgnoreWS();
+  if (match === null || match === undefined) {
+    return null;
+  }
+  switch (match.type) {
+    case "element" :
+        return {
+                TAG: "VElement",
+                _0: Ligature.element(match.value)
+              };
+    case "literal" :
+        return {
+                TAG: "VLiteral",
+                _0: Ligature.literal(match.value)
+              };
+    case "variable" :
+        return {
+                TAG: "VVariable",
+                _0: Ligature.variable(match.value)
+              };
+    default:
+      return null;
+  }
+}
+
+function readNetwork(triples) {
+  var match = readIgnoreWS();
+  if (match === null || match === undefined) {
+    return null;
+  }
+  switch (match.type) {
+    case "cbrace" :
+        return Ligature.network(triples);
+    case "element" :
+        readElementVariable();
+        readValue();
+        throw {
+              RE_EXN_ID: "Failure",
+              _1: "TODO",
+              Error: new Error()
+            };
+    case "variable" :
+        throw {
+              RE_EXN_ID: "Failure",
+              _1: "TODO",
+              Error: new Error()
+            };
+    default:
+      throw {
+            RE_EXN_ID: "Match_failure",
+            _1: [
+              "WanderParser.res",
+              57,
+              2
+            ],
+            Error: new Error()
+          };
+  }
+}
+
+function parseTokens() {
+  var res = [];
+  var match = WanderTokenizerJs.next();
+  if (match === null || match === undefined) {
+    match === null;
+  } else {
+    switch (match.type) {
+      case "comma" :
+          res.push("Comma");
+          break;
+      case "element" :
+          res.push({
+                TAG: "Element",
+                _0: Ligature.element(match.value)
+              });
+          break;
+      case "literal" :
+          res.push({
+                TAG: "Literal",
+                _0: Ligature.literal(match.value)
+              });
+          break;
+      case "obrace" :
+          var value = readNetwork([]);
+          if (value === null || value === undefined) {
+            if (value === null) {
+              throw {
+                    RE_EXN_ID: "Match_failure",
+                    _1: [
+                      "WanderParser.res",
+                      118,
+                      34
+                    ],
+                    Error: new Error()
+                  };
+            }
+            throw {
+                  RE_EXN_ID: "Match_failure",
+                  _1: [
+                    "WanderParser.res",
+                    118,
+                    34
+                  ],
+                  Error: new Error()
+                };
+          } else {
+            res.push({
+                  TAG: "Network",
+                  _0: value
+                });
+          }
+          break;
+      case "pipe" :
+          res.push("Pipe");
+          break;
+      case "variable" :
+          res.push({
+                TAG: "Variable",
+                _0: Ligature.variable(match.value)
+              });
+          break;
+      default:
+        throw {
+              RE_EXN_ID: "Failure",
+              _1: "Unexpected value.",
+              Error: new Error()
+            };
+    }
+  }
+  return res;
+}
+
+function parse(script) {
+  WanderTokenizerJs.reset(script);
+  return parseTokens();
+}
+
+function readTriple() {
+  return null;
+}
+
 function readToken() {
   
 }
@@ -86,12 +177,13 @@ function readToken() {
 export {
   reset ,
   next ,
+  readIgnoreWS ,
+  readElementVariable ,
+  readValue ,
+  readNetwork ,
   parseTokens ,
   parse ,
   readTriple ,
-  readNetwork ,
-  readIgnoreWS ,
-  readElementVariable ,
   readToken ,
 }
 /* Ligature Not a pure module */

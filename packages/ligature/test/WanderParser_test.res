@@ -15,9 +15,9 @@ test("basic parsing", t => {
   t->Assert.deepEqual(WanderParser.parse(","), [Model.Comma])
 })
 
-// test("parse networks", t => {
-
-// })
+test("parse networks", t => {
+  t->Assert.deepEqual(WanderParser.parse("{}"), [Model.Network(Ligature.network([]))])
+})
 
 // suite "parser tests" do
 //   test "parse empty network" do

@@ -25,6 +25,13 @@ Ava("basic parsing", (function (t) {
         t.deepEqual(WanderParser.parse(","), ["Comma"]);
       }));
 
+Ava("parse networks", (function (t) {
+        t.deepEqual(WanderParser.parse("{}"), [{
+                TAG: "Network",
+                _0: Ligature.network([])
+              }]);
+      }));
+
 export {
   
 }
