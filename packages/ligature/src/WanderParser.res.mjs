@@ -130,8 +130,9 @@ function readArguments() {
   var args = [];
   var cont = true;
   while(cont) {
-    if (token === null || token === undefined) {
-      if (token === null) {
+    var match = token;
+    if (match === null || match === undefined) {
+      if (match === null) {
         cont = false;
       } else {
         throw {
@@ -144,21 +145,56 @@ function readArguments() {
               Error: new Error()
             };
       }
-    } else if (token.type === "element") {
-      args.push({
-            TAG: "Element",
-            _0: Ligature.element(token.value)
-          });
     } else {
-      throw {
-            RE_EXN_ID: "Match_failure",
-            _1: [
-              "WanderParser.res",
-              76,
-              4
-            ],
-            Error: new Error()
-          };
+      switch (match.type) {
+        case "element" :
+            args.push({
+                  TAG: "Element",
+                  _0: Ligature.element(match.value)
+                });
+            token = readIgnoreWS();
+            break;
+        case "obrace" :
+            var value = readNetwork([]);
+            if (value === null || value === undefined) {
+              if (value === null) {
+                throw {
+                      RE_EXN_ID: "Failure",
+                      _1: "Unexpected value while reading network.",
+                      Error: new Error()
+                    };
+              }
+              throw {
+                    RE_EXN_ID: "Failure",
+                    _1: "Unexpected value while reading network.",
+                    Error: new Error()
+                  };
+            } else {
+              args.push({
+                    TAG: "Network",
+                    _0: value
+                  });
+            }
+            token = readIgnoreWS();
+            break;
+        case "variable" :
+            args.push({
+                  TAG: "Variable",
+                  _0: Ligature.variable(match.value)
+                });
+            token = readIgnoreWS();
+            break;
+        default:
+          throw {
+                RE_EXN_ID: "Match_failure",
+                _1: [
+                  "WanderParser.res",
+                  76,
+                  4
+                ],
+                Error: new Error()
+              };
+      }
     }
   };
   return args;
@@ -176,6 +212,8 @@ function parseScript() {
     match === null;
   } else {
     switch (match.type) {
+      case "comma" :
+          break;
       case "element" :
           var c = readCall(match.value);
           if (c === null || c === undefined) {
@@ -184,8 +222,8 @@ function parseScript() {
                     RE_EXN_ID: "Match_failure",
                     _1: [
                       "WanderParser.res",
-                      101,
-                      4
+                      108,
+                      6
                     ],
                     Error: new Error()
                   };
@@ -194,9 +232,6 @@ function parseScript() {
           } else {
             res.push(c);
           }
-          break;
-      case "comma" :
-      case "variable" :
           break;
       default:
         throw {

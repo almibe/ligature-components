@@ -4,7 +4,7 @@ test("parse empty string", t => {
   t->Assert.deepEqual(WanderParser.parse(""), [])
 })
 
-test("basic parsing", t => {
+test("parse single call with no args", t => {
   t->Assert.deepEqual(
     WanderParser.parse("test"),
     [
@@ -26,9 +26,84 @@ test("basic parsing", t => {
   // t->Assert.deepEqual(WanderParser.parse(","), [Model.Comma])
 })
 
-// test("parse empty network", t => {
-//   t->Assert.deepEqual(WanderParser.parse("{}"), [Model.Network(Ligature.network([]))])
-// })
+test("parse single call with single arg", t => {
+  t->Assert.deepEqual(
+    WanderParser.parse("test 1"),
+    [
+      {
+        \"type": "call",
+        commandName: "test",
+        arguments: [Model.Element(Ligature.element("1"))],
+      },
+    ],
+  )
+})
+
+test("parse single call with multiple args", t => {
+  t->Assert.deepEqual(
+    WanderParser.parse("test 1 2 3"),
+    [
+      {
+        \"type": "call",
+        commandName: "test",
+        arguments: [
+          Model.Element(Ligature.element("1")),
+          Model.Element(Ligature.element("2")),
+          Model.Element(Ligature.element("3")),
+        ],
+      },
+    ],
+  )
+})
+
+test("parse single call with variable arg", t => {
+  t->Assert.deepEqual(
+    WanderParser.parse("test ?var"),
+    [
+      {
+        \"type": "call",
+        commandName: "test",
+        arguments: [Model.Variable(Ligature.variable("?var"))],
+      },
+    ],
+  )
+})
+
+test("parse single call with emppy network arg", t => {
+  t->Assert.deepEqual(
+    WanderParser.parse("test {}"),
+    [
+      {
+        \"type": "call",
+        commandName: "test",
+        arguments: [Model.Network(Ligature.network([]))],
+      },
+    ],
+  )
+})
+
+test("parse single call with network arg", t => {
+  t->Assert.deepEqual(
+    WanderParser.parse("test {a b c}"),
+    [
+      {
+        \"type": "call",
+        commandName: "test",
+        arguments: [
+          Model.Network(
+            Ligature.network([
+              Ligature.triple(
+                Ligature.Element(Ligature.element("a")),
+                Ligature.Element(Ligature.element("b")),
+                Ligature.VElement(Ligature.element("c")),
+              ),
+            ]),
+          ),
+        ],
+      },
+    ],
+  )
+})
 
 // test("parse network with single triple", t => {
 //   t->Assert.deepEqual(

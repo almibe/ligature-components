@@ -69,12 +69,26 @@ let rec readNetwork: array<Ligature.triple> => Nullable.t<Ligature.network> = tr
 }
 
 let readArguments: unit => array<Model.wanderValue> = () => {
-  let token = readIgnoreWS()
+  let token = ref(readIgnoreWS())
   let args: array<Model.wanderValue> = []
   let cont = ref(true)
   while cont.contents {
-    switch token {
-    | Value({\"type": "element", value}) => args->Array.push(Model.Element(Ligature.element(value)))
+    switch token.contents {
+    | Value({\"type": "element", value}) => {
+        args->Array.push(Model.Element(Ligature.element(value)))
+        token := readIgnoreWS()
+      }
+    | Value({\"type": "variable", value}) => {
+        args->Array.push(Model.Variable(Ligature.variable(value)))
+        token := readIgnoreWS()
+      }
+    | Value({\"type": "obrace"}) => {
+        switch readNetwork([]) {
+        | Value(value) => args->Array.push(Model.Network(value))
+        | Null | Undefined => raise(Failure("Unexpected value while reading network."))
+        }
+        token := readIgnoreWS()
+      }
     | Null => cont := false
     }
   }
@@ -82,13 +96,6 @@ let readArguments: unit => array<Model.wanderValue> = () => {
 }
 
 let readCall: string => Nullable.t<Model.call> = name => {
-  // switch readArguments() {
-  // | Null => {
-  //     commandName: commandName,
-  //     \"type": "call",
-  //     arguments: []
-  // }
-  // | Value(args) => {
   let args = readArguments()
   Value(Model.call(name, args))
 }
@@ -103,16 +110,11 @@ let parseScript: unit => Model.script = () => {
       | Value(c) => res->Array.push(c)
       }
     }
-  | Value({\"type": "variable", value}) => () //res->Array.push(Model.Variable(Ligature.variable(value)))
+  //  | Value({\"type": "variable", value}) => () //res->Array.push(Model.Variable(Ligature.variable(value)))
   //  | Value({\"type": "literal", value}) => res->Array.push(Model.Literal(Ligature.literal(value)))
   //  | Value({\"type": "pipe"}) => res->Array.push(Pipe)
   | Value({\"type": "comma"}) => () //res->Array.push(Comma)
   | Undefined | Null => ()
-  // | Value({\"type": "obrace"}) =>
-  //   switch readNetwork([]) {
-  //   | Value(value) => res->Array.push(Ligature.Network(value))
-  //   | Null | Undefined => raise(Failure("Unexpected value while reading network."))
-  //   }
   | _ => raise(Failure("Unexpected value while reading tokens."))
   }
   res
