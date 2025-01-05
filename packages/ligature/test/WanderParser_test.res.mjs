@@ -48,13 +48,13 @@ Ava("parse single call with multiple args", (function (t) {
               }]);
       }));
 
-Ava("parse single call with variable arg", (function (t) {
+Ava("parse single call with slot arg", (function (t) {
         t.deepEqual(WanderParser.parse("test ?var"), [{
                 type: "call",
                 commandName: "test",
                 arguments: [{
-                    TAG: "Variable",
-                    _0: Ligature.variable("?var")
+                    TAG: "Slot",
+                    _0: Ligature.slot("?var")
                   }]
               }]);
       }));
@@ -122,7 +122,7 @@ Ava("parse network with two triples", (function (t) {
               }]);
       }));
 
-Ava("parse network with variables", (function (t) {
+Ava("parse network with slots", (function (t) {
         t.deepEqual(WanderParser.parse("test {?a b ?c, d ?e f}"), [{
                 type: "call",
                 commandName: "test",
@@ -130,21 +130,21 @@ Ava("parse network with variables", (function (t) {
                     TAG: "Network",
                     _0: Ligature.network([
                           Ligature.triple({
-                                TAG: "Variable",
-                                _0: Ligature.variable("?a")
+                                TAG: "Slot",
+                                _0: Ligature.slot("?a")
                               }, {
                                 TAG: "Element",
                                 _0: Ligature.element("b")
                               }, {
-                                TAG: "VVariable",
-                                _0: Ligature.variable("?c")
+                                TAG: "VSlot",
+                                _0: Ligature.slot("?c")
                               }),
                           Ligature.triple({
                                 TAG: "Element",
                                 _0: Ligature.element("d")
                               }, {
-                                TAG: "Variable",
-                                _0: Ligature.variable("?e")
+                                TAG: "Slot",
+                                _0: Ligature.slot("?e")
                               }, {
                                 TAG: "VElement",
                                 _0: Ligature.element("f")

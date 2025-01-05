@@ -1,22 +1,22 @@
 type element = {"value": string, "type": string}
 
-type variable = {"value": string, "type": string}
+type slot = {"value": string, "type": string}
 
 type literal = {"value": string, "type": string}
 
 let element = value => {"value": value, "type": "element"}
 
-let variable = value => {"value": value, "type": "variable"}
+let slot = value => {"value": value, "type": "slot"}
 
 let literal = value => {"value": value, "type": "literal"}
 
 type elementPattern =
   | Element(element)
-  | Variable(variable)
+  | Slot(slot)
 
 type value =
   | VElement(element)
-  | VVariable(variable)
+  | VSlot(slot)
   | VLiteral(literal)
 
 type triple = {

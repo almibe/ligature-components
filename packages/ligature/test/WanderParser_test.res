@@ -47,14 +47,14 @@ test("parse single call with multiple args", t => {
   )
 })
 
-test("parse single call with variable arg", t => {
+test("parse single call with slot arg", t => {
   t->Assert.deepEqual(
     WanderParser.parse("test ?var"),
     [
       {
         \"type": "call",
         commandName: "test",
-        arguments: [Model.Variable(Ligature.variable("?var"))],
+        arguments: [Model.Slot(Ligature.slot("?var"))],
       },
     ],
   )
@@ -124,7 +124,7 @@ test("parse network with two triples", t => {
   )
 })
 
-test("parse network with variables", t => {
+test("parse network with slots", t => {
   t->Assert.deepEqual(
     WanderParser.parse("test {?a b ?c, d ?e f}"),
     [
@@ -135,13 +135,13 @@ test("parse network with variables", t => {
           Model.Network(
             Ligature.network([
               Ligature.triple(
-                Ligature.Variable(Ligature.variable("?a")),
+                Ligature.Slot(Ligature.slot("?a")),
                 Ligature.Element(Ligature.element("b")),
-                Ligature.VVariable(Ligature.variable("?c")),
+                Ligature.VSlot(Ligature.slot("?c")),
               ),
               Ligature.triple(
                 Ligature.Element(Ligature.element("d")),
-                Ligature.Variable(Ligature.variable("?e")),
+                Ligature.Slot(Ligature.slot("?e")),
                 Ligature.VElement(Ligature.element("f")),
               ),
             ]),

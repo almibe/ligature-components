@@ -19,21 +19,21 @@ let rec readIgnoreWS: unit => Nullable.t<token> = () => {
   }
 }
 
-//Reads an element or variable.
+//Reads an element or slot.
 let readElementPattern: unit => Nullable.t<Ligature.elementPattern> = () => {
   switch readIgnoreWS() {
   | Value({\"type": "element", value}) => Value(Ligature.Element(Ligature.element(value)))
-  | Value({\"type": "variable", value}) => Value(Ligature.Variable(Ligature.variable(value)))
+  | Value({\"type": "slot", value}) => Value(Ligature.Slot(Ligature.slot(value)))
   | _ => Null
   }
 }
 
-//Reads an element, literal, or variable.
+//Reads an element, literal, or slot.
 let readValue: unit => Nullable.t<Ligature.value> = () => {
   switch readIgnoreWS() {
   | Null => Null
   | Value({\"type": "element", value}) => Value(Ligature.VElement(Ligature.element(value)))
-  | Value({\"type": "variable", value}) => Value(Ligature.VVariable(Ligature.variable(value)))
+  | Value({\"type": "slot", value}) => Value(Ligature.VSlot(Ligature.slot(value)))
   | Value({\"type": "literal", value}) => Value(Ligature.VLiteral(Ligature.literal(value)))
   | _ => Null
   }
@@ -55,12 +55,10 @@ let rec readNetwork: array<Ligature.triple> => Nullable.t<Ligature.network> = tr
       }
     | (_, _) => Null
     }
-  | Value({\"type": "variable", value: variable}) =>
+  | Value({\"type": "slot", value: slot}) =>
     switch (readElementPattern(), readValue()) {
     | (Value(role), Value(value)) => {
-        triples->Array.push(
-          Ligature.triple(Ligature.Variable(Ligature.variable(variable)), role, value),
-        )
+        triples->Array.push(Ligature.triple(Ligature.Slot(Ligature.slot(slot)), role, value))
         readNetwork(triples)
       }
     | (_, _) => Null
@@ -78,8 +76,8 @@ let readArguments: unit => array<Model.wanderValue> = () => {
         args->Array.push(Model.Element(Ligature.element(value)))
         token := readIgnoreWS()
       }
-    | Value({\"type": "variable", value}) => {
-        args->Array.push(Model.Variable(Ligature.variable(value)))
+    | Value({\"type": "slot", value}) => {
+        args->Array.push(Model.Slot(Ligature.slot(value)))
         token := readIgnoreWS()
       }
     | Value({\"type": "obrace"}) => {

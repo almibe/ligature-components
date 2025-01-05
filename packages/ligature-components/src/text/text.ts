@@ -6,7 +6,7 @@ export function printValue(value: any): string {
             res += "  " + printValue(triple[0]) + " " + printValue(triple[1]) + " " + printValue(triple[2]) + ",\n"
         }
         res += "}"
-    } else if (value.type == "element" || value.type == "variable" || value.type == "literal") {
+    } else if (value.type == "element" || value.type == "slot" || value.type == "literal") {
         res += value.value
      } else {
         res = "???"

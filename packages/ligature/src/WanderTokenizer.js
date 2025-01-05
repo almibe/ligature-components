@@ -4,7 +4,7 @@ const lexer = moo.compile({
     ws:        { match: /[ \t\n\r]+/, lineBreaks: true },
     comment:   /;.*?$/,
     element:   /[a-zA-Z_0-9]+/,
-    variable:  /\?[a-zA-Z_0-9]+/,
+    slot:      /\?[a-zA-Z_0-9]+/,
     literal:   /"(?:\\["\\]|[^\n"\\])*"/,
     obrace:    '{',
     cbrace:    '}',

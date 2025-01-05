@@ -36,10 +36,10 @@ function readElementPattern() {
                 TAG: "Element",
                 _0: Ligature.element(match.value)
               };
-    case "variable" :
+    case "slot" :
         return {
-                TAG: "Variable",
-                _0: Ligature.variable(match.value)
+                TAG: "Slot",
+                _0: Ligature.slot(match.value)
               };
     default:
       return null;
@@ -62,10 +62,10 @@ function readValue() {
                 TAG: "VLiteral",
                 _0: Ligature.literal(match.value)
               };
-    case "variable" :
+    case "slot" :
         return {
-                TAG: "VVariable",
-                _0: Ligature.variable(match.value)
+                TAG: "VSlot",
+                _0: Ligature.slot(match.value)
               };
     default:
       return null;
@@ -97,7 +97,7 @@ function readNetwork(triples) {
                     _0: Ligature.element(match.value)
                   }, match$1, match$2));
           continue ;
-      case "variable" :
+      case "slot" :
           var match$3 = readElementPattern();
           var match$4 = readValue();
           if (match$3 === null || match$3 === undefined) {
@@ -107,8 +107,8 @@ function readNetwork(triples) {
             return null;
           }
           triples.push(Ligature.triple({
-                    TAG: "Variable",
-                    _0: Ligature.variable(match.value)
+                    TAG: "Slot",
+                    _0: Ligature.slot(match.value)
                   }, match$3, match$4));
           continue ;
       default:
@@ -180,10 +180,10 @@ function readArguments() {
             }
             token = readIgnoreWS();
             break;
-        case "variable" :
+        case "slot" :
             args.push({
-                  TAG: "Variable",
-                  _0: Ligature.variable(match.value)
+                  TAG: "Slot",
+                  _0: Ligature.slot(match.value)
                 });
             token = readIgnoreWS();
             break;
@@ -234,7 +234,7 @@ function parseScript() {
                     _1: [
                       "WanderParser.res",
                       111,
-                      6
+                      8
                     ],
                     Error: new Error()
                   };

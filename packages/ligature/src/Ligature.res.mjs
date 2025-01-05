@@ -8,10 +8,10 @@ function element(value) {
         };
 }
 
-function variable(value) {
+function slot(value) {
   return {
           value: value,
-          type: "variable"
+          type: "slot"
         };
 }
 
@@ -41,7 +41,7 @@ var emptyNetwork = network([]);
 
 export {
   element ,
-  variable ,
+  slot ,
   literal ,
   triple ,
   network ,

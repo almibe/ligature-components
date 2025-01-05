@@ -6,14 +6,14 @@ and wanderValue =
   | Element(Ligature.element)
   | Pipe
   | Comma
-  | Variable(Ligature.variable)
+  | Slot(Ligature.slot)
   | Network(Ligature.network)
   | Literal(Ligature.literal)
   | Quote(quote)
 
 and quote = array<wanderValue>
 
-type command = unit => unit //--(local: Map<Element, Command>, modules: Map<Element, Map<Element, Command>>, variables: Map<Variable, Element | Literal>, args: WanderValue[]) => WanderValue
+type command = unit => unit //--(local: Map<Element, Command>, modules: Map<Element, Map<Element, Command>>, slots: Map<Slot, Element | Literal>, args: WanderValue[]) => WanderValue
 
 let call: (string, array<wanderValue>) => call = (name, args) => {
   \"type": "call",
