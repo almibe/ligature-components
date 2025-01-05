@@ -90,6 +90,91 @@ Ava("parse single call with network arg", (function (t) {
               }]);
       }));
 
+Ava("parse network with two triples", (function (t) {
+        t.deepEqual(WanderParser.parse("test {a b c, d e f}"), [{
+                type: "call",
+                commandName: "test",
+                arguments: [{
+                    TAG: "Network",
+                    _0: Ligature.network([
+                          Ligature.triple({
+                                TAG: "Element",
+                                _0: Ligature.element("a")
+                              }, {
+                                TAG: "Element",
+                                _0: Ligature.element("b")
+                              }, {
+                                TAG: "VElement",
+                                _0: Ligature.element("c")
+                              }),
+                          Ligature.triple({
+                                TAG: "Element",
+                                _0: Ligature.element("d")
+                              }, {
+                                TAG: "Element",
+                                _0: Ligature.element("e")
+                              }, {
+                                TAG: "VElement",
+                                _0: Ligature.element("f")
+                              })
+                        ])
+                  }]
+              }]);
+      }));
+
+Ava("parse network with variables", (function (t) {
+        t.deepEqual(WanderParser.parse("test {?a b ?c, d ?e f}"), [{
+                type: "call",
+                commandName: "test",
+                arguments: [{
+                    TAG: "Network",
+                    _0: Ligature.network([
+                          Ligature.triple({
+                                TAG: "Variable",
+                                _0: Ligature.variable("?a")
+                              }, {
+                                TAG: "Element",
+                                _0: Ligature.element("b")
+                              }, {
+                                TAG: "VVariable",
+                                _0: Ligature.variable("?c")
+                              }),
+                          Ligature.triple({
+                                TAG: "Element",
+                                _0: Ligature.element("d")
+                              }, {
+                                TAG: "Variable",
+                                _0: Ligature.variable("?e")
+                              }, {
+                                TAG: "VElement",
+                                _0: Ligature.element("f")
+                              })
+                        ])
+                  }]
+              }]);
+      }));
+
+Ava("parse script with multiple calls", (function (t) {
+        t.deepEqual(WanderParser.parse("test 1, test 2"), [
+              {
+                type: "call",
+                commandName: "test",
+                arguments: [{
+                    TAG: "Element",
+                    _0: Ligature.element("1")
+                  }]
+              },
+              {
+                type: "call",
+                commandName: "test",
+                arguments: [{
+                    TAG: "Element",
+                    _0: Ligature.element("2")
+                  }]
+              }
+            ]);
+      }));
+
 export {
   
 }

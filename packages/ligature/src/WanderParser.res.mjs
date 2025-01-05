@@ -147,6 +147,9 @@ function readArguments() {
       }
     } else {
       switch (match.type) {
+        case "comma" :
+            cont = false;
+            break;
         case "element" :
             args.push({
                   TAG: "Element",
@@ -207,40 +210,44 @@ function readCall(name) {
 
 function parseScript() {
   var res = [];
-  var match = WanderTokenizerJs.next();
-  if (match === null || match === undefined) {
-    match === null;
-  } else {
-    switch (match.type) {
-      case "comma" :
-          break;
-      case "element" :
-          var c = readCall(match.value);
-          if (c === null || c === undefined) {
-            if (c !== null) {
+  var cont = true;
+  while(cont) {
+    var x = readIgnoreWS();
+    if (x === null || x === undefined) {
+      cont = false;
+    } else {
+      switch (x.type) {
+        case "comma" :
+            break;
+        case "element" :
+            var c = readCall(x.value);
+            if (c === null || c === undefined) {
+              if (c === null) {
+                throw {
+                      RE_EXN_ID: "Failure",
+                      _1: "Unexpected problem reading call.",
+                      Error: new Error()
+                    };
+              }
               throw {
                     RE_EXN_ID: "Match_failure",
                     _1: [
                       "WanderParser.res",
-                      108,
+                      111,
                       6
                     ],
                     Error: new Error()
                   };
+            } else {
+              res.push(c);
             }
-            
-          } else {
-            res.push(c);
-          }
-          break;
-      default:
-        throw {
-              RE_EXN_ID: "Failure",
-              _1: "Unexpected value while reading tokens.",
-              Error: new Error()
-            };
+            break;
+        default:
+          console.log("Error");
+          console.log(x);
+      }
     }
-  }
+  };
   return res;
 }
 

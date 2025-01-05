@@ -89,6 +89,7 @@ let readArguments: unit => array<Model.wanderValue> = () => {
         }
         token := readIgnoreWS()
       }
+    | Value({\"type": "comma"}) => cont := false
     | Null => cont := false
     }
   }
@@ -102,20 +103,23 @@ let readCall: string => Nullable.t<Model.call> = name => {
 
 let parseScript: unit => Model.script = () => {
   let res = []
-  switch next() {
-  | Value({\"type": "element", value}) => {
-      let c = readCall(value) //res->Array.push(Model.Element(Ligature.element(value)))
-      switch c {
-      | Null => ()
-      | Value(c) => res->Array.push(c)
+  let cont = ref(true)
+  while cont.contents {
+    switch readIgnoreWS() {
+    | Value({\"type": "element", value}) => {
+        let c = readCall(value)
+        switch c {
+        | Null => raise(Failure("Unexpected problem reading call."))
+        | Value(c) => res->Array.push(c)
+        }
+      }
+    | Value({\"type": "comma"}) => ()
+    | Undefined | Null => cont := false
+    | x => {
+        Console.log("Error")
+        Console.log(x)
       }
     }
-  //  | Value({\"type": "variable", value}) => () //res->Array.push(Model.Variable(Ligature.variable(value)))
-  //  | Value({\"type": "literal", value}) => res->Array.push(Model.Literal(Ligature.literal(value)))
-  //  | Value({\"type": "pipe"}) => res->Array.push(Pipe)
-  | Value({\"type": "comma"}) => () //res->Array.push(Comma)
-  | Undefined | Null => ()
-  | _ => raise(Failure("Unexpected value while reading tokens."))
   }
   res
 }
