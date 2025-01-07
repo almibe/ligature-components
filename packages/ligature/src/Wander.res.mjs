@@ -14,6 +14,8 @@ function run(script, modulesOpt) {
       _0: undefined
     }
   };
+  console.log(modules);
+  console.log(Commands.stdModules());
   script$1.forEach(function (call) {
         var parts = call.commandName.split(".");
         if (parts.length !== 2) {

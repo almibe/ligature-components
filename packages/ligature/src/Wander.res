@@ -5,6 +5,8 @@ let run = (
 ) => {
   let script = WanderParser.parse(script)
   let result = ref(Ok(None))
+  Console.log(modules)
+  Console.log(Commands.stdModules())
   script->Array.forEach(call => {
     let parts = call.commandName->String.split(".")
     switch parts {

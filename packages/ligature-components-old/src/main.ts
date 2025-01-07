@@ -6,13 +6,13 @@ import { showTable } from './table/table'
 import { showGraph } from './graph/graph'
 
 const initalScript = 
-`import core,
-id {a b c}`
+`core.id {a b c}`
 
 let editor = showEditor(document.querySelector("#editor"), initalScript)
 
 document.querySelector("#runButton")?.addEventListener("click", () => {
-    let res = run(editor.state.doc.toString(), [])
+    let res = run(editor.state.doc.toString())
+    console.log(res)
     showText(document.querySelector("#text"), res)
     showTable(document.querySelector("#table"), res)
     showGraph(document.querySelector("#graph"), res)

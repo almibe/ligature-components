@@ -1,28 +1,21 @@
 {
-  "name": "@ligature/ligature-components",
-  "license": "MPL-2.0",
+  "name": "ligature-components",
   "private": true,
-  "version": "0.14.0",
+  "version": "0.0.0",
   "type": "module",
   "scripts": {
+    "res:build": "rescript",
+    "res:clean": "rescript clean",
+    "res:dev": "rescript -w",
     "dev": "vite",
-    "build": "tsc && vite build",
-    "preview": "vite preview",
-    "test": "vitest"
-  },
-  "devDependencies": {
-    "typescript": "^5.5.3",
-    "vite": "^5.4.8",
-    "vitest": "^2.1.8"
+    "build": "vite build",
+    "preview": "vite preview"
   },
   "dependencies": {
-    "@codemirror/commands": "^6.7.0",
-    "@codemirror/state": "^6.4.1",
-    "@codemirror/view": "^6.34.1",
-    "@ligature/ligature": "link:..\\ligature",
-    "codemirror": "^6.0.1",
-    "cytoscape": "^3.30.2",
-    "markdown-it": "^14.1.0",
-    "tabulator-tables": "^6.3.0"
+    "@rescript/core": "^1.6.1",
+    "rescript": "^11.1.4"
+  },
+  "devDependencies": {
+    "vite": "^5.0.6"
   }
 }
