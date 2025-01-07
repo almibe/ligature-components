@@ -1,6 +1,7 @@
 {
-  "name": "ligature-re",
-  "version": "0.0.0",
+  "name": "@ligature/ligature",
+  "version": "0.17.0",
+  "private": true,
   "scripts": {
     "res:build": "rescript",
     "res:clean": "rescript clean",
@@ -9,9 +10,6 @@
     "test": "ava",
     "build-test": "run-s res:build test"
   },
-  "keywords": [
-    "rescript"
-  ],
   "ava": {
     "files": [
       "test/**/*_test.res.mjs",
@@ -29,6 +27,7 @@
   "devDependencies": {
     "@dzakh/rescript-ava": "^3.1.0",
     "ava": "^6.2.0",
+    "glob": "^11.0.0",
     "npm-run-all": "^4.1.5"
   }
 }

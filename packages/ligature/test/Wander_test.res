@@ -1,22 +1,24 @@
 open Ava
 
-test("parse empty string", t => {
-  t->Assert.deepEqual(WanderParser.parse(""), [])
+test("run empty script", t => {
+  t->Assert.deepEqual(Wander.run(""), Ok(None))
 })
 
-// import { element } from '../ligature/ligature.ts'
-// import { run } from './wander.ts'
-// import { expect, test } from 'vitest'
+test("call id command", t => {
+  t->Assert.deepEqual(Wander.run("core.id test"), Ok(Some(Model.Element(Ligature.element("test")))))
+})
 
-// test('run empty script', () => {
-//   expect(run("")).toStrictEqual({})
-// })
+test("allow multiple calls", t => {
+  t->Assert.deepEqual(
+    Wander.run("core.id test, core.id test2"),
+    Ok(Some(Model.Element(Ligature.element("test2")))),
+  )
+})
 
-// test('call id command', () => {
-//   expect(run("id test")).toStrictEqual(element("test"))
-//   expect(run("id test2")).toStrictEqual(element("test2"))
-// })
+@module("./TestUtils.js") external readTests: unit => array<array<string>> = "readTests"
 
-// test('allow multiple statements', () => {
-//   expect(run("id test, id test2")).toStrictEqual(element("test2"))
-// })
+readTests()->Array.forEach(file => {
+  test("Running " ++ file[0]->Option.getUnsafe, t => {
+    t->Assert.isTrue(Wander.run(file[1]->Option.getUnsafe)->Result.isOk)
+  })
+})

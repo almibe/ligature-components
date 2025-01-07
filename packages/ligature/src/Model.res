@@ -13,7 +13,9 @@ and wanderValue =
 
 and quote = array<wanderValue>
 
-type command = unit => unit //--(local: Map<Element, Command>, modules: Map<Element, Map<Element, Command>>, slots: Map<Slot, Element | Literal>, args: WanderValue[]) => WanderValue
+type arguments = array<wanderValue>
+
+type command = arguments => result<option<wanderValue>, string> //--(local: Map<Element, Command>, modules: Map<Element, Map<Element, Command>>, slots: Map<Slot, Element | Literal>, args: WanderValue[]) => WanderValue
 
 let call: (string, array<wanderValue>) => call = (name, args) => {
   \"type": "call",
