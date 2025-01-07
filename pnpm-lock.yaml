@@ -33,12 +33,30 @@ importers:
 
   packages/ligature-components:
     dependencies:
+      '@codemirror/commands':
+        specifier: ^6.7.0
+        version: 6.7.0
+      '@codemirror/state':
+        specifier: ^6.4.1
+        version: 6.4.1
+      '@codemirror/view':
+        specifier: ^6.34.1
+        version: 6.34.1
       '@rescript/core':
         specifier: ^1.6.1
         version: 1.6.1(rescript@11.1.4)
+      codemirror:
+        specifier: ^6.0.1
+        version: 6.0.1(@lezer/common@1.2.3)
+      cytoscape:
+        specifier: ^3.30.2
+        version: 3.30.2
       rescript:
         specifier: ^11.1.4
         version: 11.1.4
+      tabulator-tables:
+        specifier: ^6.3.0
+        version: 6.3.0
     devDependencies:
       vite:
         specifier: ^5.0.6

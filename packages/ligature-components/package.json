@@ -12,8 +12,14 @@
     "preview": "vite preview"
   },
   "dependencies": {
+    "@codemirror/commands": "^6.7.0",
+    "@codemirror/state": "^6.4.1",
+    "@codemirror/view": "^6.34.1",
     "@rescript/core": "^1.6.1",
-    "rescript": "^11.1.4"
+    "codemirror": "^6.0.1",
+    "cytoscape": "^3.30.2",
+    "rescript": "^11.1.4",
+    "tabulator-tables": "^6.3.0"
   },
   "devDependencies": {
     "vite": "^5.0.6"
