@@ -42,6 +42,9 @@ importers:
       '@codemirror/view':
         specifier: ^6.34.1
         version: 6.34.1
+      '@ligature/ligature':
+        specifier: link:..\ligature
+        version: link:../ligature
       '@rescript/core':
         specifier: ^1.6.1
         version: 1.6.1(rescript@11.1.4)

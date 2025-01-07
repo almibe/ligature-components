@@ -1,5 +1,5 @@
 {
-  "name": "ligature-components",
+  "name": "@ligature/ligature-components",
   "sources": [
     {
       "dir": "src",
@@ -14,7 +14,8 @@
   ],
   "suffix": ".res.mjs",
   "bs-dependencies": [
-    "@rescript/core"
+    "@rescript/core",
+    "@ligature/ligature"
   ],
   "bsc-flags": [
     "-open RescriptCore"

@@ -1,5 +1,5 @@
 {
-  "name": "ligature-re",
+  "name": "@ligature/ligature",
   "sources": [{
     "dir": "src",
     "subdirs": true
