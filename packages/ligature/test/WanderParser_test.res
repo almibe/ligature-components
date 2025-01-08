@@ -24,7 +24,7 @@ test("parse single call with single arg", t => {
       {
         \"type": "call",
         commandName: "test",
-        arguments: [Model.Element(Ligature.element("1"))],
+        arguments: [Model.Element(Ligature.Element.element("1"))],
       },
     ],
   )
@@ -38,9 +38,9 @@ test("parse single call with multiple args", t => {
         \"type": "call",
         commandName: "test",
         arguments: [
-          Model.Element(Ligature.element("1")),
-          Model.Element(Ligature.element("2")),
-          Model.Element(Ligature.element("3")),
+          Model.Element(Ligature.Element.element("1")),
+          Model.Element(Ligature.Element.element("2")),
+          Model.Element(Ligature.Element.element("3")),
         ],
       },
     ],
@@ -54,7 +54,7 @@ test("parse single call with slot arg", t => {
       {
         \"type": "call",
         commandName: "test",
-        arguments: [Model.Slot(Ligature.slot("?var"))],
+        arguments: [Model.Slot(Ligature.Slot.slot("?var"))],
       },
     ],
   )
@@ -67,7 +67,7 @@ test("parse single call with emppy network arg", t => {
       {
         \"type": "call",
         commandName: "test",
-        arguments: [Model.Network(Ligature.network([]))],
+        arguments: [Model.Network(Ligature.Network.network([]))],
       },
     ],
   )
@@ -82,11 +82,11 @@ test("parse single call with network arg", t => {
         commandName: "test",
         arguments: [
           Model.Network(
-            Ligature.network([
-              Ligature.triple(
-                Ligature.Element(Ligature.element("a")),
-                Ligature.Element(Ligature.element("b")),
-                Ligature.VElement(Ligature.element("c")),
+            Ligature.Network.network([
+              Ligature.Triple.triple(
+                Ligature.ElementPattern.Element(Ligature.Element.element("a")),
+                Ligature.ElementPattern.Element(Ligature.Element.element("b")),
+                Ligature.Value.VElement(Ligature.Element.element("c")),
               ),
             ]),
           ),
@@ -105,16 +105,16 @@ test("parse network with two triples", t => {
         commandName: "test",
         arguments: [
           Model.Network(
-            Ligature.network([
-              Ligature.triple(
-                Ligature.Element(Ligature.element("a")),
-                Ligature.Element(Ligature.element("b")),
-                Ligature.VElement(Ligature.element("c")),
+            Ligature.Network.network([
+              Ligature.Triple.triple(
+                Ligature.ElementPattern.Element(Ligature.Element.element("a")),
+                Ligature.ElementPattern.Element(Ligature.Element.element("b")),
+                Ligature.Value.VElement(Ligature.Element.element("c")),
               ),
-              Ligature.triple(
-                Ligature.Element(Ligature.element("d")),
-                Ligature.Element(Ligature.element("e")),
-                Ligature.VElement(Ligature.element("f")),
+              Ligature.Triple.triple(
+                Ligature.ElementPattern.Element(Ligature.Element.element("d")),
+                Ligature.ElementPattern.Element(Ligature.Element.element("e")),
+                Ligature.Value.VElement(Ligature.Element.element("f")),
               ),
             ]),
           ),
@@ -133,16 +133,16 @@ test("parse network with slots", t => {
         commandName: "test",
         arguments: [
           Model.Network(
-            Ligature.network([
-              Ligature.triple(
-                Ligature.Slot(Ligature.slot("?a")),
-                Ligature.Element(Ligature.element("b")),
-                Ligature.VSlot(Ligature.slot("?c")),
+            Ligature.Network.network([
+              Ligature.Triple.triple(
+                Ligature.ElementPattern.Slot(Ligature.Slot.slot("?a")),
+                Ligature.ElementPattern.Element(Ligature.Element.element("b")),
+                Ligature.Value.VSlot(Ligature.Slot.slot("?c")),
               ),
-              Ligature.triple(
-                Ligature.Element(Ligature.element("d")),
-                Ligature.Slot(Ligature.slot("?e")),
-                Ligature.VElement(Ligature.element("f")),
+              Ligature.Triple.triple(
+                Ligature.ElementPattern.Element(Ligature.Element.element("d")),
+                Ligature.ElementPattern.Slot(Ligature.Slot.slot("?e")),
+                Ligature.Value.VElement(Ligature.Element.element("f")),
               ),
             ]),
           ),
@@ -159,12 +159,12 @@ test("parse script with multiple calls", t => {
       {
         \"type": "call",
         commandName: "test",
-        arguments: [Model.Element(Ligature.element("1"))],
+        arguments: [Model.Element(Ligature.Element.element("1"))],
       },
       {
         \"type": "call",
         commandName: "test",
-        arguments: [Model.Element(Ligature.element("2"))],
+        arguments: [Model.Element(Ligature.Element.element("2"))],
       },
     ],
   )

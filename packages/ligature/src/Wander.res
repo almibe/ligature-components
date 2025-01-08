@@ -1,3 +1,5 @@
+type wanderResult = result<option<Model.wanderValue>, string>
+
 let run = (
   //: (string, Commands.modules) => result<option<Model.wanderValue>, string> = (
   script,
@@ -23,4 +25,12 @@ let run = (
     }
   })
   result.contents
+}
+
+let printResult: wanderResult => string = value => {
+  switch value {
+  | Ok(None) => "--nothing--"
+  | Ok(Some(value)) => Model.printValue(value)
+  | Error(error) => error
+  }
 }

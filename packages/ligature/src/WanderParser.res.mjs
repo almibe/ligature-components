@@ -34,12 +34,12 @@ function readElementPattern() {
     case "element" :
         return {
                 TAG: "Element",
-                _0: Ligature.element(match.value)
+                _0: Ligature.$$Element.element(match.value)
               };
     case "slot" :
         return {
                 TAG: "Slot",
-                _0: Ligature.slot(match.value)
+                _0: Ligature.Slot.slot(match.value)
               };
     default:
       return null;
@@ -55,17 +55,17 @@ function readValue() {
     case "element" :
         return {
                 TAG: "VElement",
-                _0: Ligature.element(match.value)
+                _0: Ligature.$$Element.element(match.value)
               };
     case "literal" :
         return {
                 TAG: "VLiteral",
-                _0: Ligature.literal(match.value)
+                _0: Ligature.Literal.literal(match.value)
               };
     case "slot" :
         return {
                 TAG: "VSlot",
-                _0: Ligature.slot(match.value)
+                _0: Ligature.Slot.slot(match.value)
               };
     default:
       return null;
@@ -80,7 +80,7 @@ function readNetwork(triples) {
     }
     switch (match.type) {
       case "cbrace" :
-          return Ligature.network(triples);
+          return Ligature.Network.network(triples);
       case "comma" :
           continue ;
       case "element" :
@@ -92,9 +92,9 @@ function readNetwork(triples) {
           if (match$2 === null || match$2 === undefined) {
             return null;
           }
-          triples.push(Ligature.triple({
+          triples.push(Ligature.Triple.triple({
                     TAG: "Element",
-                    _0: Ligature.element(match.value)
+                    _0: Ligature.$$Element.element(match.value)
                   }, match$1, match$2));
           continue ;
       case "slot" :
@@ -106,9 +106,9 @@ function readNetwork(triples) {
           if (match$4 === null || match$4 === undefined) {
             return null;
           }
-          triples.push(Ligature.triple({
+          triples.push(Ligature.Triple.triple({
                     TAG: "Slot",
-                    _0: Ligature.slot(match.value)
+                    _0: Ligature.Slot.slot(match.value)
                   }, match$3, match$4));
           continue ;
       default:
@@ -116,7 +116,7 @@ function readNetwork(triples) {
               RE_EXN_ID: "Match_failure",
               _1: [
                 "WanderParser.res",
-                44,
+                50,
                 2
               ],
               Error: new Error()
@@ -139,7 +139,7 @@ function readArguments() {
               RE_EXN_ID: "Match_failure",
               _1: [
                 "WanderParser.res",
-                74,
+                90,
                 4
               ],
               Error: new Error()
@@ -153,7 +153,7 @@ function readArguments() {
         case "element" :
             args.push({
                   TAG: "Element",
-                  _0: Ligature.element(match.value)
+                  _0: Ligature.$$Element.element(match.value)
                 });
             token = readIgnoreWS();
             break;
@@ -183,7 +183,7 @@ function readArguments() {
         case "slot" :
             args.push({
                   TAG: "Slot",
-                  _0: Ligature.slot(match.value)
+                  _0: Ligature.Slot.slot(match.value)
                 });
             token = readIgnoreWS();
             break;
@@ -192,7 +192,7 @@ function readArguments() {
                 RE_EXN_ID: "Match_failure",
                 _1: [
                   "WanderParser.res",
-                  74,
+                  90,
                   4
                 ],
                 Error: new Error()
@@ -233,7 +233,7 @@ function parseScript() {
                     RE_EXN_ID: "Match_failure",
                     _1: [
                       "WanderParser.res",
-                      109,
+                      125,
                       8
                     ],
                     Error: new Error()

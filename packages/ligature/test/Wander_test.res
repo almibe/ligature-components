@@ -5,13 +5,16 @@ test("run empty script", t => {
 })
 
 test("call id command", t => {
-  t->Assert.deepEqual(Wander.run("core.id test"), Ok(Some(Model.Element(Ligature.element("test")))))
+  t->Assert.deepEqual(
+    Wander.run("core.id test"),
+    Ok(Some(Model.Element(Ligature.Element.element("test")))),
+  )
 })
 
 test("allow multiple calls", t => {
   t->Assert.deepEqual(
     Wander.run("core.id test, core.id test2"),
-    Ok(Some(Model.Element(Ligature.element("test2")))),
+    Ok(Some(Model.Element(Ligature.Element.element("test2")))),
   )
 })
 

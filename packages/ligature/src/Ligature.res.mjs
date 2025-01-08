@@ -8,12 +8,20 @@ function element(value) {
         };
 }
 
+var $$Element = {
+  element: element
+};
+
 function slot(value) {
   return {
           value: value,
           type: "slot"
         };
 }
+
+var Slot = {
+  slot: slot
+};
 
 function literal(value) {
   return {
@@ -22,6 +30,14 @@ function literal(value) {
         };
 }
 
+var Literal = {
+  literal: literal
+};
+
+var ElementPattern = {};
+
+var Value = {};
+
 function triple(e, r, v) {
   return {
           element: e,
@@ -29,6 +45,10 @@ function triple(e, r, v) {
           value: v
         };
 }
+
+var Triple = {
+  triple: triple
+};
 
 function network(value) {
   return {
@@ -39,12 +59,18 @@ function network(value) {
 
 var emptyNetwork = network([]);
 
+var Network = {
+  network: network,
+  emptyNetwork: emptyNetwork
+};
+
 export {
-  element ,
-  slot ,
-  literal ,
-  triple ,
-  network ,
-  emptyNetwork ,
+  $$Element ,
+  Slot ,
+  Literal ,
+  ElementPattern ,
+  Value ,
+  Triple ,
+  Network ,
 }
 /* emptyNetwork Not a pure module */

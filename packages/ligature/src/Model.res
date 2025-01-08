@@ -3,12 +3,12 @@ type rec call = {\"type": string, commandName: string, arguments: array<wanderVa
 and script = array<call>
 
 and wanderValue =
-  | Element(Ligature.element)
+  | Element(Ligature.Element.element)
   | Pipe
   | Comma
-  | Slot(Ligature.slot)
-  | Network(Ligature.network)
-  | Literal(Ligature.literal)
+  | Slot(Ligature.Slot.slot)
+  | Network(Ligature.Network.network)
+  | Literal(Ligature.Literal.literal)
   | Quote(quote)
 
 and quote = array<wanderValue>
@@ -21,4 +21,14 @@ let call: (string, array<wanderValue>) => call = (name, args) => {
   \"type": "call",
   commandName: name,
   arguments: args,
+}
+
+let printValue: wanderValue => string = value => {
+  switch value {
+  | Element(ele) => ele.value
+  | Slot(slot) => slot.value
+  | Network(network) => %todo
+  | Literal(literal) => literal.value
+  | _ => %todo
+  }
 }

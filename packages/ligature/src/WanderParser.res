@@ -20,36 +20,46 @@ let rec readIgnoreWS: unit => Nullable.t<token> = () => {
 }
 
 //Reads an element or slot.
-let readElementPattern: unit => Nullable.t<Ligature.elementPattern> = () => {
+let readElementPattern: unit => Nullable.t<Ligature.ElementPattern.elementPattern> = () => {
   switch readIgnoreWS() {
-  | Value({\"type": "element", value}) => Value(Ligature.Element(Ligature.element(value)))
-  | Value({\"type": "slot", value}) => Value(Ligature.Slot(Ligature.slot(value)))
+  | Value({\"type": "element", value}) =>
+    Value(Ligature.ElementPattern.Element(Ligature.Element.element(value)))
+  | Value({\"type": "slot", value}) =>
+    Value(Ligature.ElementPattern.Slot(Ligature.Slot.slot(value)))
   | _ => Null
   }
 }
 
 //Reads an element, literal, or slot.
-let readValue: unit => Nullable.t<Ligature.value> = () => {
+let readValue: unit => Nullable.t<Ligature.Value.value> = () => {
   switch readIgnoreWS() {
   | Null => Null
-  | Value({\"type": "element", value}) => Value(Ligature.VElement(Ligature.element(value)))
-  | Value({\"type": "slot", value}) => Value(Ligature.VSlot(Ligature.slot(value)))
-  | Value({\"type": "literal", value}) => Value(Ligature.VLiteral(Ligature.literal(value)))
+  | Value({\"type": "element", value}) =>
+    Value(Ligature.Value.VElement(Ligature.Element.element(value)))
+  | Value({\"type": "slot", value}) => Value(Ligature.Value.VSlot(Ligature.Slot.slot(value)))
+  | Value({\"type": "literal", value}) =>
+    Value(Ligature.Value.VLiteral(Ligature.Literal.literal(value)))
   | _ => Null
   }
 }
 
 //Note this function assumes that the opening brace has been read before calling
-let rec readNetwork: array<Ligature.triple> => Nullable.t<Ligature.network> = triples => {
+let rec readNetwork: array<Ligature.Triple.triple> => Nullable.t<
+  Ligature.Network.network,
+> = triples => {
   switch readIgnoreWS() {
   | Null | Undefined => Null
-  | Value({\"type": "cbrace"}) => Value(Ligature.network(triples))
+  | Value({\"type": "cbrace"}) => Value(Ligature.Network.network(triples))
   | Value({\"type": "comma"}) => readNetwork(triples)
   | Value({\"type": "element", value: element}) =>
     switch (readElementPattern(), readValue()) {
     | (Value(role), Value(value)) => {
         triples->Array.push(
-          Ligature.triple(Ligature.Element(Ligature.element(element)), role, value),
+          Ligature.Triple.triple(
+            Ligature.ElementPattern.Element(Ligature.Element.element(element)),
+            role,
+            value,
+          ),
         )
         readNetwork(triples)
       }
@@ -58,7 +68,13 @@ let rec readNetwork: array<Ligature.triple> => Nullable.t<Ligature.network> = tr
   | Value({\"type": "slot", value: slot}) =>
     switch (readElementPattern(), readValue()) {
     | (Value(role), Value(value)) => {
-        triples->Array.push(Ligature.triple(Ligature.Slot(Ligature.slot(slot)), role, value))
+        triples->Array.push(
+          Ligature.Triple.triple(
+            Ligature.ElementPattern.Slot(Ligature.Slot.slot(slot)),
+            role,
+            value,
+          ),
+        )
         readNetwork(triples)
       }
     | (_, _) => Null
@@ -73,11 +89,11 @@ let readArguments: unit => array<Model.wanderValue> = () => {
   while cont.contents {
     switch token.contents {
     | Value({\"type": "element", value}) => {
-        args->Array.push(Model.Element(Ligature.element(value)))
+        args->Array.push(Model.Element(Ligature.Element.element(value)))
         token := readIgnoreWS()
       }
     | Value({\"type": "slot", value}) => {
-        args->Array.push(Model.Slot(Ligature.slot(value)))
+        args->Array.push(Model.Slot(Ligature.Slot.slot(value)))
         token := readIgnoreWS()
       }
     | Value({\"type": "obrace"}) => {
@@ -127,7 +143,7 @@ let parse = script => {
   parseScript()
 }
 
-let readTriple: unit => Nullable.t<Ligature.triple> = () => {
+let readTriple: unit => Nullable.t<Ligature.Triple.triple> = () => {
   Null
 }
 
