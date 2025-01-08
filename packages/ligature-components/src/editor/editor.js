@@ -1,6 +1,6 @@
 import {EditorView, basicSetup} from "codemirror"
 
-export function showEditor(element: HTMLElement, content: string) {
+export function showEditor(element, content) {
     const view = new EditorView({
         extensions: [basicSetup],
         parent: element

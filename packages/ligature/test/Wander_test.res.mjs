@@ -33,6 +33,34 @@ Ava("allow multiple calls", (function (t) {
             });
       }));
 
+Ava("empty network result toJs", (function (t) {
+        t.deepEqual(Wander.toJs(Wander.run("core.id {}", undefined)), {
+              NAME: "Network",
+              VAL: []
+            });
+      }));
+
+Ava("single triple network result toJs", (function (t) {
+        t.deepEqual(Wander.toJs(Wander.run("core.id {a b c}", undefined)), {
+              NAME: "Network",
+              VAL: [{
+                  type: "triple",
+                  element: {
+                    type: "element",
+                    value: "a"
+                  },
+                  role: {
+                    type: "element",
+                    value: "b"
+                  },
+                  value: {
+                    type: "element",
+                    value: "c"
+                  }
+                }]
+            });
+      }));
+
 function readTests(prim) {
   return TestUtilsJs.readTests();
 }

@@ -7,8 +7,6 @@ let run = (
 ) => {
   let script = WanderParser.parse(script)
   let result = ref(Ok(None))
-  Console.log(modules)
-  Console.log(Commands.stdModules())
   script->Array.forEach(call => {
     let parts = call.commandName->String.split(".")
     switch parts {
@@ -32,5 +30,40 @@ let printResult: wanderResult => string = value => {
   | Ok(None) => "--nothing--"
   | Ok(Some(value)) => Model.printValue(value)
   | Error(error) => error
+  }
+}
+
+type jsResult<'a> = [
+  | #Error(string)
+  | #Network('a)
+]
+
+let toJs: wanderResult => jsResult<'a> = (result: wanderResult) => {
+  switch result {
+  | Ok(Some(Network(value))) => {
+      let result = []
+      value.value->Array.forEach(triple => {
+        let element = switch triple.element {
+        | Element(e) => {"type": "element", "value": e.value}
+        | Slot(s) => {"type": "slot", "value": s.value}
+        }
+
+        let role = switch triple.role {
+        | Element(e) => {"type": "element", "value": e.value}
+        | Slot(s) => {"type": "slot", "value": s.value}
+        }
+
+        let value = switch triple.value {
+        | VElement(e) => {"type": "element", "value": e.value}
+        | VSlot(s) => {"type": "slot", "value": s.value}
+        | VLiteral(l) => {"type": "literal", "value": l.value}
+        }
+
+        result->Array.push({"type": "triple", "element": element, "role": role, "value": value})
+      })
+      #Network(result)
+    }
+  | Error(error) => #Error(error)
+  | _ => %todo
   }
 }

@@ -129,9 +129,9 @@ let parseScript: unit => Model.script = () => {
       }
     | Value({\"type": "comma"}) => ()
     | Undefined | Null => cont := false
-    | x => {
+    | unexpected => {
         Console.log("Error")
-        Console.log(x)
+        Console.log(unexpected)
       }
     }
   }

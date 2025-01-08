@@ -212,15 +212,15 @@ function parseScript() {
   var res = [];
   var cont = true;
   while(cont) {
-    var x = readIgnoreWS();
-    if (x === null || x === undefined) {
+    var unexpected = readIgnoreWS();
+    if (unexpected === null || unexpected === undefined) {
       cont = false;
     } else {
-      switch (x.type) {
+      switch (unexpected.type) {
         case "comma" :
             break;
         case "element" :
-            var c = readCall(x.value);
+            var c = readCall(unexpected.value);
             if (c === null || c === undefined) {
               if (c === null) {
                 throw {
@@ -244,7 +244,7 @@ function parseScript() {
             break;
         default:
           console.log("Error");
-          console.log(x);
+          console.log(unexpected);
       }
     }
   };

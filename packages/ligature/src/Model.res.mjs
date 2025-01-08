@@ -13,7 +13,7 @@ function call(name, args) {
 
 function printValue(value) {
   if (typeof value !== "object") {
-    return Js_exn.raiseError("C:\\Users\\berry3\\vsCodeProjects\\ligature-components\\packages\\ligature\\src\\Model.res:39:1157-1162 - Todo");
+    return Js_exn.raiseError("C:\\Users\\berry3\\vsCodeProjects\\ligature-components\\packages\\ligature\\src\\Model.res:39:1171-1176 - Todo");
   }
   switch (value.TAG) {
     case "Network" :
@@ -26,7 +26,7 @@ function printValue(value) {
         result.contents = result.contents + "}";
         return result.contents;
     case "Quote" :
-        return Js_exn.raiseError("C:\\Users\\berry3\\vsCodeProjects\\ligature-components\\packages\\ligature\\src\\Model.res:39:1157-1162 - Todo");
+        return Js_exn.raiseError("C:\\Users\\berry3\\vsCodeProjects\\ligature-components\\packages\\ligature\\src\\Model.res:39:1171-1176 - Todo");
     default:
       return value._0.value;
   }

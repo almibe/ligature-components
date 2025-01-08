@@ -18,6 +18,24 @@ test("allow multiple calls", t => {
   )
 })
 
+test("empty network result toJs", t => {
+  t->Assert.deepEqual(Wander.run("core.id {}")->Wander.toJs, #Network([]))
+})
+
+test("single triple network result toJs", t => {
+  t->Assert.deepEqual(
+    Wander.run("core.id {a b c}")->Wander.toJs,
+    #Network([
+      {
+        "type": "triple",
+        "element": {"type": "element", "value": "a"},
+        "role": {"type": "element", "value": "b"},
+        "value": {"type": "element", "value": "c"},
+      },
+    ]),
+  )
+})
+
 @module("./TestUtils.js") external readTests: unit => array<array<string>> = "readTests"
 
 readTests()->Array.forEach(file => {

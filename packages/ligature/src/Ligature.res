@@ -55,14 +55,18 @@ module Triple = {
   }
 
   let printTriple: triple => string = value => {
-    ElementPattern.printElementPattern(value.element) ++ " " ++ ElementPattern.printElementPattern(value.role) ++ " " ++ Value.printValue(value.value)
+    ElementPattern.printElementPattern(value.element) ++
+    " " ++
+    ElementPattern.printElementPattern(value.role) ++
+    " " ++
+    Value.printValue(value.value)
   }
 }
 
 module Network = {
   type network = {value: array<Triple.triple>, \"type": string} //TODO make a set
 
-  let network = value => {value: value, \"type": "network"}
+  let network = value => {value, \"type": "network"}
 
   let emptyNetwork: network = network([])
 }

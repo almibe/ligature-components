@@ -28,13 +28,13 @@ let printValue: wanderValue => string = value => {
   | Element(ele) => ele.value
   | Slot(slot) => slot.value
   | Network(network) => {
-    let result = ref("{\n")
-    network.value->Array.forEach(triple => {
-      result := result.contents ++ "  " ++ Ligature.Triple.printTriple(triple) ++ ",\n"
-    })
-    result := result.contents ++ "}"
-    result.contents
-  }
+      let result = ref("{\n")
+      network.value->Array.forEach(triple => {
+        result := result.contents ++ "  " ++ Ligature.Triple.printTriple(triple) ++ ",\n"
+      })
+      result := result.contents ++ "}"
+      result.contents
+    }
   | Literal(literal) => literal.value
   | _ => %todo
   }
