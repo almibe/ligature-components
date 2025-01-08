@@ -1,3 +1,3 @@
-import {run} from './src/Wander.res.mjs'
+import {run, printResult} from './src/Wander.res.mjs'
 
-export {run}
+export {run, printResult}

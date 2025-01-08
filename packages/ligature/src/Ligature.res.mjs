@@ -34,9 +34,21 @@ var Literal = {
   literal: literal
 };
 
-var ElementPattern = {};
+function printElementPattern(value) {
+  return value._0.value;
+}
 
-var Value = {};
+var ElementPattern = {
+  printElementPattern: printElementPattern
+};
+
+function printValue(v) {
+  return v._0.value;
+}
+
+var Value = {
+  printValue: printValue
+};
 
 function triple(e, r, v) {
   return {
@@ -46,8 +58,13 @@ function triple(e, r, v) {
         };
 }
 
+function printTriple(value) {
+  return value.element._0.value + " " + value.role._0.value + " " + value.value._0.value;
+}
+
 var Triple = {
-  triple: triple
+  triple: triple,
+  printTriple: printTriple
 };
 
 function network(value) {
@@ -57,7 +74,12 @@ function network(value) {
         };
 }
 
-var emptyNetwork = network([]);
+var emptyNetwork_value = [];
+
+var emptyNetwork = {
+  value: emptyNetwork_value,
+  type: "network"
+};
 
 var Network = {
   network: network,
@@ -73,4 +95,4 @@ export {
   Triple ,
   Network ,
 }
-/* emptyNetwork Not a pure module */
+/* No side effect */

@@ -278,4 +278,4 @@ export {
   readTriple ,
   readToken ,
 }
-/* Ligature Not a pure module */
+/* ./WanderTokenizer.js Not a pure module */

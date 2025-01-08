@@ -17,6 +17,13 @@ module ElementPattern = {
   type elementPattern =
     | Element(Element.element)
     | Slot(Slot.slot)
+
+  let printElementPattern: elementPattern => string = value => {
+    switch value {
+    | Element(el) => el.value
+    | Slot(slot) => slot.value
+    }
+  }
 }
 
 module Value = {
@@ -24,6 +31,14 @@ module Value = {
     | VElement(Element.element)
     | VSlot(Slot.slot)
     | VLiteral(Literal.literal)
+
+  let printValue: value => string = v => {
+    switch v {
+    | VElement(el) => el.value
+    | VSlot(slot) => slot.value
+    | VLiteral(literal) => literal.value
+    }
+  }
 }
 
 module Triple = {
@@ -38,12 +53,16 @@ module Triple = {
     role: r,
     value: v,
   }
+
+  let printTriple: triple => string = value => {
+    ElementPattern.printElementPattern(value.element) ++ " " ++ ElementPattern.printElementPattern(value.role) ++ " " ++ Value.printValue(value.value)
+  }
 }
 
 module Network = {
-  type network = {"value": array<Triple.triple>, "type": string} //TODO make a set
+  type network = {value: array<Triple.triple>, \"type": string} //TODO make a set
 
-  let network = value => {"value": value, "type": "network"}
+  let network = value => {value: value, \"type": "network"}
 
   let emptyNetwork: network = network([])
 }
