@@ -118,11 +118,11 @@ let readArguments: unit => array<Model.wanderAtom> = () => {
   args
 }
 
-let readCall: Model.wanderAtom => Nullable.t<Model.expression> = name => {
-  let args = readArguments()
-  let contents = [name, ...args]
-  Value(Model.expression("", contents))
-}
+// let readCall: Model.wanderAtom => Nullable.t<Model.expression> = name => {
+//   let args = readArguments()
+//   let contents = [name, ...args]
+//   Value(Model.expression("", contents))
+// }
 
 let readAssignment: string => Nullable.t<Model.expression> = name => {
   let equals = readIgnoreWS()
@@ -151,37 +151,46 @@ let readAtoms: unit => array<Model.wanderAtom> = () => {
     | Value({\"type": "comma"}) => atoms->Array.push(Model.Comma)
     | Undefined | Null => cont := false
     | Value({\"type": "variable", value}) => atoms->Array.push(Model.Variable({\"type": "variable", value}))
+    | Value({\"type": "slot", value}) => atoms->Array.push(Model.Slot({\"type": "slot", value}))
+    | Value({\"type": "obrace"}) => {
+        switch readNetwork([]) {
+        | Value(value) => atoms->Array.push(Model.Network(value))
+        | Null | Undefined => raise(Failure("Unexpected value while reading network."))
+        }
+      }
     }
   }
   atoms
 }
 
-let parseScript: unit => Model.script = () => {
-  let res = []
+let parseScript: array<Model.wanderAtom> => Model.script = atoms => {
+  let res: array<Model.expression> = []
   let cont = ref(true)
+  let offset = ref(0)
   while cont.contents {
-    switch readIgnoreWS() {
-    | Value({\"type": "element", value}) => {
-        let c = readCall(Model.Element({\"type": "element", value}))
-        switch c {
-        | Null => raise(Failure("Unexpected problem reading call."))
-        | Value(c) => res->Array.push(c)
-        }
+    switch atoms->Array.get(offset.contents) {
+    | Some(Model.Element({\"type": "element", value})) => {
+        offset := offset.contents + 1
+        let commandName = Model.Element({\"type": "element", value})
+        res->Array.push({\"type": "expression", variableName: "", contents: [commandName]})
       }
-    | Value({\"type": "comma"}) => ()
-    | Undefined | Null => cont := false
-    | Value({\"type": "variable", value}) => {
-        let assignment = readAssignment(value)
-        switch assignment {
-        | Null => raise(Failure("Unexpected problem reading assignment."))
-        | Value(assignment) => res->Array.push((assignment))
-        }
-      }
-    | unexpected => {
-        Console.log("Error")
-        Console.log(unexpected)
-      }
+    | None => cont := false
     }
+  //   switch readIgnoreWS() {
+  //   | Value({\"type": "comma"}) => ()
+  //   | Undefined | Null => cont := false
+  //   | Value({\"type": "variable", value}) => {
+  //       let assignment = readAssignment(value)
+  //       switch assignment {
+  //       | Null => raise(Failure("Unexpected problem reading assignment."))
+  //       | Value(assignment) => res->Array.push((assignment))
+  //       }
+  //     }
+  //   | unexpected => {
+  //       Console.log("Error")
+  //       Console.log(unexpected)
+  //     }
+  //   }
   }
   res
 }
@@ -189,7 +198,7 @@ let parseScript: unit => Model.script = () => {
 let parse = script => {
   reset(script)
   let atoms = readAtoms()
-  parseScript()
+  parseScript(atoms)
 }
 
 let readTriple: unit => Nullable.t<Ligature.Triple.triple> = () => {

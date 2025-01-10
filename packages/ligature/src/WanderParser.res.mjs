@@ -2,7 +2,6 @@
 
 import * as Model from "./Model.res.mjs";
 import * as Ligature from "./Ligature.res.mjs";
-import * as Belt_Array from "rescript/lib/es6/belt_Array.js";
 import * as WanderTokenizerJs from "./WanderTokenizer.js";
 
 function reset(prim) {
@@ -204,15 +203,6 @@ function readArguments() {
   return args;
 }
 
-function readCall(name) {
-  var args = readArguments();
-  var contents = Belt_Array.concatMany([
-        [name],
-        args
-      ]);
-  return Model.expression("", contents);
-}
-
 function readAssignment(name) {
   var equals = readIgnoreWS();
   if (equals === null || equals === undefined) {
@@ -277,6 +267,37 @@ function readAtoms() {
                   }
                 });
             break;
+        case "obrace" :
+            var value = readNetwork([]);
+            if (value === null || value === undefined) {
+              if (value === null) {
+                throw {
+                      RE_EXN_ID: "Failure",
+                      _1: "Unexpected value while reading network.",
+                      Error: new Error()
+                    };
+              }
+              throw {
+                    RE_EXN_ID: "Failure",
+                    _1: "Unexpected value while reading network.",
+                    Error: new Error()
+                  };
+            } else {
+              atoms.push({
+                    TAG: "Network",
+                    _0: value
+                  });
+            }
+            break;
+        case "slot" :
+            atoms.push({
+                  TAG: "Slot",
+                  _0: {
+                    value: match.value,
+                    type: "slot"
+                  }
+                });
+            break;
         case "variable" :
             atoms.push({
                   TAG: "Variable",
@@ -302,82 +323,59 @@ function readAtoms() {
   return atoms;
 }
 
-function parseScript() {
+function parseScript(atoms) {
   var res = [];
   var cont = true;
+  var offset = 0;
   while(cont) {
-    var unexpected = readIgnoreWS();
-    if (unexpected === null || unexpected === undefined) {
-      cont = false;
-    } else {
-      switch (unexpected.type) {
-        case "comma" :
-            break;
-        case "element" :
-            var c = readCall({
-                  TAG: "Element",
-                  _0: {
-                    value: unexpected.value,
-                    type: "element"
-                  }
-                });
-            if (c === null || c === undefined) {
-              if (c === null) {
-                throw {
-                      RE_EXN_ID: "Failure",
-                      _1: "Unexpected problem reading call.",
-                      Error: new Error()
-                    };
-              }
-              throw {
-                    RE_EXN_ID: "Match_failure",
-                    _1: [
-                      "WanderParser.res",
-                      166,
-                      8
-                    ],
-                    Error: new Error()
-                  };
-            } else {
-              res.push(c);
+    var exit = 0;
+    var match = atoms[offset];
+    if (match !== undefined) {
+      if (typeof match !== "object" || match.TAG !== "Element") {
+        exit = 1;
+      } else {
+        var match$1 = match._0;
+        if (match$1.type === "element") {
+          offset = offset + 1 | 0;
+          var commandName = {
+            TAG: "Element",
+            _0: {
+              value: match$1.value,
+              type: "element"
             }
-            break;
-        case "variable" :
-            var assignment = readAssignment(unexpected.value);
-            if (assignment === null || assignment === undefined) {
-              if (assignment === null) {
-                throw {
-                      RE_EXN_ID: "Failure",
-                      _1: "Unexpected problem reading assignment.",
-                      Error: new Error()
-                    };
-              }
-              throw {
-                    RE_EXN_ID: "Match_failure",
-                    _1: [
-                      "WanderParser.res",
-                      175,
-                      8
-                    ],
-                    Error: new Error()
-                  };
-            } else {
-              res.push(assignment);
-            }
-            break;
-        default:
-          console.log("Error");
-          console.log(unexpected);
+          };
+          res.push({
+                type: "expression",
+                variableName: "",
+                contents: [commandName]
+              });
+        } else {
+          exit = 1;
+        }
       }
+    } else {
+      cont = false;
     }
+    if (exit === 1) {
+      throw {
+            RE_EXN_ID: "Match_failure",
+            _1: [
+              "WanderParser.res",
+              171,
+              4
+            ],
+            Error: new Error()
+          };
+    }
+    
   };
   return res;
 }
 
 function parse(script) {
   WanderTokenizerJs.reset(script);
-  readAtoms();
-  return parseScript();
+  var atoms = readAtoms();
+  return parseScript(atoms);
 }
 
 function readTriple() {
@@ -396,7 +394,6 @@ export {
   readValue ,
   readNetwork ,
   readArguments ,
-  readCall ,
   readAssignment ,
   readAtoms ,
   parseScript ,
