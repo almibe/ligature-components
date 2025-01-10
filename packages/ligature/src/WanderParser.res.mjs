@@ -337,17 +337,38 @@ function parseScript(atoms) {
         var match$1 = match._0;
         if (match$1.type === "element") {
           offset = offset + 1 | 0;
-          var commandName = {
-            TAG: "Element",
-            _0: {
-              value: match$1.value,
-              type: "element"
+          var results = [{
+              TAG: "Element",
+              _0: {
+                value: match$1.value,
+                type: "element"
+              }
+            }];
+          var innerCont = true;
+          while(innerCont) {
+            var value = atoms[offset];
+            if (value !== undefined) {
+              var exit$1 = 0;
+              if (typeof value !== "object" && value === "Comma") {
+                offset = offset + 1 | 0;
+                innerCont = false;
+              } else {
+                exit$1 = 2;
+              }
+              if (exit$1 === 2) {
+                results.push(value);
+                offset = offset + 1 | 0;
+              }
+              
+            } else {
+              offset = offset + 1 | 0;
+              innerCont = false;
             }
           };
           res.push({
                 type: "expression",
                 variableName: "",
-                contents: [commandName]
+                contents: results
               });
         } else {
           exit = 1;

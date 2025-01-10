@@ -171,8 +171,25 @@ let parseScript: array<Model.wanderAtom> => Model.script = atoms => {
     switch atoms->Array.get(offset.contents) {
     | Some(Model.Element({\"type": "element", value})) => {
         offset := offset.contents + 1
-        let commandName = Model.Element({\"type": "element", value})
-        res->Array.push({\"type": "expression", variableName: "", contents: [commandName]})
+        let results = [Model.Element({\"type": "element", value})]
+        let innerCont = ref(true)
+        while innerCont.contents {
+          switch atoms->Array.get(offset.contents) {
+          | Some(Model.Comma) => {
+            offset := offset.contents + 1
+            innerCont := false
+          }
+          | Some(value) => {
+            results->Array.push(value)
+            offset := offset.contents + 1
+          }
+          | None => {
+            offset := offset.contents + 1
+            innerCont := false
+          }
+          }
+        }
+        res->Array.push({\"type": "expression", variableName: "", contents: results})
       }
     | None => cont := false
     }
