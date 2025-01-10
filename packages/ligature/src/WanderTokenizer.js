@@ -5,6 +5,7 @@ const lexer = moo.compile({
     comment:   /;.*?$/,
     element:   /[a-zA-Z_0-9\.-]+/,
     slot:      /\?[a-zA-Z_0-9]+/,
+    variable:  /\$[a-zA-Z_0-9]+/,
     literal:   /"(?:\\["\\]|[^\n"\\])*"/,
     obrace:    '{',
     cbrace:    '}',

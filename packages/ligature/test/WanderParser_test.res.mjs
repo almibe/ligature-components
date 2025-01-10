@@ -10,28 +10,41 @@ Ava("parse empty string", (function (t) {
 
 Ava("parse single call with no args", (function (t) {
         t.deepEqual(WanderParser.parse("test"), [{
-                type: "call",
-                commandName: "test",
-                arguments: []
+                type: "expression",
+                variableName: "",
+                contents: [{
+                    TAG: "Element",
+                    _0: Ligature.$$Element.element("test")
+                  }]
               }]);
       }));
 
 Ava("parse single call with single arg", (function (t) {
         t.deepEqual(WanderParser.parse("test 1"), [{
-                type: "call",
-                commandName: "test",
-                arguments: [{
+                type: "expression",
+                variableName: "",
+                contents: [
+                  {
+                    TAG: "Element",
+                    _0: Ligature.$$Element.element("test")
+                  },
+                  {
                     TAG: "Element",
                     _0: Ligature.$$Element.element("1")
-                  }]
+                  }
+                ]
               }]);
       }));
 
 Ava("parse single call with multiple args", (function (t) {
         t.deepEqual(WanderParser.parse("test 1 2 3"), [{
-                type: "call",
-                commandName: "test",
-                arguments: [
+                type: "expression",
+                variableName: "",
+                contents: [
+                  {
+                    TAG: "Element",
+                    _0: Ligature.$$Element.element("test")
+                  },
                   {
                     TAG: "Element",
                     _0: Ligature.$$Element.element("1")
@@ -50,31 +63,48 @@ Ava("parse single call with multiple args", (function (t) {
 
 Ava("parse single call with slot arg", (function (t) {
         t.deepEqual(WanderParser.parse("test ?var"), [{
-                type: "call",
-                commandName: "test",
-                arguments: [{
+                type: "expression",
+                variableName: "",
+                contents: [
+                  {
+                    TAG: "Element",
+                    _0: Ligature.$$Element.element("test")
+                  },
+                  {
                     TAG: "Slot",
                     _0: Ligature.Slot.slot("?var")
-                  }]
+                  }
+                ]
               }]);
       }));
 
 Ava("parse single call with emppy network arg", (function (t) {
         t.deepEqual(WanderParser.parse("test {}"), [{
                 type: "call",
-                commandName: "test",
-                arguments: [{
+                variableName: "",
+                contents: [
+                  {
+                    TAG: "Element",
+                    _0: Ligature.$$Element.element("test")
+                  },
+                  {
                     TAG: "Network",
                     _0: Ligature.Network.network([])
-                  }]
+                  }
+                ]
               }]);
       }));
 
 Ava("parse single call with network arg", (function (t) {
         t.deepEqual(WanderParser.parse("test {a b c}"), [{
                 type: "call",
-                commandName: "test",
-                arguments: [{
+                variableName: "",
+                contents: [
+                  {
+                    TAG: "Element",
+                    _0: Ligature.$$Element.element("test")
+                  },
+                  {
                     TAG: "Network",
                     _0: Ligature.Network.network([Ligature.Triple.triple({
                                 TAG: "Element",
@@ -86,15 +116,21 @@ Ava("parse single call with network arg", (function (t) {
                                 TAG: "VElement",
                                 _0: Ligature.$$Element.element("c")
                               })])
-                  }]
+                  }
+                ]
               }]);
       }));
 
 Ava("parse network with two triples", (function (t) {
         t.deepEqual(WanderParser.parse("test {a b c, d e f}"), [{
                 type: "call",
-                commandName: "test",
-                arguments: [{
+                variableName: "",
+                contents: [
+                  {
+                    TAG: "Element",
+                    _0: Ligature.$$Element.element("test")
+                  },
+                  {
                     TAG: "Network",
                     _0: Ligature.Network.network([
                           Ligature.Triple.triple({
@@ -118,15 +154,21 @@ Ava("parse network with two triples", (function (t) {
                                 _0: Ligature.$$Element.element("f")
                               })
                         ])
-                  }]
+                  }
+                ]
               }]);
       }));
 
 Ava("parse network with slots", (function (t) {
         t.deepEqual(WanderParser.parse("test {?a b ?c, d ?e f}"), [{
-                type: "call",
-                commandName: "test",
-                arguments: [{
+                type: "expression",
+                variableName: "",
+                contents: [
+                  {
+                    TAG: "Element",
+                    _0: Ligature.$$Element.element("test")
+                  },
+                  {
                     TAG: "Network",
                     _0: Ligature.Network.network([
                           Ligature.Triple.triple({
@@ -150,27 +192,40 @@ Ava("parse network with slots", (function (t) {
                                 _0: Ligature.$$Element.element("f")
                               })
                         ])
-                  }]
+                  }
+                ]
               }]);
       }));
 
 Ava("parse script with multiple calls", (function (t) {
         t.deepEqual(WanderParser.parse("test 1, test 2"), [
               {
-                type: "call",
-                commandName: "test",
-                arguments: [{
+                type: "expression",
+                variableName: "",
+                contents: [
+                  {
+                    TAG: "Element",
+                    _0: Ligature.$$Element.element("test")
+                  },
+                  {
                     TAG: "Element",
                     _0: Ligature.$$Element.element("1")
-                  }]
+                  }
+                ]
               },
               {
                 type: "call",
-                commandName: "test",
-                arguments: [{
+                variableName: "",
+                contents: [
+                  {
+                    TAG: "Element",
+                    _0: Ligature.$$Element.element("test")
+                  },
+                  {
                     TAG: "Element",
                     _0: Ligature.$$Element.element("2")
-                  }]
+                  }
+                ]
               }
             ]);
       }));

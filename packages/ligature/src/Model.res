@@ -1,29 +1,35 @@
-type rec call = {\"type": string, commandName: string, arguments: array<wanderValue>}
+module Variable = {
+  type variable = {value: string, \"type": string}
+  let variable = value => {value, \"type": "variable"}
+}
 
-and script = array<call>
+type rec expression = {\"type": string, variableName: string, contents: array<wanderAtom>}
 
-and wanderValue =
+and script = array<expression>
+
+and wanderAtom =
   | Element(Ligature.Element.element)
   | Pipe
   | Comma
   | Slot(Ligature.Slot.slot)
+  | Variable(Variable.variable)
   | Network(Ligature.Network.network)
   | Literal(Ligature.Literal.literal)
   | Quote(quote)
 
-and quote = array<wanderValue>
+and quote = array<wanderAtom>
 
-type arguments = array<wanderValue>
+type arguments = array<wanderAtom>
 
-type command = arguments => result<option<wanderValue>, string> //--(local: Map<Element, Command>, modules: Map<Element, Map<Element, Command>>, slots: Map<Slot, Element | Literal>, args: WanderValue[]) => WanderValue
+type command = arguments => result<option<wanderAtom>, string> //--(local: Map<Element, Command>, modules: Map<Element, Map<Element, Command>>, slots: Map<Slot, Element | Literal>, args: WanderValue[]) => WanderValue
 
-let call: (string, array<wanderValue>) => call = (name, args) => {
-  \"type": "call",
-  commandName: name,
-  arguments: args,
+let expression: (string, array<wanderAtom>) => expression = (name, contents) => {
+  \"type": "expression",
+  variableName: name,
+  contents: contents,
 }
 
-let printValue: wanderValue => string = value => {
+let printValue: wanderAtom => string = value => {
   switch value {
   | Element(ele) => ele.value
   | Slot(slot) => slot.value
@@ -36,6 +42,6 @@ let printValue: wanderValue => string = value => {
       result.contents
     }
   | Literal(literal) => literal.value
-  | _ => %todo
+  | _ => raise(Failure("TODO"))
   }
 }

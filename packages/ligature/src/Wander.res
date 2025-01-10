@@ -1,26 +1,36 @@
-type wanderResult = result<option<Model.wanderValue>, string>
+type wanderResult = result<option<Model.wanderAtom>, string>
 
 let run = (
-  //: (string, Commands.modules) => result<option<Model.wanderValue>, string> = (
+  //: (string, Commands.modules) => result<option<Model.wanderAtom>, string> = (
   script,
   ~modules=Commands.stdModules(),
 ) => {
+  let variables = ref(Belt.Map.String.empty)
   let script = WanderParser.parse(script)
   let result = ref(Ok(None))
-  script->Array.forEach(call => {
-    let parts = call.commandName->String.split(".")
-    switch parts {
-    | [moduleName, commandName] =>
-      switch modules->Belt.Map.String.get(moduleName) {
-      | Some(mod) =>
-        switch mod->Belt.Map.String.get(commandName) {
-        | Some(command) => result := command(call.arguments)
-        | None => ()
-        }
-      | None => raise(Failure("Could not find command: " ++ call.commandName))
-      }
-    | _ => ()
-    }
+  script->Array.forEach(expression => {
+    ()
+    // switch statement {
+    // | Model.Expression(expression) => {
+    //     ()
+    //     // let parts = call.commandName->String.split(".")
+    //     // switch parts {
+    //     // | [moduleName, commandName] =>
+    //     //   switch modules->Belt.Map.String.get(moduleName) {
+    //     //   | Some(mod) =>
+    //     //     switch mod->Belt.Map.String.get(commandName) {
+    //     //     | Some(command) => result := command(call.arguments)
+    //     //     | None => ()
+    //     //     }
+    //     //   | None => raise(Failure("Could not find command: " ++ call.commandName))
+    //     //   }
+    //     // | _ => ()
+    //     // }
+    //   }
+    // | Assignment(assignment) => {
+    //   variables := variables.contents->Belt.Map.String.set(assignment.variableName, assignment.value)
+    // }
+    // }
   })
   result.contents
 }
@@ -64,6 +74,6 @@ let toJs: wanderResult => jsResult<'a> = (result: wanderResult) => {
       #Network(result)
     }
   | Error(error) => #Error(error)
-  | _ => %todo
+  | _ => raise(Failure("Unexpected value, toJs only supports Networks."))
   }
 }

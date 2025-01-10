@@ -2,6 +2,7 @@
 
 import * as Model from "./Model.res.mjs";
 import * as Ligature from "./Ligature.res.mjs";
+import * as Belt_Array from "rescript/lib/es6/belt_Array.js";
 import * as WanderTokenizerJs from "./WanderTokenizer.js";
 
 function reset(prim) {
@@ -130,9 +131,9 @@ function readArguments() {
   var args = [];
   var cont = true;
   while(cont) {
-    var match = token;
-    if (match === null || match === undefined) {
-      if (match === null) {
+    var unexpected = token;
+    if (unexpected === null || unexpected === undefined) {
+      if (unexpected === null) {
         cont = false;
       } else {
         throw {
@@ -146,14 +147,14 @@ function readArguments() {
             };
       }
     } else {
-      switch (match.type) {
+      switch (unexpected.type) {
         case "comma" :
             cont = false;
             break;
         case "element" :
             args.push({
                   TAG: "Element",
-                  _0: Ligature.$$Element.element(match.value)
+                  _0: Ligature.$$Element.element(unexpected.value)
                 });
             token = readIgnoreWS();
             break;
@@ -183,20 +184,20 @@ function readArguments() {
         case "slot" :
             args.push({
                   TAG: "Slot",
-                  _0: Ligature.Slot.slot(match.value)
+                  _0: Ligature.Slot.slot(unexpected.value)
+                });
+            token = readIgnoreWS();
+            break;
+        case "variable" :
+            args.push({
+                  TAG: "Variable",
+                  _0: Model.Variable.variable(unexpected.value)
                 });
             token = readIgnoreWS();
             break;
         default:
-          throw {
-                RE_EXN_ID: "Match_failure",
-                _1: [
-                  "WanderParser.res",
-                  90,
-                  4
-                ],
-                Error: new Error()
-              };
+          console.log("Unexpected value");
+          console.log(unexpected);
       }
     }
   };
@@ -205,7 +206,100 @@ function readArguments() {
 
 function readCall(name) {
   var args = readArguments();
-  return Model.call(name, args);
+  var contents = Belt_Array.concatMany([
+        [name],
+        args
+      ]);
+  return Model.expression("", contents);
+}
+
+function readAssignment(name) {
+  var equals = readIgnoreWS();
+  if (equals === null || equals === undefined) {
+    if (equals === null) {
+      return null;
+    }
+    throw {
+          RE_EXN_ID: "Match_failure",
+          _1: [
+            "WanderParser.res",
+            129,
+            2
+          ],
+          Error: new Error()
+        };
+  } else {
+    if (equals.type === "equalSign") {
+      var contents = readArguments();
+      if (contents.length !== 0) {
+        return {
+                type: "assignment",
+                variableName: name,
+                contents: contents
+              };
+      }
+      throw {
+            RE_EXN_ID: "Failure",
+            _1: "Invalid expression.",
+            Error: new Error()
+          };
+    }
+    throw {
+          RE_EXN_ID: "Match_failure",
+          _1: [
+            "WanderParser.res",
+            129,
+            2
+          ],
+          Error: new Error()
+        };
+  }
+}
+
+function readAtoms() {
+  var atoms = [];
+  var cont = true;
+  while(cont) {
+    var match = readIgnoreWS();
+    if (match === null || match === undefined) {
+      cont = false;
+    } else {
+      switch (match.type) {
+        case "comma" :
+            atoms.push("Comma");
+            break;
+        case "element" :
+            atoms.push({
+                  TAG: "Element",
+                  _0: {
+                    value: match.value,
+                    type: "element"
+                  }
+                });
+            break;
+        case "variable" :
+            atoms.push({
+                  TAG: "Variable",
+                  _0: {
+                    value: match.value,
+                    type: "variable"
+                  }
+                });
+            break;
+        default:
+          throw {
+                RE_EXN_ID: "Match_failure",
+                _1: [
+                  "WanderParser.res",
+                  149,
+                  4
+                ],
+                Error: new Error()
+              };
+      }
+    }
+  };
+  return atoms;
 }
 
 function parseScript() {
@@ -220,7 +314,13 @@ function parseScript() {
         case "comma" :
             break;
         case "element" :
-            var c = readCall(unexpected.value);
+            var c = readCall({
+                  TAG: "Element",
+                  _0: {
+                    value: unexpected.value,
+                    type: "element"
+                  }
+                });
             if (c === null || c === undefined) {
               if (c === null) {
                 throw {
@@ -233,13 +333,36 @@ function parseScript() {
                     RE_EXN_ID: "Match_failure",
                     _1: [
                       "WanderParser.res",
-                      125,
+                      166,
                       8
                     ],
                     Error: new Error()
                   };
             } else {
               res.push(c);
+            }
+            break;
+        case "variable" :
+            var assignment = readAssignment(unexpected.value);
+            if (assignment === null || assignment === undefined) {
+              if (assignment === null) {
+                throw {
+                      RE_EXN_ID: "Failure",
+                      _1: "Unexpected problem reading assignment.",
+                      Error: new Error()
+                    };
+              }
+              throw {
+                    RE_EXN_ID: "Match_failure",
+                    _1: [
+                      "WanderParser.res",
+                      175,
+                      8
+                    ],
+                    Error: new Error()
+                  };
+            } else {
+              res.push(assignment);
             }
             break;
         default:
@@ -253,6 +376,7 @@ function parseScript() {
 
 function parse(script) {
   WanderTokenizerJs.reset(script);
+  readAtoms();
   return parseScript();
 }
 
@@ -273,6 +397,8 @@ export {
   readNetwork ,
   readArguments ,
   readCall ,
+  readAssignment ,
+  readAtoms ,
   parseScript ,
   parse ,
   readTriple ,
