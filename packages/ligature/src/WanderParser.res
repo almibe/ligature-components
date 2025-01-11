@@ -95,7 +95,7 @@ let readArguments: unit => array<Model.wanderAtom> = () => {
     | Value({\"type": "variable", value}) => {
         args->Array.push(Model.Variable(Model.Variable.variable(value)))
         token := readIgnoreWS()
-    }
+      }
     | Value({\"type": "slot", value}) => {
         args->Array.push(Model.Slot(Ligature.Slot.slot(value)))
         token := readIgnoreWS()
@@ -131,7 +131,7 @@ let readQuote: unit => array<Model.wanderAtom> = () => {
     | Value({\"type": "variable", value}) => {
         args->Array.push(Model.Variable(Model.Variable.variable(value)))
         token := readIgnoreWS()
-    }
+      }
     | Value({\"type": "slot", value}) => {
         args->Array.push(Model.Slot(Ligature.Slot.slot(value)))
         token := readIgnoreWS()
@@ -157,18 +157,12 @@ let readQuote: unit => array<Model.wanderAtom> = () => {
 let readAssignment: string => Nullable.t<Model.expression> = name => {
   let equals = readIgnoreWS()
   switch equals {
-  | Value({\"type": "equalSign"}) => {
-    switch readArguments() {
+  | Value({\"type": "equalSign"}) => switch readArguments() {
     | [] => raise(Failure("Invalid expression."))
-    | contents => {
-      Value({\"type": "assignment", variableName: name, contents: contents})
-    }
+    | contents => Value({\"type": "assignment", variableName: name, contents})
     | _ => raise(Failure("Invalid expression."))
     }
-  }
-  | Null => {
-    Null
-  }
+  | Null => Null
   }
 }
 
@@ -177,23 +171,24 @@ let readAtoms: unit => array<Model.wanderAtom> = () => {
   let cont = ref(true)
   while cont.contents {
     switch readIgnoreWS() {
-    | Value({\"type": "element", value}) => atoms->Array.push(Model.Element({\"type": "element", value}))
-    | Value({\"type": "literal", value}) => atoms->Array.push(Model.Literal({\"type": "literal", value}))
+    | Value({\"type": "element", value}) =>
+      atoms->Array.push(Model.Element({\"type": "element", value}))
+    | Value({\"type": "literal", value}) =>
+      atoms->Array.push(Model.Literal({\"type": "literal", value}))
     | Value({\"type": "comma"}) => atoms->Array.push(Model.Comma)
     | Value({\"type": "equalSign"}) => atoms->Array.push(Model.EqualSign)
     | Undefined | Null => cont := false
-    | Value({\"type": "variable", value}) => atoms->Array.push(Model.Variable({\"type": "variable", value}))
+    | Value({\"type": "variable", value}) =>
+      atoms->Array.push(Model.Variable({\"type": "variable", value}))
     | Value({\"type": "slot", value}) => atoms->Array.push(Model.Slot({\"type": "slot", value}))
-    | Value({\"type": "obrace"}) => {
-        switch readNetwork([]) {
-        | Value(value) => atoms->Array.push(Model.Network(value))
-        | Null | Undefined => raise(Failure("Unexpected value while reading network."))
-        }
+    | Value({\"type": "obrace"}) => switch readNetwork([]) {
+      | Value(value) => atoms->Array.push(Model.Network(value))
+      | Null | Undefined => raise(Failure("Unexpected value while reading network."))
       }
     | Value({\"type": "oparen"}) => {
         let quote = readQuote()
         atoms->Array.push(Model.Quote(quote))
-    }
+      }
     }
   }
   atoms
@@ -206,33 +201,33 @@ let parseScript: array<Model.wanderAtom> => Model.script = atoms => {
   while cont.contents {
     switch atoms->Array.get(offset.contents) {
     | Some(Model.Variable({\"type": "variable", value: variableName})) => {
-      offset := offset.contents + 1
-      switch atoms->Array.get(offset.contents) {
-      | Some(Model.EqualSign) => {
         offset := offset.contents + 1
-        let results = []
-        let innerCont = ref(true)
-        while innerCont.contents {
-          switch atoms->Array.get(offset.contents) {
-          | Some(Model.Comma) => {
+        switch atoms->Array.get(offset.contents) {
+        | Some(Model.EqualSign) => {
             offset := offset.contents + 1
-            innerCont := false
+            let results = []
+            let innerCont = ref(true)
+            while innerCont.contents {
+              switch atoms->Array.get(offset.contents) {
+              | Some(Model.Comma) => {
+                  offset := offset.contents + 1
+                  innerCont := false
+                }
+              | Some(value) => {
+                  results->Array.push(value)
+                  offset := offset.contents + 1
+                }
+              | None => {
+                  offset := offset.contents + 1
+                  innerCont := false
+                }
+              }
+            }
+            res->Array.push({\"type": "expression", variableName, contents: results})
           }
-          | Some(value) => {
-            results->Array.push(value)
-            offset := offset.contents + 1
-          }
-          | None => {
-            offset := offset.contents + 1
-            innerCont := false
-          }
-          }
+        | _ => raise(Failure("Invalid assignment."))
         }
-        res->Array.push({\"type": "expression", variableName: variableName, contents: results})
       }
-      | _ => raise(Failure("Invalid assignment."))
-      }      
-    }
     | Some(Model.Element({\"type": "element", value})) => {
         offset := offset.contents + 1
         let results = [Model.Element({\"type": "element", value})]
@@ -240,38 +235,38 @@ let parseScript: array<Model.wanderAtom> => Model.script = atoms => {
         while innerCont.contents {
           switch atoms->Array.get(offset.contents) {
           | Some(Model.Comma) => {
-            offset := offset.contents + 1
-            innerCont := false
-          }
+              offset := offset.contents + 1
+              innerCont := false
+            }
           | Some(value) => {
-            results->Array.push(value)
-            offset := offset.contents + 1
-          }
+              results->Array.push(value)
+              offset := offset.contents + 1
+            }
           | None => {
-            offset := offset.contents + 1
-            innerCont := false
-          }
+              offset := offset.contents + 1
+              innerCont := false
+            }
           }
         }
         res->Array.push({\"type": "expression", variableName: "", contents: results})
       }
     | None => cont := false
     }
-  //   switch readIgnoreWS() {
-  //   | Value({\"type": "comma"}) => ()
-  //   | Undefined | Null => cont := false
-  //   | Value({\"type": "variable", value}) => {
-  //       let assignment = readAssignment(value)
-  //       switch assignment {
-  //       | Null => raise(Failure("Unexpected problem reading assignment."))
-  //       | Value(assignment) => res->Array.push((assignment))
-  //       }
-  //     }
-  //   | unexpected => {
-  //       Console.log("Error")
-  //       Console.log(unexpected)
-  //     }
-  //   }
+    //   switch readIgnoreWS() {
+    //   | Value({\"type": "comma"}) => ()
+    //   | Undefined | Null => cont := false
+    //   | Value({\"type": "variable", value}) => {
+    //       let assignment = readAssignment(value)
+    //       switch assignment {
+    //       | Null => raise(Failure("Unexpected problem reading assignment."))
+    //       | Value(assignment) => res->Array.push((assignment))
+    //       }
+    //     }
+    //   | unexpected => {
+    //       Console.log("Error")
+    //       Console.log(unexpected)
+    //     }
+    //   }
   }
   res
 }

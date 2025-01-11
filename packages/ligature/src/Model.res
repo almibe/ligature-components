@@ -27,7 +27,7 @@ type command = arguments => result<option<wanderAtom>, string> //--(local: Map<E
 let expression: (string, array<wanderAtom>) => expression = (name, contents) => {
   \"type": "expression",
   variableName: name,
-  contents: contents,
+  contents,
 }
 
 let printValue: wanderAtom => string = value => {

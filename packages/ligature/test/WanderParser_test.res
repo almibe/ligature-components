@@ -24,7 +24,10 @@ test("parse single call with single arg", t => {
       {
         \"type": "expression",
         variableName: "",
-        contents: [Model.Element(Ligature.Element.element("test")), Model.Element(Ligature.Element.element("1"))],
+        contents: [
+          Model.Element(Ligature.Element.element("test")),
+          Model.Element(Ligature.Element.element("1")),
+        ],
       },
     ],
   )
@@ -55,7 +58,10 @@ test("parse single call with slot arg", t => {
       {
         \"type": "expression",
         variableName: "",
-        contents: [Model.Element(Ligature.Element.element("test")), Model.Slot(Ligature.Slot.slot("?var"))],
+        contents: [
+          Model.Element(Ligature.Element.element("test")),
+          Model.Slot(Ligature.Slot.slot("?var")),
+        ],
       },
     ],
   )
@@ -68,7 +74,10 @@ test("parse single call with emppy network arg", t => {
       {
         \"type": "expression",
         variableName: "",
-        contents: [Model.Element(Ligature.Element.element("test")), Model.Network(Ligature.Network.network([]))],
+        contents: [
+          Model.Element(Ligature.Element.element("test")),
+          Model.Network(Ligature.Network.network([])),
+        ],
       },
     ],
   )
@@ -163,12 +172,18 @@ test("parse script with multiple calls", t => {
       {
         \"type": "expression",
         variableName: "",
-        contents: [Model.Element(Ligature.Element.element("test")), Model.Element(Ligature.Element.element("1"))],
+        contents: [
+          Model.Element(Ligature.Element.element("test")),
+          Model.Element(Ligature.Element.element("1")),
+        ],
       },
       {
         \"type": "expression",
         variableName: "",
-        contents: [Model.Element(Ligature.Element.element("test")), Model.Element(Ligature.Element.element("2"))],
+        contents: [
+          Model.Element(Ligature.Element.element("test")),
+          Model.Element(Ligature.Element.element("2")),
+        ],
       },
     ],
   )
@@ -181,7 +196,10 @@ test("parse assignment", t => {
       {
         \"type": "expression",
         variableName: "$var",
-        contents: [Model.Element(Ligature.Element.element("test")), Model.Element(Ligature.Element.element("1"))],
+        contents: [
+          Model.Element(Ligature.Element.element("test")),
+          Model.Element(Ligature.Element.element("1")),
+        ],
       },
     ],
   )
