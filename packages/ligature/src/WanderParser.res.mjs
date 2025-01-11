@@ -203,6 +203,84 @@ function readArguments() {
   return args;
 }
 
+function readQuote() {
+  var token = readIgnoreWS();
+  var args = [];
+  var cont = true;
+  while(cont) {
+    var unexpected = token;
+    if (unexpected === null || unexpected === undefined) {
+      if (unexpected === null) {
+        cont = false;
+      } else {
+        throw {
+              RE_EXN_ID: "Match_failure",
+              _1: [
+                "WanderParser.res",
+                126,
+                4
+              ],
+              Error: new Error()
+            };
+      }
+    } else {
+      switch (unexpected.type) {
+        case "cparen" :
+            cont = false;
+            break;
+        case "element" :
+            args.push({
+                  TAG: "Element",
+                  _0: Ligature.$$Element.element(unexpected.value)
+                });
+            token = readIgnoreWS();
+            break;
+        case "obrace" :
+            var value = readNetwork([]);
+            if (value === null || value === undefined) {
+              if (value === null) {
+                throw {
+                      RE_EXN_ID: "Failure",
+                      _1: "Unexpected value while reading network.",
+                      Error: new Error()
+                    };
+              }
+              throw {
+                    RE_EXN_ID: "Failure",
+                    _1: "Unexpected value while reading network.",
+                    Error: new Error()
+                  };
+            } else {
+              args.push({
+                    TAG: "Network",
+                    _0: value
+                  });
+            }
+            token = readIgnoreWS();
+            break;
+        case "slot" :
+            args.push({
+                  TAG: "Slot",
+                  _0: Ligature.Slot.slot(unexpected.value)
+                });
+            token = readIgnoreWS();
+            break;
+        case "variable" :
+            args.push({
+                  TAG: "Variable",
+                  _0: Model.Variable.variable(unexpected.value)
+                });
+            token = readIgnoreWS();
+            break;
+        default:
+          console.log("Unexpected value");
+          console.log(unexpected);
+      }
+    }
+  };
+  return args;
+}
+
 function readAssignment(name) {
   var equals = readIgnoreWS();
   if (equals === null || equals === undefined) {
@@ -213,7 +291,7 @@ function readAssignment(name) {
           RE_EXN_ID: "Match_failure",
           _1: [
             "WanderParser.res",
-            129,
+            159,
             2
           ],
           Error: new Error()
@@ -238,7 +316,7 @@ function readAssignment(name) {
           RE_EXN_ID: "Match_failure",
           _1: [
             "WanderParser.res",
-            129,
+            159,
             2
           ],
           Error: new Error()
@@ -267,6 +345,18 @@ function readAtoms() {
                   }
                 });
             break;
+        case "equalSign" :
+            atoms.push("EqualSign");
+            break;
+        case "literal" :
+            atoms.push({
+                  TAG: "Literal",
+                  _0: {
+                    value: match.value,
+                    type: "literal"
+                  }
+                });
+            break;
         case "obrace" :
             var value = readNetwork([]);
             if (value === null || value === undefined) {
@@ -288,6 +378,13 @@ function readAtoms() {
                     _0: value
                   });
             }
+            break;
+        case "oparen" :
+            var quote = readQuote();
+            atoms.push({
+                  TAG: "Quote",
+                  _0: quote
+                });
             break;
         case "slot" :
             atoms.push({
@@ -312,7 +409,7 @@ function readAtoms() {
                 RE_EXN_ID: "Match_failure",
                 _1: [
                   "WanderParser.res",
-                  149,
+                  179,
                   4
                 ],
                 Error: new Error()
@@ -331,47 +428,114 @@ function parseScript(atoms) {
     var exit = 0;
     var match = atoms[offset];
     if (match !== undefined) {
-      if (typeof match !== "object" || match.TAG !== "Element") {
+      if (typeof match !== "object") {
         exit = 1;
       } else {
-        var match$1 = match._0;
-        if (match$1.type === "element") {
-          offset = offset + 1 | 0;
-          var results = [{
-              TAG: "Element",
-              _0: {
-                value: match$1.value,
-                type: "element"
-              }
-            }];
-          var innerCont = true;
-          while(innerCont) {
-            var value = atoms[offset];
-            if (value !== undefined) {
-              var exit$1 = 0;
-              if (typeof value !== "object" && value === "Comma") {
+        switch (match.TAG) {
+          case "Element" :
+              var match$1 = match._0;
+              if (match$1.type === "element") {
                 offset = offset + 1 | 0;
-                innerCont = false;
+                var results = [{
+                    TAG: "Element",
+                    _0: {
+                      value: match$1.value,
+                      type: "element"
+                    }
+                  }];
+                var innerCont = true;
+                while(innerCont) {
+                  var value = atoms[offset];
+                  if (value !== undefined) {
+                    var exit$1 = 0;
+                    if (typeof value !== "object" && value === "Comma") {
+                      offset = offset + 1 | 0;
+                      innerCont = false;
+                    } else {
+                      exit$1 = 2;
+                    }
+                    if (exit$1 === 2) {
+                      results.push(value);
+                      offset = offset + 1 | 0;
+                    }
+                    
+                  } else {
+                    offset = offset + 1 | 0;
+                    innerCont = false;
+                  }
+                };
+                res.push({
+                      type: "expression",
+                      variableName: "",
+                      contents: results
+                    });
               } else {
-                exit$1 = 2;
+                exit = 1;
               }
-              if (exit$1 === 2) {
-                results.push(value);
+              break;
+          case "Variable" :
+              var match$2 = match._0;
+              if (match$2.type === "variable") {
                 offset = offset + 1 | 0;
+                var match$3 = atoms[offset];
+                if (match$3 !== undefined) {
+                  if (typeof match$3 !== "object") {
+                    if (match$3 === "EqualSign") {
+                      offset = offset + 1 | 0;
+                      var results$1 = [];
+                      var innerCont$1 = true;
+                      while(innerCont$1) {
+                        var value$1 = atoms[offset];
+                        if (value$1 !== undefined) {
+                          var exit$2 = 0;
+                          if (typeof value$1 !== "object" && value$1 === "Comma") {
+                            offset = offset + 1 | 0;
+                            innerCont$1 = false;
+                          } else {
+                            exit$2 = 2;
+                          }
+                          if (exit$2 === 2) {
+                            results$1.push(value$1);
+                            offset = offset + 1 | 0;
+                          }
+                          
+                        } else {
+                          offset = offset + 1 | 0;
+                          innerCont$1 = false;
+                        }
+                      };
+                      res.push({
+                            type: "expression",
+                            variableName: match$2.value,
+                            contents: results$1
+                          });
+                    } else {
+                      throw {
+                            RE_EXN_ID: "Failure",
+                            _1: "Invalid assignment.",
+                            Error: new Error()
+                          };
+                    }
+                  } else {
+                    throw {
+                          RE_EXN_ID: "Failure",
+                          _1: "Invalid assignment.",
+                          Error: new Error()
+                        };
+                  }
+                } else {
+                  throw {
+                        RE_EXN_ID: "Failure",
+                        _1: "Invalid assignment.",
+                        Error: new Error()
+                      };
+                }
+              } else {
+                exit = 1;
               }
-              
-            } else {
-              offset = offset + 1 | 0;
-              innerCont = false;
-            }
-          };
-          res.push({
-                type: "expression",
-                variableName: "",
-                contents: results
-              });
-        } else {
-          exit = 1;
+              break;
+          default:
+            exit = 1;
         }
       }
     } else {
@@ -382,7 +546,7 @@ function parseScript(atoms) {
             RE_EXN_ID: "Match_failure",
             _1: [
               "WanderParser.res",
-              171,
+              207,
               4
             ],
             Error: new Error()
@@ -415,6 +579,7 @@ export {
   readValue ,
   readNetwork ,
   readArguments ,
+  readQuote ,
   readAssignment ,
   readAtoms ,
   parseScript ,

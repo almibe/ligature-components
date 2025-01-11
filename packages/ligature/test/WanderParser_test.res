@@ -173,3 +173,16 @@ test("parse script with multiple calls", t => {
     ],
   )
 })
+
+test("parse assignment", t => {
+  t->Assert.deepEqual(
+    WanderParser.parse("$var = test 1"),
+    [
+      {
+        \"type": "expression",
+        variableName: "$var",
+        contents: [Model.Element(Ligature.Element.element("test")), Model.Element(Ligature.Element.element("1"))],
+      },
+    ],
+  )
+})

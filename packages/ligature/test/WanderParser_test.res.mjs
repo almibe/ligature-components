@@ -230,6 +230,23 @@ Ava("parse script with multiple calls", (function (t) {
             ]);
       }));
 
+Ava("parse assignment", (function (t) {
+        t.deepEqual(WanderParser.parse("$var = test 1"), [{
+                type: "expression",
+                variableName: "$var",
+                contents: [
+                  {
+                    TAG: "Element",
+                    _0: Ligature.$$Element.element("test")
+                  },
+                  {
+                    TAG: "Element",
+                    _0: Ligature.$$Element.element("1")
+                  }
+                ]
+              }]);
+      }));
+
 export {
   
 }

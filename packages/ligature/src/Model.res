@@ -11,6 +11,7 @@ and wanderAtom =
   | Element(Ligature.Element.element)
   | Pipe
   | Comma
+  | EqualSign
   | Slot(Ligature.Slot.slot)
   | Variable(Variable.variable)
   | Network(Ligature.Network.network)

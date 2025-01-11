@@ -2,24 +2,129 @@
 
 import * as Model from "./Model.res.mjs";
 import * as Commands from "./Commands.res.mjs";
+import * as Core__List from "@rescript/core/src/Core__List.res.mjs";
 import * as Caml_option from "rescript/lib/es6/caml_option.js";
 import * as WanderParser from "./WanderParser.res.mjs";
+import * as Belt_MapString from "rescript/lib/es6/belt_MapString.js";
+
+function runExpression(expression, variables, modules) {
+  var match = Core__List.fromArray(expression);
+  if (match) {
+    var value = match.hd;
+    if (!match.tl) {
+      return {
+              TAG: "Ok",
+              _0: value
+            };
+    }
+    if (typeof value === "object" && value.TAG === "Element") {
+      var parts = value._0.value.split(".");
+      var len = parts.length;
+      if (len >= 3) {
+        throw {
+              RE_EXN_ID: "Match_failure",
+              _1: [
+                "Wander.res",
+                8,
+                4
+              ],
+              Error: new Error()
+            };
+      }
+      switch (len) {
+        case 0 :
+            throw {
+                  RE_EXN_ID: "Match_failure",
+                  _1: [
+                    "Wander.res",
+                    8,
+                    4
+                  ],
+                  Error: new Error()
+                };
+        case 1 :
+            throw {
+                  RE_EXN_ID: "Failure",
+                  _1: "Local commands not supported yet.",
+                  Error: new Error()
+                };
+        case 2 :
+            var moduleName = parts[0];
+            var commandName = parts[1];
+            var mod = Belt_MapString.get(modules, moduleName);
+            if (mod !== undefined) {
+              var command = Belt_MapString.get(Caml_option.valFromOption(mod), commandName);
+              if (command !== undefined) {
+                return command(expression.slice(1));
+              }
+              throw {
+                    RE_EXN_ID: "Failure",
+                    _1: "Could not find command: " + commandName,
+                    Error: new Error()
+                  };
+            }
+            throw {
+                  RE_EXN_ID: "Failure",
+                  _1: "Could not find command: " + commandName,
+                  Error: new Error()
+                };
+        
+      }
+    }
+    
+  }
+  throw {
+        RE_EXN_ID: "Match_failure",
+        _1: [
+          "Wander.res",
+          4,
+          2
+        ],
+        Error: new Error()
+      };
+}
 
 function run(script, modulesOpt) {
-  if (modulesOpt !== undefined) {
-    Caml_option.valFromOption(modulesOpt);
-  } else {
-    Commands.stdModules();
-  }
+  var modules = modulesOpt !== undefined ? Caml_option.valFromOption(modulesOpt) : Commands.stdModules();
+  var variables = {
+    contents: undefined
+  };
   var script$1 = WanderParser.parse(script);
   var result = {
-    TAG: "Ok",
-    _0: undefined
+    contents: {
+      TAG: "Ok",
+      _0: undefined
+    }
   };
   script$1.forEach(function (expression) {
-        
+        var err = runExpression(expression.contents, variables.contents, modules);
+        var tmp;
+        if (err.TAG === "Ok") {
+          var value = err._0;
+          if (value !== undefined) {
+            if (expression.variableName !== "") {
+              variables.contents = Belt_MapString.set(variables.contents, expression.variableName, value);
+            }
+            tmp = {
+              TAG: "Ok",
+              _0: value
+            };
+          } else {
+            tmp = {
+              TAG: "Ok",
+              _0: undefined
+            };
+          }
+        } else {
+          throw {
+                RE_EXN_ID: "Failure",
+                _1: err._0,
+                Error: new Error()
+              };
+        }
+        result.contents = tmp;
       });
-  return result;
+  return result.contents;
 }
 
 function printResult(value) {
@@ -121,6 +226,7 @@ function toJs(result) {
 }
 
 export {
+  runExpression ,
   run ,
   printResult ,
   toJs ,

@@ -1,5 +1,28 @@
 type wanderResult = result<option<Model.wanderAtom>, string>
 
+let runExpression: (array<Model.wanderAtom>, Belt.Map.String.t<Model.wanderAtom>, Commands.modules) => wanderResult = (expression, variables, modules) => {
+  switch List.fromArray(expression) {
+  | list{value} => Ok(Some(value))
+  | list{Model.Element({value: commandName}), ...args} => {
+    let parts = commandName->String.split(".")
+    switch parts {
+    | [moduleName, commandName] =>
+      switch modules->Belt.Map.String.get(moduleName) {
+      | Some(mod) =>
+        switch mod->Belt.Map.String.get(commandName) {
+        | Some(command) => command(expression->Array.sliceToEnd(~start=1))
+        | None => raise(Failure("Could not find command: " ++ commandName))
+        }
+      | None => raise(Failure("Could not find command: " ++ commandName))
+      }
+    | [commandName] => {
+      raise(Failure("Local commands not supported yet."))
+    }
+    }
+  }
+  }
+}
+
 let run = (
   //: (string, Commands.modules) => result<option<Model.wanderAtom>, string> = (
   script,
@@ -9,28 +32,16 @@ let run = (
   let script = WanderParser.parse(script)
   let result = ref(Ok(None))
   script->Array.forEach(expression => {
-    ()
-    // switch statement {
-    // | Model.Expression(expression) => {
-    //     ()
-    //     // let parts = call.commandName->String.split(".")
-    //     // switch parts {
-    //     // | [moduleName, commandName] =>
-    //     //   switch modules->Belt.Map.String.get(moduleName) {
-    //     //   | Some(mod) =>
-    //     //     switch mod->Belt.Map.String.get(commandName) {
-    //     //     | Some(command) => result := command(call.arguments)
-    //     //     | None => ()
-    //     //     }
-    //     //   | None => raise(Failure("Could not find command: " ++ call.commandName))
-    //     //   }
-    //     // | _ => ()
-    //     // }
-    //   }
-    // | Assignment(assignment) => {
-    //   variables := variables.contents->Belt.Map.String.set(assignment.variableName, assignment.value)
-    // }
-    // }
+    result := switch runExpression(expression.contents, variables.contents, modules) {
+      | Ok(Some(value)) => {
+        if (expression.variableName != "") {
+          variables := variables.contents->Belt.Map.String.set(expression.variableName, value)
+        }
+        Ok(Some(value))
+      }
+      | Ok(None) => Ok(None)
+      | Error(err) => raise(Failure(err))
+    }
   })
   result.contents
 }

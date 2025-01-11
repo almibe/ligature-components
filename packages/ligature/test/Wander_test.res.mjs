@@ -2,6 +2,9 @@
 
 import Ava from "ava";
 import * as Wander from "../src/Wander.res.mjs";
+import * as Ligature from "../src/Ligature.res.mjs";
+import * as Core__Result from "@rescript/core/src/Core__Result.res.mjs";
+import * as TestUtilsJs from "./TestUtils.js";
 
 Ava("run empty script", (function (t) {
         t.deepEqual(Wander.run("", undefined), {
@@ -10,7 +13,75 @@ Ava("run empty script", (function (t) {
             });
       }));
 
+Ava("call id command", (function (t) {
+        t.deepEqual(Wander.run("core.id test", undefined), {
+              TAG: "Ok",
+              _0: {
+                TAG: "Element",
+                _0: Ligature.$$Element.element("test")
+              }
+            });
+      }));
+
+Ava("allow multiple calls", (function (t) {
+        t.deepEqual(Wander.run("core.id test, core.id test2", undefined), {
+              TAG: "Ok",
+              _0: {
+                TAG: "Element",
+                _0: Ligature.$$Element.element("test2")
+              }
+            });
+      }));
+
+Ava("run assignment", (function (t) {
+        t.deepEqual(Wander.run("$var = test", undefined), {
+              TAG: "Ok",
+              _0: {
+                TAG: "Element",
+                _0: Ligature.$$Element.element("test")
+              }
+            });
+      }));
+
+Ava("empty network result toJs", (function (t) {
+        t.deepEqual(Wander.toJs(Wander.run("core.id {}", undefined)), {
+              NAME: "Network",
+              VAL: []
+            });
+      }));
+
+Ava("single triple network result toJs", (function (t) {
+        t.deepEqual(Wander.toJs(Wander.run("core.id {a b c}", undefined)), {
+              NAME: "Network",
+              VAL: [{
+                  type: "triple",
+                  element: {
+                    type: "element",
+                    value: "a"
+                  },
+                  role: {
+                    type: "element",
+                    value: "b"
+                  },
+                  value: {
+                    type: "element",
+                    value: "c"
+                  }
+                }]
+            });
+      }));
+
+function readTests(prim) {
+  return TestUtilsJs.readTests();
+}
+
+TestUtilsJs.readTests().forEach(function (file) {
+      Ava("Running " + file[0], (function (t) {
+              t.true(Core__Result.isOk(Wander.run(file[1], undefined)));
+            }));
+    });
+
 export {
-  
+  readTests ,
 }
 /*  Not a pure module */
