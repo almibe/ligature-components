@@ -25,8 +25,8 @@ function runExpression(expression, variables, modules) {
               RE_EXN_ID: "Match_failure",
               _1: [
                 "Wander.res",
-                8,
-                4
+                12,
+                6
               ],
               Error: new Error()
             };
@@ -37,8 +37,8 @@ function runExpression(expression, variables, modules) {
                   RE_EXN_ID: "Match_failure",
                   _1: [
                     "Wander.res",
-                    8,
-                    4
+                    12,
+                    6
                   ],
                   Error: new Error()
                 };
@@ -77,7 +77,7 @@ function runExpression(expression, variables, modules) {
         RE_EXN_ID: "Match_failure",
         _1: [
           "Wander.res",
-          4,
+          8,
           2
         ],
         Error: new Error()

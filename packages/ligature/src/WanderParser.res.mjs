@@ -336,6 +336,8 @@ function readAtoms() {
         case "comma" :
             atoms.push("Comma");
             break;
+        case "comment" :
+            break;
         case "element" :
             atoms.push({
                   TAG: "Element",
@@ -409,7 +411,7 @@ function readAtoms() {
                 RE_EXN_ID: "Match_failure",
                 _1: [
                   "WanderParser.res",
-                  179,
+                  174,
                   4
                 ],
                 Error: new Error()
@@ -546,7 +548,7 @@ function parseScript(atoms) {
             RE_EXN_ID: "Match_failure",
             _1: [
               "WanderParser.res",
-              207,
+              205,
               4
             ],
             Error: new Error()

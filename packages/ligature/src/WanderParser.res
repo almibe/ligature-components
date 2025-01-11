@@ -157,7 +157,8 @@ let readQuote: unit => array<Model.wanderAtom> = () => {
 let readAssignment: string => Nullable.t<Model.expression> = name => {
   let equals = readIgnoreWS()
   switch equals {
-  | Value({\"type": "equalSign"}) => switch readArguments() {
+  | Value({\"type": "equalSign"}) =>
+    switch readArguments() {
     | [] => raise(Failure("Invalid expression."))
     | contents => Value({\"type": "assignment", variableName: name, contents})
     | _ => raise(Failure("Invalid expression."))
@@ -181,7 +182,9 @@ let readAtoms: unit => array<Model.wanderAtom> = () => {
     | Value({\"type": "variable", value}) =>
       atoms->Array.push(Model.Variable({\"type": "variable", value}))
     | Value({\"type": "slot", value}) => atoms->Array.push(Model.Slot({\"type": "slot", value}))
-    | Value({\"type": "obrace"}) => switch readNetwork([]) {
+    | Value({\"type": "comment"}) => ()
+    | Value({\"type": "obrace"}) =>
+      switch readNetwork([]) {
       | Value(value) => atoms->Array.push(Model.Network(value))
       | Null | Undefined => raise(Failure("Unexpected value while reading network."))
       }
