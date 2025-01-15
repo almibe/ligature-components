@@ -32,14 +32,14 @@ type rec triple = {
   value: value,
 }
 
-and network = {value: array<triple>, \"type": string} //TODO make a set
+and network = array<triple> //TODO make a set
 
 and value =
   | VElement(Element.element)
   | VSlot(Slot.slot)
   | VLiteral(Literal.literal)
   | VQuote(quote)
-  | VNetwork
+  | VNetwork(network)
 
 and script = array<network>
 
@@ -80,17 +80,13 @@ let printTriple: triple => string = value => {
   printValue(value.value)
 }
 
-let network = value => {value, \"type": "network"}
-
-let emptyNetwork: network = network([])
-
 let printValue: wanderAtom => string = value => {
   switch value {
   | Element(ele) => ele.value
   | Slot(slot) => slot.value
   | Network(network) => {
       let result = ref("{\n")
-      network.value->Array.forEach(triple => {
+      network->Array.forEach(triple => {
         result := result.contents ++ "  " ++ printTriple(triple) ++ ",\n"
       })
       result := result.contents ++ "}"
@@ -103,7 +99,7 @@ let printValue: wanderAtom => string = value => {
 
 let printNetwork: network => string = network => {
   let result = ref("{\n")
-  network.value->Array.forEach(triple => {
+  network->Array.forEach(triple => {
     result := result.contents ++ "  " ++ printTriple(triple) ++ ",\n"
   })
   result := result.contents ++ "}"

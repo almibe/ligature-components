@@ -84,20 +84,20 @@ open Ava
 // })
 
 test("empty network", t => {
-  t->Assert.deepEqual(WanderParser.parse("{}"), Ok([Ligature.network([])]))
+  t->Assert.deepEqual(WanderParser.parse("{}"), Ok([[]]))
 })
 
 test("network with single triple", t => {
   t->Assert.deepEqual(
     WanderParser.parse("{a b c}"),
     Ok([
-      Ligature.network([
+      [
         Ligature.triple(
           Element(Ligature.Element.element("a")),
           Element(Ligature.Element.element("b")),
           VElement(Ligature.Element.element("c")),
         ),
-      ]),
+      ],
     ]),
   )
 })
@@ -106,7 +106,7 @@ test("network with two triples", t => {
   t->Assert.deepEqual(
     WanderParser.parse("{a b c, d e f}"),
     Ok([
-      Ligature.network([
+      [
         Ligature.triple(
           Element(Ligature.Element.element("a")),
           Element(Ligature.Element.element("b")),
@@ -117,22 +117,40 @@ test("network with two triples", t => {
           Element(Ligature.Element.element("e")),
           VElement(Ligature.Element.element("f")),
         ),
-      ]),
+      ],
     ]),
   )
 })
 
-// test("network with quote as value", t => {
-//   t->Assert.deepEqual(
-//     WanderParser.parse("{a b (c)}"),
-//     Ok([Ligature.network([
-//       Ligature.triple(
-//         Element(Ligature.Element.element("a")),
-//         Element(Ligature.Element.element("b")),
-//         VQuote(Ligature.Element.element("c"))),
-//     ])]),
-//   )
-// })
+test("network with quote as value", t => {
+  t->Assert.deepEqual(
+    WanderParser.parse("{a b (c)}"),
+    Ok([
+      [
+        Ligature.triple(
+          Element(Ligature.Element.element("a")),
+          Element(Ligature.Element.element("b")),
+          VQuote([Ligature.Element(Ligature.Element.element("c"))]),
+        ),
+      ],
+    ]),
+  )
+})
+
+test("network with empty network as value", t => {
+  t->Assert.deepEqual(
+    WanderParser.parse("{a b {}}"),
+    Ok([
+      [
+        Ligature.triple(
+          Element(Ligature.Element.element("a")),
+          Element(Ligature.Element.element("b")),
+          VNetwork([]),
+        ),
+      ],
+    ]),
+  )
+})
 
 // test("parse single call with network arg", t => {
 //   t->Assert.deepEqual(

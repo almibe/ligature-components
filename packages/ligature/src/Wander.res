@@ -39,7 +39,7 @@ let toJs: wanderResult => jsResult<'a> = (result: wanderResult) => {
   switch result {
   | Ok(network) => {
       let result = []
-      network.value->Array.forEach(triple => {
+      network->Array.forEach(triple => {
         let element = switch triple.element {
         | Element(e) => {"type": "element", "value": e.value}
         | Slot(s) => {"type": "slot", "value": s.value}

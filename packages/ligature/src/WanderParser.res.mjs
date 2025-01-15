@@ -27,7 +27,7 @@ function readIgnoreWS() {
 function readElementPattern() {
   var match = readIgnoreWS();
   if (match === null || match === undefined) {
-    return null;
+    return ;
   }
   switch (match.type) {
     case "element" :
@@ -41,7 +41,7 @@ function readElementPattern() {
                 _0: Ligature.Slot.slot(match.value)
               };
     default:
-      return null;
+      return ;
   }
 }
 
@@ -49,21 +49,21 @@ function readNetwork(triples) {
   while(true) {
     var match = readIgnoreWS();
     if (match === null || match === undefined) {
-      return null;
+      return ;
     }
     switch (match.type) {
       case "cbrace" :
-          return Ligature.network(triples);
+          return triples;
       case "comma" :
           continue ;
       case "element" :
           var match$1 = readElementPattern();
           var match$2 = readValue();
-          if (match$1 === null || match$1 === undefined) {
-            return null;
+          if (match$1 === undefined) {
+            return ;
           }
-          if (match$2 === null || match$2 === undefined) {
-            return null;
+          if (match$2 === undefined) {
+            return ;
           }
           triples.push(Ligature.triple({
                     TAG: "Element",
@@ -73,11 +73,11 @@ function readNetwork(triples) {
       case "slot" :
           var match$3 = readElementPattern();
           var match$4 = readValue();
-          if (match$3 === null || match$3 === undefined) {
-            return null;
+          if (match$3 === undefined) {
+            return ;
           }
-          if (match$4 === null || match$4 === undefined) {
-            return null;
+          if (match$4 === undefined) {
+            return ;
           }
           triples.push(Ligature.triple({
                     TAG: "Slot",
@@ -89,7 +89,7 @@ function readNetwork(triples) {
               RE_EXN_ID: "Match_failure",
               _1: [
                 "WanderParser.res",
-                37,
+                34,
                 2
               ],
               Error: new Error()
@@ -101,7 +101,7 @@ function readNetwork(triples) {
 function readValue() {
   var match = readIgnoreWS();
   if (match === null || match === undefined) {
-    return null;
+    return ;
   }
   switch (match.type) {
     case "element" :
@@ -114,6 +114,16 @@ function readValue() {
                 TAG: "VLiteral",
                 _0: Ligature.Literal.literal(match.value)
               };
+    case "obrace" :
+        var network = readNetwork([]);
+        if (network !== undefined) {
+          return {
+                  TAG: "VNetwork",
+                  _0: network
+                };
+        } else {
+          return ;
+        }
     case "oparen" :
         var value = readQuote();
         return {
@@ -126,7 +136,7 @@ function readValue() {
                 _0: Ligature.Slot.slot(match.value)
               };
     default:
-      return null;
+      return ;
   }
 }
 
@@ -144,7 +154,7 @@ function readQuote() {
               RE_EXN_ID: "Match_failure",
               _1: [
                 "WanderParser.res",
-                94,
+                89,
                 4
               ],
               Error: new Error()
@@ -164,24 +174,17 @@ function readQuote() {
             break;
         case "obrace" :
             var value = readNetwork([]);
-            if (value === null || value === undefined) {
-              if (value === null) {
-                throw {
-                      RE_EXN_ID: "Failure",
-                      _1: "Unexpected value while reading network.",
-                      Error: new Error()
-                    };
-              }
+            if (value !== undefined) {
+              args.push({
+                    TAG: "Network",
+                    _0: value
+                  });
+            } else {
               throw {
                     RE_EXN_ID: "Failure",
                     _1: "Unexpected value while reading network.",
                     Error: new Error()
                   };
-            } else {
-              args.push({
-                    TAG: "Network",
-                    _0: value
-                  });
             }
             token = readIgnoreWS();
             break;
@@ -235,24 +238,17 @@ function readAtoms() {
             break;
         case "obrace" :
             var value = readNetwork([]);
-            if (value === null || value === undefined) {
-              if (value === null) {
-                throw {
-                      RE_EXN_ID: "Failure",
-                      _1: "Unexpected value while reading network.",
-                      Error: new Error()
-                    };
-              }
+            if (value !== undefined) {
+              atoms.push({
+                    TAG: "Network",
+                    _0: value
+                  });
+            } else {
               throw {
                     RE_EXN_ID: "Failure",
                     _1: "Unexpected value while reading network.",
                     Error: new Error()
                   };
-            } else {
-              atoms.push({
-                    TAG: "Network",
-                    _0: value
-                  });
             }
             break;
         case "oparen" :
@@ -276,7 +272,7 @@ function readAtoms() {
                 RE_EXN_ID: "Match_failure",
                 _1: [
                   "WanderParser.res",
-                  157,
+                  120,
                   4
                 ],
                 Error: new Error()
@@ -302,17 +298,8 @@ function parseScript(atoms) {
             };
       }
       if (match.TAG === "Network") {
-        var match$1 = match._0;
-        if (match$1.type === "network") {
-          offset = offset + 1 | 0;
-          res.push(Ligature.network(match$1.value));
-        } else {
-          throw {
-                RE_EXN_ID: "Failure",
-                _1: "Error",
-                Error: new Error()
-              };
-        }
+        offset = offset + 1 | 0;
+        res.push(match._0);
       } else {
         throw {
               RE_EXN_ID: "Failure",

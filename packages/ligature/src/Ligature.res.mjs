@@ -50,29 +50,21 @@ function variable(value) {
 }
 
 function printValue(v) {
-  if (typeof v !== "object") {
-    throw {
-          RE_EXN_ID: "Match_failure",
-          _1: [
-            "Ligature.res",
-            62,
-            2
-          ],
-          Error: new Error()
-        };
+  switch (v.TAG) {
+    case "VQuote" :
+    case "VNetwork" :
+        throw {
+              RE_EXN_ID: "Match_failure",
+              _1: [
+                "Ligature.res",
+                62,
+                2
+              ],
+              Error: new Error()
+            };
+    default:
+      return v._0.value;
   }
-  if (v.TAG !== "VQuote") {
-    return v._0.value;
-  }
-  throw {
-        RE_EXN_ID: "Match_failure",
-        _1: [
-          "Ligature.res",
-          62,
-          2
-        ],
-        Error: new Error()
-      };
 }
 
 function triple(e, r, v) {
@@ -87,20 +79,6 @@ function printTriple(value) {
   return value.element._0.value + " " + value.role._0.value + " " + printValue(value.value);
 }
 
-function network(value) {
-  return {
-          value: value,
-          type: "network"
-        };
-}
-
-var emptyNetwork_value = [];
-
-var emptyNetwork = {
-  value: emptyNetwork_value,
-  type: "network"
-};
-
 function printValue$1(value) {
   if (typeof value !== "object") {
     throw {
@@ -114,7 +92,7 @@ function printValue$1(value) {
         var result = {
           contents: "{\n"
         };
-        value._0.value.forEach(function (triple) {
+        value._0.forEach(function (triple) {
               result.contents = result.contents + "  " + printTriple(triple) + ",\n";
             });
         result.contents = result.contents + "}";
@@ -136,7 +114,7 @@ function printNetwork(network) {
   var result = {
     contents: "{\n"
   };
-  network.value.forEach(function (triple) {
+  network.forEach(function (triple) {
         result.contents = result.contents + "  " + printTriple(triple) + ",\n";
       });
   result.contents = result.contents + "}";
@@ -151,8 +129,6 @@ export {
   variable ,
   triple ,
   printTriple ,
-  network ,
-  emptyNetwork ,
   printValue$1 as printValue,
   printNetwork ,
 }

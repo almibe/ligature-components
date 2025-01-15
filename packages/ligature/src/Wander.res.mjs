@@ -18,7 +18,7 @@ function toJs(result) {
           };
   }
   var result$1 = [];
-  result._0.value.forEach(function (triple) {
+  result._0.forEach(function (triple) {
         var e = triple.element;
         var element;
         element = e.TAG === "Element" ? ({
@@ -39,17 +39,6 @@ function toJs(result) {
             });
         var e$2 = triple.value;
         var value;
-        if (typeof e$2 !== "object") {
-          throw {
-                RE_EXN_ID: "Match_failure",
-                _1: [
-                  "Wander.res",
-                  53,
-                  20
-                ],
-                Error: new Error()
-              };
-        }
         switch (e$2.TAG) {
           case "VElement" :
               value = {
@@ -70,6 +59,7 @@ function toJs(result) {
               };
               break;
           case "VQuote" :
+          case "VNetwork" :
               throw {
                     RE_EXN_ID: "Match_failure",
                     _1: [
