@@ -25,7 +25,8 @@ type wanderResult = result<Ligature.network, string>
 
 let readNetwork: string => result<Ligature.network, string> = input => {
   switch WanderParser.parse(input) {
-  | Ok(results) => if results->Array.length == 1 {
+  | Ok(results) =>
+    if results->Array.length == 1 {
       Ok(results->Array.getUnsafe(0))
     } else {
       Error("Error reading Network.")
