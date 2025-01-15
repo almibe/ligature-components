@@ -1,8 +1,8 @@
 open Ava
 
-// test("run empty script", t => {
-//   t->Assert.deepEqual(Wander.run(""), Ok(None))
-// })
+test("read empty Network", t => {
+  t->Assert.deepEqual(Wander.readNetwork("{}"), Ok([]))
+})
 
 // test("call id command", t => {
 //   t->Assert.deepEqual(

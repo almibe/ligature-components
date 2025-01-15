@@ -23,6 +23,17 @@ type wanderResult = result<Ligature.network, string>
 //   result.contents
 // }
 
+let readNetwork: string => result<Ligature.network, string> = input => {
+  switch WanderParser.parse(input) {
+  | Ok(results) => if results->Array.length == 1 {
+      Ok(results->Array.getUnsafe(0))
+    } else {
+      Error("Error reading Network.")
+    }
+  | Error(error) => Error(error)
+  }
+}
+
 let printResult: wanderResult => string = value => {
   switch value {
   | Ok(value) => Ligature.printNetwork(value)

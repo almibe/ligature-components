@@ -69,7 +69,8 @@ and readValue: unit => option<Ligature.value> = () => {
   | Value({\"type": "element", value}) => Some(Ligature.VElement(Ligature.Element.element(value)))
   | Value({\"type": "slot", value}) => Some(Ligature.VSlot(Ligature.Slot.slot(value)))
   | Value({\"type": "literal", value}) => Some(Ligature.VLiteral(Ligature.Literal.literal(value)))
-  | Value({\"type": "obrace"}) => switch readNetwork([]) {
+  | Value({\"type": "obrace"}) =>
+    switch readNetwork([]) {
     | Some(network) => Some(Ligature.VNetwork(network))
     | None => None
     }
