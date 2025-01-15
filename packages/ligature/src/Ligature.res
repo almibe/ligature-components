@@ -26,47 +26,86 @@ module ElementPattern = {
   }
 }
 
-module Value = {
-  type value =
-    | VElement(Element.element)
-    | VSlot(Slot.slot)
-    | VLiteral(Literal.literal)
+type rec triple = {
+  element: ElementPattern.elementPattern,
+  role: ElementPattern.elementPattern,
+  value: value,
+}
 
-  let printValue: value => string = v => {
-    switch v {
-    | VElement(el) => el.value
-    | VSlot(slot) => slot.value
-    | VLiteral(literal) => literal.value
+and network = {value: array<triple>, \"type": string} //TODO make a set
+
+and value =
+  | VElement(Element.element)
+  | VSlot(Slot.slot)
+  | VLiteral(Literal.literal)
+  | VQuote(quote)
+  | VNetwork
+
+and script = array<network>
+
+and variable = {value: string, \"type": string}
+
+and wanderAtom =
+  | Element(Element.element)
+  | Comma
+  | Slot(Slot.slot)
+  | Variable(variable)
+  | Network(network)
+  | Literal(Literal.literal)
+  | Quote(quote)
+
+and quote = array<wanderAtom>
+
+let variable = value => {value, \"type": "variable"}
+
+let printValue: value => string = v => {
+  switch v {
+  | VElement(el) => el.value
+  | VSlot(slot) => slot.value
+  | VLiteral(literal) => literal.value
+  }
+}
+
+let triple = (e, r, v) => {
+  element: e,
+  role: r,
+  value: v,
+}
+
+let printTriple: triple => string = value => {
+  ElementPattern.printElementPattern(value.element) ++
+  " " ++
+  ElementPattern.printElementPattern(value.role) ++
+  " " ++
+  printValue(value.value)
+}
+
+let network = value => {value, \"type": "network"}
+
+let emptyNetwork: network = network([])
+
+let printValue: wanderAtom => string = value => {
+  switch value {
+  | Element(ele) => ele.value
+  | Slot(slot) => slot.value
+  | Network(network) => {
+      let result = ref("{\n")
+      network.value->Array.forEach(triple => {
+        result := result.contents ++ "  " ++ printTriple(triple) ++ ",\n"
+      })
+      result := result.contents ++ "}"
+      result.contents
     }
+  | Literal(literal) => literal.value
+  | _ => raise(Failure("TODO"))
   }
 }
 
-module Triple = {
-  type triple = {
-    element: ElementPattern.elementPattern,
-    role: ElementPattern.elementPattern,
-    value: Value.value,
-  }
-
-  let triple = (e, r, v) => {
-    element: e,
-    role: r,
-    value: v,
-  }
-
-  let printTriple: triple => string = value => {
-    ElementPattern.printElementPattern(value.element) ++
-    " " ++
-    ElementPattern.printElementPattern(value.role) ++
-    " " ++
-    Value.printValue(value.value)
-  }
-}
-
-module Network = {
-  type network = {value: array<Triple.triple>, \"type": string} //TODO make a set
-
-  let network = value => {value, \"type": "network"}
-
-  let emptyNetwork: network = network([])
+let printNetwork: network => string = network => {
+  let result = ref("{\n")
+  network.value->Array.forEach(triple => {
+    result := result.contents ++ "  " ++ printTriple(triple) ++ ",\n"
+  })
+  result := result.contents ++ "}"
+  result.contents
 }

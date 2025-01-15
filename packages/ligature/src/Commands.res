@@ -1,39 +1,31 @@
-type mod = Belt.Map.String.t<Model.command>
-type modules = Belt.Map.String.t<Belt.Map.String.t<Model.command>>
-
-let coreModule = () => {
-  let res: mod = Belt.Map.String.empty
-  let res = res->Belt.Map.String.set("id", arguments => {
-    switch arguments {
-    | [arg] => Ok(Some(arg))
-    | _ => Error("id expects a single argument.")
-    }
-  })
-  res
-}
-
-let stdModules = () => {
-  let res: modules = Belt.Map.String.empty
-  let res = res->Belt.Map.String.set("core", coreModule())
-  res
-}
-
-// export const defaultLocals: Map<Element, Command> = Map(
-//   [[element("id"), (l, m, v, a) => {
-//     if (a.length == 1) {
-//       return a[0]
-//     } else {
-//       throw "id command expects one argument."
+// let coreModule = () => {
+//   let res: mod = Belt.Map.String.empty
+//   let res = res->Belt.Map.String.set("id", arguments => {
+//     switch arguments {
+//     | [arg] => Ok(Some(arg))
+//     | _ => Error("id expects a single argument.")
 //     }
-//   }],
-//   [element("union"), (l, m, v, a) => {
-//     if (a.length == 2) {
+//   })
+//   res
+// }
 
-//       return a[0]
-//     } else {
-//       throw "union command expects two arguments."
+// let assertModule = () => {
+//   let res: mod = Belt.Map.String.empty
+//   let res = res->Belt.Map.String.set("assert-equal", arguments => {
+//     switch arguments {
+//     | [left, right] => {
+//       Ok(None)
 //     }
-//   }]]
-// )
+//     | _ => Error("id expects a single argument.")
+//     }
+//   })
+//   res
+// }
 
-// export const stdModules = Map()
+// let stdModules = () => {
+//   let res: modules = Belt.Map.String.empty
+//   let res = res->Belt.Map.String.set("core", coreModule())
+//   let res = res->Belt.Map.String.set("assert", assertModule())
+//   res
+// }
+

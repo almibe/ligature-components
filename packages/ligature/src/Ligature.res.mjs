@@ -42,13 +42,38 @@ var ElementPattern = {
   printElementPattern: printElementPattern
 };
 
-function printValue(v) {
-  return v._0.value;
+function variable(value) {
+  return {
+          value: value,
+          type: "variable"
+        };
 }
 
-var Value = {
-  printValue: printValue
-};
+function printValue(v) {
+  if (typeof v !== "object") {
+    throw {
+          RE_EXN_ID: "Match_failure",
+          _1: [
+            "Ligature.res",
+            62,
+            2
+          ],
+          Error: new Error()
+        };
+  }
+  if (v.TAG !== "VQuote") {
+    return v._0.value;
+  }
+  throw {
+        RE_EXN_ID: "Match_failure",
+        _1: [
+          "Ligature.res",
+          62,
+          2
+        ],
+        Error: new Error()
+      };
+}
 
 function triple(e, r, v) {
   return {
@@ -59,13 +84,8 @@ function triple(e, r, v) {
 }
 
 function printTriple(value) {
-  return value.element._0.value + " " + value.role._0.value + " " + value.value._0.value;
+  return value.element._0.value + " " + value.role._0.value + " " + printValue(value.value);
 }
-
-var Triple = {
-  triple: triple,
-  printTriple: printTriple
-};
 
 function network(value) {
   return {
@@ -81,18 +101,59 @@ var emptyNetwork = {
   type: "network"
 };
 
-var Network = {
-  network: network,
-  emptyNetwork: emptyNetwork
-};
+function printValue$1(value) {
+  if (typeof value !== "object") {
+    throw {
+          RE_EXN_ID: "Failure",
+          _1: "TODO",
+          Error: new Error()
+        };
+  }
+  switch (value.TAG) {
+    case "Network" :
+        var result = {
+          contents: "{\n"
+        };
+        value._0.value.forEach(function (triple) {
+              result.contents = result.contents + "  " + printTriple(triple) + ",\n";
+            });
+        result.contents = result.contents + "}";
+        return result.contents;
+    case "Element" :
+    case "Slot" :
+    case "Literal" :
+        return value._0.value;
+    default:
+      throw {
+            RE_EXN_ID: "Failure",
+            _1: "TODO",
+            Error: new Error()
+          };
+  }
+}
+
+function printNetwork(network) {
+  var result = {
+    contents: "{\n"
+  };
+  network.value.forEach(function (triple) {
+        result.contents = result.contents + "  " + printTriple(triple) + ",\n";
+      });
+  result.contents = result.contents + "}";
+  return result.contents;
+}
 
 export {
   $$Element ,
   Slot ,
   Literal ,
   ElementPattern ,
-  Value ,
-  Triple ,
-  Network ,
+  variable ,
+  triple ,
+  printTriple ,
+  network ,
+  emptyNetwork ,
+  printValue$1 as printValue,
+  printNetwork ,
 }
 /* No side effect */
