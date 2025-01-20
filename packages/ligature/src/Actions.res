@@ -1,3 +1,4 @@
+let stdActions = Belt.Map.String.empty
 
 // let coreModule = () => {
 //   let res: mod = Belt.Map.String.empty
@@ -29,4 +30,3 @@
 //   let res = res->Belt.Map.String.set("assert", assertModule())
 //   res
 // }
-

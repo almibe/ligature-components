@@ -4,8 +4,8 @@ module Element = {
 }
 
 module NetworkName = {
-  type networkName = { value: string, \"type": string }
-  let networkName = value => { value, \"type": "networkName"}
+  type networkName = {value: string, \"type": string}
+  let networkName = value => {value, \"type": "networkName"}
 }
 
 module Slot = {
@@ -46,7 +46,7 @@ and value =
   | VSlot(Slot.slot)
   | VLiteral(Literal.literal)
   | VQuote(quote)
-  | VNetwork(network)
+  | VNetworkName(NetworkName.networkName)
 
 and script = array<wanderAtom>
 
@@ -59,6 +59,7 @@ and wanderAtom =
   | Network(network)
   | Literal(Literal.literal)
   | Quote(quote)
+  | NetworkName(NetworkName.networkName)
 
 and quote = array<wanderAtom>
 
@@ -111,3 +112,5 @@ let printNetwork: network => string = network => {
   result := result.contents ++ "}"
   result.contents
 }
+
+let emptyNetworks = Belt.Map.String.empty

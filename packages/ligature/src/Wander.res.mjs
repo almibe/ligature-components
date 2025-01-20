@@ -3,6 +3,33 @@
 import * as Ligature from "./Ligature.res.mjs";
 import * as Core__List from "@rescript/core/src/Core__List.res.mjs";
 import * as WanderParser from "./WanderParser.res.mjs";
+import * as Belt_MapString from "rescript/lib/es6/belt_MapString.js";
+
+function executeAction(action, actions, networks, stack) {
+  var action$1 = Belt_MapString.get(actions, action.value);
+  if (action$1 !== undefined) {
+    return action$1(networks, stack);
+  } else {
+    return {
+            TAG: "Error",
+            _0: "Could not find action " + action.value
+          };
+  }
+}
+
+function $$eval(atom, actions, networks, stack) {
+  if (atom.TAG === "Element") {
+    return executeAction(atom._0, actions, networks, stack);
+  } else {
+    return {
+            TAG: "Ok",
+            _0: [
+              networks,
+              Core__List.add(stack, atom)
+            ]
+          };
+  }
+}
 
 function run(script, actions, networks) {
   var values = WanderParser.parse(script);
@@ -12,41 +39,33 @@ function run(script, actions, networks) {
             _0: values._0
           };
   }
-  values._0.forEach(function (expression) {
-        
+  var stack = {
+    contents: /* [] */0
+  };
+  var networks$1 = {
+    contents: Ligature.emptyNetworks
+  };
+  values._0.forEach(function (atom) {
+        var err = $$eval(atom, actions, networks$1.contents, stack.contents);
+        if (err.TAG === "Ok") {
+          var match = err._0;
+          stack.contents = match[1];
+          networks$1.contents = match[0];
+          return ;
+        }
+        throw {
+              RE_EXN_ID: "Failure",
+              _1: "Error: " + err._0,
+              Error: new Error()
+            };
       });
   return {
           TAG: "Ok",
           _0: [
-            networks,
-            /* [] */0
+            networks$1.contents,
+            stack.contents
           ]
         };
-}
-
-function executeAction(action, actions, networks, stack) {
-  throw {
-        RE_EXN_ID: "Failure",
-        _1: "not complete",
-        Error: new Error()
-      };
-}
-
-function $$eval(atom, actions, networks, stack) {
-  if (atom.TAG !== "Element") {
-    return {
-            TAG: "Ok",
-            _0: [
-              networks,
-              Core__List.add(stack, atom)
-            ]
-          };
-  }
-  throw {
-        RE_EXN_ID: "Failure",
-        _1: "not complete",
-        Error: new Error()
-      };
 }
 
 function printResult(value) {
@@ -106,12 +125,12 @@ function toJs(result) {
               };
               break;
           case "VQuote" :
-          case "VNetwork" :
+          case "VNetworkName" :
               throw {
                     RE_EXN_ID: "Match_failure",
                     _1: [
                       "Wander.res",
-                      91,
+                      96,
                       20
                     ],
                     Error: new Error()
@@ -132,9 +151,9 @@ function toJs(result) {
 }
 
 export {
-  run ,
   executeAction ,
   $$eval ,
+  run ,
   printResult ,
   toJs ,
 }

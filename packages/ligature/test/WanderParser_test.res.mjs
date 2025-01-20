@@ -4,6 +4,16 @@ import Ava from "ava";
 import * as Ligature from "../src/Ligature.res.mjs";
 import * as WanderParser from "../src/WanderParser.res.mjs";
 
+Ava("parse network name", (function (t) {
+        t.deepEqual(WanderParser.parse("*test"), {
+              TAG: "Ok",
+              _0: [{
+                  TAG: "NetworkName",
+                  _0: Ligature.NetworkName.networkName("*test")
+                }]
+            });
+      }));
+
 Ava("empty network", (function (t) {
         t.deepEqual(WanderParser.parse("{}"), {
               TAG: "Ok",
@@ -81,25 +91,6 @@ Ava("network with quote as value", (function (t) {
                               TAG: "Element",
                               _0: Ligature.$$Element.element("c")
                             }]
-                        })]
-                }]
-            });
-      }));
-
-Ava("network with empty network as value", (function (t) {
-        t.deepEqual(WanderParser.parse("{a b {}}"), {
-              TAG: "Ok",
-              _0: [{
-                  TAG: "Network",
-                  _0: [Ligature.triple({
-                          TAG: "Element",
-                          _0: Ligature.$$Element.element("a")
-                        }, {
-                          TAG: "Element",
-                          _0: Ligature.$$Element.element("b")
-                        }, {
-                          TAG: "VNetwork",
-                          _0: []
                         })]
                 }]
             });

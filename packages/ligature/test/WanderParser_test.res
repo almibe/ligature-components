@@ -83,6 +83,13 @@ open Ava
 //   )
 // })
 
+test("parse network name", t => {
+  t->Assert.deepEqual(
+    WanderParser.parse("*test"),
+    Ok([NetworkName(Ligature.NetworkName.networkName("*test"))]),
+  )
+})
+
 test("empty network", t => {
   t->Assert.deepEqual(WanderParser.parse("{}"), Ok([Network([])]))
 })
@@ -90,8 +97,8 @@ test("empty network", t => {
 test("network with single triple", t => {
   t->Assert.deepEqual(
     WanderParser.parse("{a b c}"),
-    Ok([ Network(
-      [
+    Ok([
+      Network([
         Ligature.triple(
           Element(Ligature.Element.element("a")),
           Element(Ligature.Element.element("b")),
@@ -105,8 +112,8 @@ test("network with single triple", t => {
 test("network with two triples", t => {
   t->Assert.deepEqual(
     WanderParser.parse("{a b c, d e f}"),
-    Ok([ Network(
-      [
+    Ok([
+      Network([
         Ligature.triple(
           Element(Ligature.Element.element("a")),
           Element(Ligature.Element.element("b")),
@@ -125,27 +132,12 @@ test("network with two triples", t => {
 test("network with quote as value", t => {
   t->Assert.deepEqual(
     WanderParser.parse("{a b [c]}"),
-    Ok([ Network(
-      [
-        Ligature.triple(
-          Element(Ligature.Element.element("a")),
-          Element(Ligature.Element.element("b")),
-          VQuote([Ligature.Element(Ligature.Element.element("c"))]),
-        ),
-      ]),
-    ]),
-  )
-})
-
-test("network with empty network as value", t => {
-  t->Assert.deepEqual(
-    WanderParser.parse("{a b {}}"),
     Ok([
       Network([
         Ligature.triple(
           Element(Ligature.Element.element("a")),
           Element(Ligature.Element.element("b")),
-          VNetwork([]),
+          VQuote([Ligature.Element(Ligature.Element.element("c"))]),
         ),
       ]),
     ]),

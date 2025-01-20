@@ -114,16 +114,11 @@ function readValue() {
                 TAG: "VLiteral",
                 _0: Ligature.Literal.literal(match.value)
               };
-    case "obrace" :
-        var network = readNetwork([]);
-        if (network !== undefined) {
-          return {
-                  TAG: "VNetwork",
-                  _0: network
-                };
-        } else {
-          return ;
-        }
+    case "networkName" :
+        return {
+                TAG: "VNetworkName",
+                _0: Ligature.NetworkName.networkName(match.value)
+              };
     case "osquare" :
         var value = readQuote();
         return {
@@ -154,7 +149,7 @@ function readQuote() {
               RE_EXN_ID: "Match_failure",
               _1: [
                 "WanderParser.res",
-                90,
+                87,
                 4
               ],
               Error: new Error()
@@ -233,6 +228,15 @@ function readAtoms() {
                   }
                 });
             break;
+        case "networkName" :
+            atoms.push({
+                  TAG: "NetworkName",
+                  _0: {
+                    value: match.value,
+                    type: "networkName"
+                  }
+                });
+            break;
         case "obrace" :
             var value = readNetwork([]);
             if (value !== undefined) {
@@ -269,7 +273,7 @@ function readAtoms() {
                 RE_EXN_ID: "Match_failure",
                 _1: [
                   "WanderParser.res",
-                  121,
+                  118,
                   4
                 ],
                 Error: new Error()

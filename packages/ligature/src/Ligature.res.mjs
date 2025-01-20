@@ -63,12 +63,12 @@ function variable(value) {
 function printValue(v) {
   switch (v.TAG) {
     case "VQuote" :
-    case "VNetwork" :
+    case "VNetworkName" :
         throw {
               RE_EXN_ID: "Match_failure",
               _1: [
                 "Ligature.res",
-                68,
+                69,
                 2
               ],
               Error: new Error()
@@ -101,15 +101,16 @@ function printValue$1(value) {
             });
         result.contents = result.contents + "}";
         return result.contents;
-    case "Variable" :
-    case "Quote" :
-        throw {
-              RE_EXN_ID: "Failure",
-              _1: "TODO",
-              Error: new Error()
-            };
+    case "Element" :
+    case "Slot" :
+    case "Literal" :
+        return value._0.value;
     default:
-      return value._0.value;
+      throw {
+            RE_EXN_ID: "Failure",
+            _1: "TODO",
+            Error: new Error()
+          };
   }
 }
 
@@ -124,6 +125,8 @@ function printNetwork(network) {
   return result.contents;
 }
 
+var emptyNetworks;
+
 export {
   $$Element ,
   NetworkName ,
@@ -135,5 +138,6 @@ export {
   printTriple ,
   printValue$1 as printValue,
   printNetwork ,
+  emptyNetworks ,
 }
 /* No side effect */

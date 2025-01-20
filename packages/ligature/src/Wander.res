@@ -2,51 +2,56 @@ type wanderResult = result<Ligature.network, string>
 
 type stack = list<Ligature.wanderAtom>
 
-type action = (Ligature.networks, stack) => unit
+type action = (Ligature.networks, stack) => result<(Ligature.networks, stack), string>
 
 type actions = Belt.Map.String.t<action>
+
+let executeAction: (
+  Ligature.Element.element,
+  actions,
+  Ligature.networks,
+  stack,
+) => result<(Ligature.networks, stack), string> = (action, actions, networks, stack) => {
+  switch actions->Belt.Map.String.get(action.value) {
+  | Some(action) => action(networks, stack)
+  | None => Error("Could not find action " ++ action.value)
+  }
+}
+
+let eval: (
+  Ligature.wanderAtom,
+  actions,
+  Ligature.networks,
+  stack,
+) => result<(Ligature.networks, stack), string> = (atom, actions, networks, stack) => {
+  switch atom {
+  | Element(action) => executeAction(action, actions, networks, stack)
+  | literal => Ok(networks, stack->List.add(literal))
+  }
+}
 
 let run: (string, actions, Ligature.networks) => result<(Ligature.networks, stack), string> = (
   script,
   actions,
-  networks
+  networks,
 ) => {
-  let variables = ref(Belt.Map.String.empty)
   switch WanderParser.parse(script) {
   | Ok(values) => {
-    let stack = list{}
-    values->Array.forEach(expression => {
-      ()
-    })
-    Ok(networks, stack)
-  }
+      let stack = ref(list{})
+      let networks = ref(Ligature.emptyNetworks)
+      values->Array.forEach(atom => {
+        switch eval(atom, actions, networks.contents, stack.contents) {
+        | Ok(newNetworks, newStack) => {
+            stack := newStack
+            networks := newNetworks
+          }
+        | Error(err) => raise(Failure("Error: " ++ err))
+        }
+      })
+      Ok(networks.contents, stack.contents)
+    }
   | Error(err) => Error(err)
   }
-}
-
-let executeAction: (Ligature.Element.element, actions, Ligature.networks, stack) => result<(Ligature.networks, stack), string> = (
-  action,
-  actions,
-  networks,
-  stack
-) => {
-  raise(Failure("not complete"))
-}
-
-let eval: (Ligature.wanderAtom, actions, Ligature.networks, stack) => result<(Ligature.networks, stack), string> = (
-  atom,
-  actions,
-  networks,
-  stack
-) => {
-    switch atom {
-    | Element(action) => {
-      executeAction(action, actions, networks, stack)
-    }
-    | literal => {
-      Ok(networks, stack->List.add(literal))
-    }
-    }
 }
 
 // let readNetwork: string => result<Ligature.network, string> = input => {

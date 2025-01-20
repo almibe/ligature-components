@@ -66,14 +66,11 @@ let rec readNetwork: array<Ligature.triple> => option<Ligature.network> = triple
 and readValue: unit => option<Ligature.value> = () => {
   switch readIgnoreWS() {
   | Null => None
+  | Value({\"type": "networkName", value}) =>
+    Some(Ligature.VNetworkName(Ligature.NetworkName.networkName(value)))
   | Value({\"type": "element", value}) => Some(Ligature.VElement(Ligature.Element.element(value)))
   | Value({\"type": "slot", value}) => Some(Ligature.VSlot(Ligature.Slot.slot(value)))
   | Value({\"type": "literal", value}) => Some(Ligature.VLiteral(Ligature.Literal.literal(value)))
-  | Value({\"type": "obrace"}) =>
-    switch readNetwork([]) {
-    | Some(network) => Some(Ligature.VNetwork(network))
-    | None => None
-    }
   | Value({\"type": "osquare"}) => {
       let value = readQuote()
       Some(Ligature.VQuote(value))
@@ -121,6 +118,8 @@ let readAtoms: unit => result<array<Ligature.wanderAtom>, string> = () => {
     switch readIgnoreWS() {
     | Value({\"type": "element", value}) =>
       atoms->Array.push(Ligature.Element({\"type": "element", value}))
+    | Value({\"type": "networkName", value}) =>
+      atoms->Array.push(Ligature.NetworkName({\"type": "networkName", value}))
     | Value({\"type": "literal", value}) =>
       atoms->Array.push(Ligature.Literal({\"type": "literal", value}))
     | Undefined | Null => cont := false
