@@ -3,6 +3,11 @@ module Element = {
   let element = value => {value, \"type": "element"}
 }
 
+module NetworkName = {
+  type networkName = { value: string, \"type": string }
+  let networkName = value => { value, \"type": "networkName"}
+}
+
 module Slot = {
   type slot = {value: string, \"type": string}
   let slot = value => {value, \"type": "slot"}
@@ -34,6 +39,8 @@ type rec triple = {
 
 and network = array<triple> //TODO make a set
 
+and networks = Belt.Map.String.t<network>
+
 and value =
   | VElement(Element.element)
   | VSlot(Slot.slot)
@@ -41,13 +48,12 @@ and value =
   | VQuote(quote)
   | VNetwork(network)
 
-and script = array<network>
+and script = array<wanderAtom>
 
 and variable = {value: string, \"type": string}
 
 and wanderAtom =
   | Element(Element.element)
-  | Comma
   | Slot(Slot.slot)
   | Variable(variable)
   | Network(network)

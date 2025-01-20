@@ -1,39 +1,65 @@
 type wanderResult = result<Ligature.network, string>
 
-// let run = (
-//   //: (string, Commands.modules) => result<option<Model.wanderAtom>, string> = (
-//   script,
-// ) => {
-//   let variables = ref(Belt.Map.String.empty)
-//   let script = WanderParser.parse(script)
-//   let result = ref(Ok(None))
-//   script->Array.forEach(expression => {
-//     result :=
-//       switch runExpression(expression.contents, variables.contents, modules) {
-//       | Ok(Some(value)) => {
-//           if expression.variableName != "" {
-//             variables := variables.contents->Belt.Map.String.set(expression.variableName, value)
-//           }
-//           Ok(Some(value))
-//         }
-//       | Ok(None) => Ok(None)
-//       | Error(err) => raise(Failure(err))
-//       }
-//   })
-//   result.contents
-// }
+type stack = list<Ligature.wanderAtom>
 
-let readNetwork: string => result<Ligature.network, string> = input => {
-  switch WanderParser.parse(input) {
-  | Ok(results) =>
-    if results->Array.length == 1 {
-      Ok(results->Array.getUnsafe(0))
-    } else {
-      Error("Error reading Network.")
-    }
-  | Error(error) => Error(error)
+type action = (Ligature.networks, stack) => unit
+
+type actions = Belt.Map.String.t<action>
+
+let run: (string, actions, Ligature.networks) => result<(Ligature.networks, stack), string> = (
+  script,
+  actions,
+  networks
+) => {
+  let variables = ref(Belt.Map.String.empty)
+  switch WanderParser.parse(script) {
+  | Ok(values) => {
+    let stack = list{}
+    values->Array.forEach(expression => {
+      ()
+    })
+    Ok(networks, stack)
+  }
+  | Error(err) => Error(err)
   }
 }
+
+let executeAction: (Ligature.Element.element, actions, Ligature.networks, stack) => result<(Ligature.networks, stack), string> = (
+  action,
+  actions,
+  networks,
+  stack
+) => {
+  raise(Failure("not complete"))
+}
+
+let eval: (Ligature.wanderAtom, actions, Ligature.networks, stack) => result<(Ligature.networks, stack), string> = (
+  atom,
+  actions,
+  networks,
+  stack
+) => {
+    switch atom {
+    | Element(action) => {
+      executeAction(action, actions, networks, stack)
+    }
+    | literal => {
+      Ok(networks, stack->List.add(literal))
+    }
+    }
+}
+
+// let readNetwork: string => result<Ligature.network, string> = input => {
+//   switch WanderParser.parse(input) {
+//   | Ok(results) =>
+//     if results->Array.length == 1 {
+//       Ok(results->Array.getUnsafe(0))
+//     } else {
+//       Error("Error reading Network.")
+//     }
+//   | Error(error) => Error(error)
+//   }
+// }
 
 let printResult: wanderResult => string = value => {
   switch value {

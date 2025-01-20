@@ -12,6 +12,17 @@ var $$Element = {
   element: element
 };
 
+function networkName(value) {
+  return {
+          value: value,
+          type: "networkName"
+        };
+}
+
+var NetworkName = {
+  networkName: networkName
+};
+
 function slot(value) {
   return {
           value: value,
@@ -57,7 +68,7 @@ function printValue(v) {
               RE_EXN_ID: "Match_failure",
               _1: [
                 "Ligature.res",
-                62,
+                68,
                 2
               ],
               Error: new Error()
@@ -80,13 +91,6 @@ function printTriple(value) {
 }
 
 function printValue$1(value) {
-  if (typeof value !== "object") {
-    throw {
-          RE_EXN_ID: "Failure",
-          _1: "TODO",
-          Error: new Error()
-        };
-  }
   switch (value.TAG) {
     case "Network" :
         var result = {
@@ -97,16 +101,15 @@ function printValue$1(value) {
             });
         result.contents = result.contents + "}";
         return result.contents;
-    case "Element" :
-    case "Slot" :
-    case "Literal" :
-        return value._0.value;
+    case "Variable" :
+    case "Quote" :
+        throw {
+              RE_EXN_ID: "Failure",
+              _1: "TODO",
+              Error: new Error()
+            };
     default:
-      throw {
-            RE_EXN_ID: "Failure",
-            _1: "TODO",
-            Error: new Error()
-          };
+      return value._0.value;
   }
 }
 
@@ -123,6 +126,7 @@ function printNetwork(network) {
 
 export {
   $$Element ,
+  NetworkName ,
   Slot ,
   Literal ,
   ElementPattern ,

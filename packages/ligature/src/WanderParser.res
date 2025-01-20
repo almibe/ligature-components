@@ -114,7 +114,7 @@ and readQuote: unit => array<Ligature.wanderAtom> = () => {
   args
 }
 
-let readAtoms: unit => array<Ligature.wanderAtom> = () => {
+let readAtoms: unit => result<array<Ligature.wanderAtom>, string> = () => {
   let atoms: array<Ligature.wanderAtom> = []
   let cont = ref(true)
   while cont.contents {
@@ -123,7 +123,6 @@ let readAtoms: unit => array<Ligature.wanderAtom> = () => {
       atoms->Array.push(Ligature.Element({\"type": "element", value}))
     | Value({\"type": "literal", value}) =>
       atoms->Array.push(Ligature.Literal({\"type": "literal", value}))
-    | Value({\"type": "comma"}) => atoms->Array.push(Ligature.Comma)
     | Undefined | Null => cont := false
     | Value({\"type": "slot", value}) => atoms->Array.push(Ligature.Slot({\"type": "slot", value}))
     | Value({\"type": "comment"}) => ()
@@ -138,30 +137,29 @@ let readAtoms: unit => array<Ligature.wanderAtom> = () => {
       }
     }
   }
-  atoms
+  Ok(atoms)
 }
 
-let parseScript: array<Ligature.wanderAtom> => result<Ligature.script, string> = atoms => {
-  let res: array<Ligature.network> = []
-  let cont = ref(true)
-  let offset = ref(0)
-  while cont.contents {
-    switch atoms->Array.get(offset.contents) {
-    | Some(Ligature.Network(value)) => {
-        offset := offset.contents + 1
-        res->Array.push(value)
-      }
-    | Some(_) => raise(Failure("Error"))
-    | None => cont := false
-    }
-  }
-  Ok(res)
-}
+// let parseScript: array<Ligature.wanderAtom> => result<Ligature.script, string> = atoms => {
+//   let res: array<Ligature.wanderAtom> = []
+//   let cont = ref(true)
+//   let offset = ref(0)
+//   while cont.contents {
+//     switch atoms->Array.get(offset.contents) {
+//     | Some(Ligature.Network(value)) => {
+//         offset := offset.contents + 1
+//         res->Array.push(value)
+//       }
+//     | Some(_) => raise(Failure("Error"))
+//     | None => cont := false
+//     }
+//   }
+//   Ok(res)
+// }
 
 let parse = script => {
   reset(script)
-  let atoms = readAtoms()
-  parseScript(atoms)
+  readAtoms()
 }
 
 let readTriple: unit => Nullable.t<Ligature.triple> = () => {

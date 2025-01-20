@@ -213,9 +213,6 @@ function readAtoms() {
       cont = false;
     } else {
       switch (match.type) {
-        case "comma" :
-            atoms.push("Comma");
-            break;
         case "comment" :
             break;
         case "element" :
@@ -280,47 +277,15 @@ function readAtoms() {
       }
     }
   };
-  return atoms;
-}
-
-function parseScript(atoms) {
-  var res = [];
-  var cont = true;
-  var offset = 0;
-  while(cont) {
-    var match = atoms[offset];
-    if (match !== undefined) {
-      if (typeof match !== "object") {
-        throw {
-              RE_EXN_ID: "Failure",
-              _1: "Error",
-              Error: new Error()
-            };
-      }
-      if (match.TAG === "Network") {
-        offset = offset + 1 | 0;
-        res.push(match._0);
-      } else {
-        throw {
-              RE_EXN_ID: "Failure",
-              _1: "Error",
-              Error: new Error()
-            };
-      }
-    } else {
-      cont = false;
-    }
-  };
   return {
           TAG: "Ok",
-          _0: res
+          _0: atoms
         };
 }
 
 function parse(script) {
   WanderTokenizerJs.reset(script);
-  var atoms = readAtoms();
-  return parseScript(atoms);
+  return readAtoms();
 }
 
 function readTriple() {
@@ -336,7 +301,6 @@ export {
   readValue ,
   readQuote ,
   readAtoms ,
-  parseScript ,
   parse ,
   readTriple ,
 }
