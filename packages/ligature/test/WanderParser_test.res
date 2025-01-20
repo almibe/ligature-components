@@ -124,7 +124,7 @@ test("network with two triples", t => {
 
 test("network with quote as value", t => {
   t->Assert.deepEqual(
-    WanderParser.parse("{a b (c)}"),
+    WanderParser.parse("{a b [c]}"),
     Ok([
       [
         Ligature.triple(

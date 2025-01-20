@@ -16,7 +16,7 @@
       "test/**/*_test.bs.js"
     ]
   },
-  "author": "",
+  "author": "https://almibe.dev",
   "type": "module",
   "license": "MPL-2.0",
   "dependencies": {

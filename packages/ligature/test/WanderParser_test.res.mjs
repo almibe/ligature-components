@@ -56,7 +56,7 @@ Ava("network with two triples", (function (t) {
       }));
 
 Ava("network with quote as value", (function (t) {
-        t.deepEqual(WanderParser.parse("{a b (c)}"), {
+        t.deepEqual(WanderParser.parse("{a b [c]}"), {
               TAG: "Ok",
               _0: [[Ligature.triple({
                         TAG: "Element",

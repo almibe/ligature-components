@@ -124,7 +124,7 @@ function readValue() {
         } else {
           return ;
         }
-    case "oparen" :
+    case "osquare" :
         var value = readQuote();
         return {
                 TAG: "VQuote",
@@ -162,7 +162,7 @@ function readQuote() {
       }
     } else {
       switch (unexpected.type) {
-        case "cparen" :
+        case "csquare" :
             cont = false;
             break;
         case "element" :
@@ -251,7 +251,7 @@ function readAtoms() {
                   };
             }
             break;
-        case "oparen" :
+        case "osquare" :
             var quote = readQuote();
             atoms.push({
                   TAG: "Quote",

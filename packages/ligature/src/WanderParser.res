@@ -74,7 +74,7 @@ and readValue: unit => option<Ligature.value> = () => {
     | Some(network) => Some(Ligature.VNetwork(network))
     | None => None
     }
-  | Value({\"type": "oparen"}) => {
+  | Value({\"type": "osquare"}) => {
       let value = readQuote()
       Some(Ligature.VQuote(value))
     }
@@ -103,7 +103,7 @@ and readQuote: unit => array<Ligature.wanderAtom> = () => {
         }
         token := readIgnoreWS()
       }
-    | Value({\"type": "cparen"}) => cont := false
+    | Value({\"type": "csquare"}) => cont := false
     | Null => cont := false
     | Value(unexpected) => {
         Console.log("Unexpected value")
@@ -132,7 +132,7 @@ let readAtoms: unit => array<Ligature.wanderAtom> = () => {
       | Some(value) => atoms->Array.push(Ligature.Network(value))
       | None => raise(Failure("Unexpected value while reading network."))
       }
-    | Value({\"type": "oparen"}) => {
+    | Value({\"type": "osquare"}) => {
         let quote = readQuote()
         atoms->Array.push(Ligature.Quote(quote))
       }
