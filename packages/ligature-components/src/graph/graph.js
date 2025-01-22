@@ -5,7 +5,7 @@ function translateNetwork(network) {
     const nodes = new Set()
     let id = 0
 
-    network.VAL.forEach((triple) => {
+    network.forEach((triple) => {
             results.push({data: {id: "id" + (++id), label: triple.role.value, source: triple.element.value, target: triple.value.value}})
             nodes.add(triple.element.value)
             nodes.add(triple.value.value)
@@ -18,9 +18,12 @@ function translateNetwork(network) {
     return results
 }
 
-export function showGraph(element, network) {
+export function appendGraph(element, network) {
+    let newElement = document.createElement("div")
+    newElement.classList.add("graph")
+    element.appendChild(newElement)
     return cytoscape({
-        container: element,
+        container: newElement,
         elements: translateNetwork(network),
         style: [
             {

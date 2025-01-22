@@ -82,26 +82,31 @@ let printResult: wanderResult => string = value => {
   }
 }
 
-let networkToJs = (network: Ligature.network) => {
+let networkToJs = (network: Ligature.wanderAtom) => {
+    switch network {
+    | Network(network) => {
     let result = []
     network->Array.forEach(triple => {
-      let element = switch triple.element {
-      | Element(e) => {"type": "element", "value": e.value}
-      | Slot(s) => {"type": "slot", "value": s.value}
-      }
+        let element = switch triple.element {
+        | Element(e) => {"type": "element", "value": e.value}
+        | Slot(s) => {"type": "slot", "value": s.value}
+        }
 
-      let role = switch triple.role {
-      | Element(e) => {"type": "element", "value": e.value}
-      | Slot(s) => {"type": "slot", "value": s.value}
-      }
+        let role = switch triple.role {
+        | Element(e) => {"type": "element", "value": e.value}
+        | Slot(s) => {"type": "slot", "value": s.value}
+        }
 
-      let value = switch triple.value {
-      | VElement(e) => {"type": "element", "value": e.value}
-      | VSlot(s) => {"type": "slot", "value": s.value}
-      | VLiteral(l) => {"type": "literal", "value": l.value}
-      }
+        let value = switch triple.value {
+        | VElement(e) => {"type": "element", "value": e.value}
+        | VSlot(s) => {"type": "slot", "value": s.value}
+        | VLiteral(l) => {"type": "literal", "value": l.value}
+        }
 
-      result->Array.push({"type": "triple", "element": element, "role": role, "value": value})
-    })
-    result
+        result->Array.push({"type": "triple", "element": element, "role": role, "value": value})
+      })
+      result
+    }
+    | _ => raise(Failure("Unsupported."))
+    }
 }

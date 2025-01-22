@@ -3,7 +3,7 @@ import { readNetwork, run, networkToJs } from "@ligature/ligature"
 import { showEditor } from './editor/editor'
 import { appendText } from './text/text'
 import { appendTable } from './table/table'
-import { showGraph } from './graph/graph'
+import { appendGraph } from './graph/graph'
 import { componentActions } from './Actions.res.mjs'
 
 let initalScript = `{a b c} display-text`
@@ -19,7 +19,7 @@ document.querySelector("#runButton")?.addEventListener("click", () => {
             appendTable(document.querySelector("#results"), networkToJs(value))
         },
         (value) => { 
-            showGraph(document.querySelector("#results"), networkToJs(value))
+            appendGraph(document.querySelector("#results"), networkToJs(value))
         }
     ))
 })

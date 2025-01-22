@@ -112,68 +112,75 @@ function printResult(value) {
 }
 
 function networkToJs(network) {
-  var result = [];
-  network.forEach(function (triple) {
-        var e = triple.element;
-        var element;
-        element = e.TAG === "Element" ? ({
-              type: "element",
-              value: e._0.value
-            }) : ({
-              type: "slot",
-              value: e._0.value
-            });
-        var e$1 = triple.role;
-        var role;
-        role = e$1.TAG === "Element" ? ({
-              type: "element",
-              value: e$1._0.value
-            }) : ({
-              type: "slot",
-              value: e$1._0.value
-            });
-        var e$2 = triple.value;
-        var value;
-        switch (e$2.TAG) {
-          case "VElement" :
-              value = {
+  if (network.TAG === "Network") {
+    var result = [];
+    network._0.forEach(function (triple) {
+          var e = triple.element;
+          var element;
+          element = e.TAG === "Element" ? ({
                 type: "element",
-                value: e$2._0.value
-              };
-              break;
-          case "VSlot" :
-              value = {
+                value: e._0.value
+              }) : ({
                 type: "slot",
-                value: e$2._0.value
-              };
-              break;
-          case "VLiteral" :
-              value = {
-                type: "literal",
-                value: e$2._0.value
-              };
-              break;
-          case "VQuote" :
-          case "VNetworkName" :
-              throw {
-                    RE_EXN_ID: "Match_failure",
-                    _1: [
-                      "Wander.res",
-                      98,
-                      18
-                    ],
-                    Error: new Error()
-                  };
-          
-        }
-        result.push({
-              type: "triple",
-              element: element,
-              role: role,
-              value: value
-            });
-      });
-  return result;
+                value: e._0.value
+              });
+          var e$1 = triple.role;
+          var role;
+          role = e$1.TAG === "Element" ? ({
+                type: "element",
+                value: e$1._0.value
+              }) : ({
+                type: "slot",
+                value: e$1._0.value
+              });
+          var e$2 = triple.value;
+          var value;
+          switch (e$2.TAG) {
+            case "VElement" :
+                value = {
+                  type: "element",
+                  value: e$2._0.value
+                };
+                break;
+            case "VSlot" :
+                value = {
+                  type: "slot",
+                  value: e$2._0.value
+                };
+                break;
+            case "VLiteral" :
+                value = {
+                  type: "literal",
+                  value: e$2._0.value
+                };
+                break;
+            case "VQuote" :
+            case "VNetworkName" :
+                throw {
+                      RE_EXN_ID: "Match_failure",
+                      _1: [
+                        "Wander.res",
+                        100,
+                        20
+                      ],
+                      Error: new Error()
+                    };
+            
+          }
+          result.push({
+                type: "triple",
+                element: element,
+                role: role,
+                value: value
+              });
+        });
+    return result;
+  }
+  throw {
+        RE_EXN_ID: "Failure",
+        _1: "Unsupported.",
+        Error: new Error()
+      };
 }
 
 export {
