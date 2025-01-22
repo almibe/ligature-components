@@ -1,17 +1,25 @@
 import './style.css'
-import { readNetwork, toJs } from "@ligature/ligature"
+import { readNetwork, run, networkToJs } from "@ligature/ligature"
 import { showEditor } from './editor/editor'
-import { showText } from './text/text'
-import { showTable } from './table/table'
+import { appendText } from './text/text'
+import { appendTable } from './table/table'
 import { showGraph } from './graph/graph'
+import { componentActions } from './Actions.res.mjs'
 
-const initalScript = `{a b c}`
+let initalScript = `{a b c} display-text`
 
 let editor = showEditor(document.querySelector("#editor"), initalScript)
 
 document.querySelector("#runButton")?.addEventListener("click", () => {
-    let res = readNetwork(editor.state.doc.toString())
-    showText(document.querySelector("#text"), res)
-    showTable(document.querySelector("#table"), toJs(res))
-    showGraph(document.querySelector("#graph"), toJs(res))
+    run(editor.state.doc.toString(), componentActions(
+        (value) => { 
+            appendText(document.querySelector("#results"), value)
+        },
+        (value) => { 
+            appendTable(document.querySelector("#results"), networkToJs(value))
+        },
+        (value) => { 
+            showGraph(document.querySelector("#results"), networkToJs(value))
+        }
+    ))
 })

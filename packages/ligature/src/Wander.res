@@ -1,6 +1,6 @@
-type wanderResult = result<Ligature.network, string>
-
 type stack = list<Ligature.wanderAtom>
+
+type wanderResult = result<stack, string>
 
 type action = (Ligature.networks, stack) => result<(Ligature.networks, stack), string>
 
@@ -54,56 +54,54 @@ let run: (string, actions, Ligature.networks) => result<(Ligature.networks, stac
   }
 }
 
-// let readNetwork: string => result<Ligature.network, string> = input => {
-//   switch WanderParser.parse(input) {
-//   | Ok(results) =>
-//     if results->Array.length == 1 {
-//       Ok(results->Array.getUnsafe(0))
-//     } else {
-//       Error("Error reading Network.")
-//     }
-//   | Error(error) => Error(error)
-//   }
-// }
+let readNetwork: string => result<Ligature.network, string> = input => {
+  switch WanderParser.parse(input) {
+  | Ok(results) =>
+    if results->Array.length == 1 {
+      switch results->Array.getUnsafe(0) {
+      | Ligature.Network(network) => Ok(network)
+      | _ => Error("Could not read network.")
+      }
+    } else {
+      Error("Error reading Network.")
+    }
+  | Error(error) => Error(error)
+  }
+}
+
+let printStack: stack => string = stack => {
+  stack->List.reduce("", (state, value) => {state ++ " → " ++ Ligature.printValue(value) ++ "\n"})
+}
 
 let printResult: wanderResult => string = value => {
   switch value {
-  | Ok(value) => Ligature.printNetwork(value)
+  | Ok(stack) => {
+    printStack(stack)
+  }
   | Error(error) => error
   }
 }
 
-type jsResult<'a> = [
-  | #Error(string)
-  | #Network('a)
-]
+let networkToJs = (network: Ligature.network) => {
+    let result = []
+    network->Array.forEach(triple => {
+      let element = switch triple.element {
+      | Element(e) => {"type": "element", "value": e.value}
+      | Slot(s) => {"type": "slot", "value": s.value}
+      }
 
-let toJs: wanderResult => jsResult<'a> = (result: wanderResult) => {
-  switch result {
-  | Ok(network) => {
-      let result = []
-      network->Array.forEach(triple => {
-        let element = switch triple.element {
-        | Element(e) => {"type": "element", "value": e.value}
-        | Slot(s) => {"type": "slot", "value": s.value}
-        }
+      let role = switch triple.role {
+      | Element(e) => {"type": "element", "value": e.value}
+      | Slot(s) => {"type": "slot", "value": s.value}
+      }
 
-        let role = switch triple.role {
-        | Element(e) => {"type": "element", "value": e.value}
-        | Slot(s) => {"type": "slot", "value": s.value}
-        }
+      let value = switch triple.value {
+      | VElement(e) => {"type": "element", "value": e.value}
+      | VSlot(s) => {"type": "slot", "value": s.value}
+      | VLiteral(l) => {"type": "literal", "value": l.value}
+      }
 
-        let value = switch triple.value {
-        | VElement(e) => {"type": "element", "value": e.value}
-        | VSlot(s) => {"type": "slot", "value": s.value}
-        | VLiteral(l) => {"type": "literal", "value": l.value}
-        }
-
-        result->Array.push({"type": "triple", "element": element, "role": role, "value": value})
-      })
-      #Network(result)
-    }
-  | Error(error) => #Error(error)
-  | _ => raise(Failure("Unexpected value, toJs only supports Networks."))
-  }
+      result->Array.push({"type": "triple", "element": element, "role": role, "value": value})
+    })
+    result
 }

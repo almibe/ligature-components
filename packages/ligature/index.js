@@ -1,3 +1,3 @@
-import {readNetwork, printResult, toJs} from './src/Wander.res.mjs'
-
-export {readNetwork, printResult, toJs}
+import {readNetwork, printResult, networkToJs, run} from './src/Wander.res.mjs'
+import { printValue } from './src/Ligature.res.mjs'
+export {readNetwork, printResult, networkToJs, run, printValue}

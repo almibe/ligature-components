@@ -31,8 +31,10 @@ function networkToTableData(network) {
     return result
 }
 
-export function showTable(element, network) {
-    return new Tabulator(element, {
+export function appendTable(element, network) {
+    let newElement = document.createElement("div")
+    element.appendChild(newElement)
+    return new Tabulator(newElement, {
         data: networkToTableData(network),
         autoColumns: true
     })    

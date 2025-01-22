@@ -68,23 +68,52 @@ function run(script, actions, networks) {
         };
 }
 
+function readNetwork(input) {
+  var results = WanderParser.parse(input);
+  if (results.TAG !== "Ok") {
+    return {
+            TAG: "Error",
+            _0: results._0
+          };
+  }
+  var results$1 = results._0;
+  if (results$1.length !== 1) {
+    return {
+            TAG: "Error",
+            _0: "Error reading Network."
+          };
+  }
+  var network = results$1[0];
+  if (network.TAG === "Network") {
+    return {
+            TAG: "Ok",
+            _0: network._0
+          };
+  } else {
+    return {
+            TAG: "Error",
+            _0: "Could not read network."
+          };
+  }
+}
+
+function printStack(stack) {
+  return Core__List.reduce(stack, "", (function (state, value) {
+                return state + " → " + Ligature.printValue(value) + "\n";
+              }));
+}
+
 function printResult(value) {
   if (value.TAG === "Ok") {
-    return Ligature.printNetwork(value._0);
+    return printStack(value._0);
   } else {
     return value._0;
   }
 }
 
-function toJs(result) {
-  if (result.TAG !== "Ok") {
-    return {
-            NAME: "Error",
-            VAL: result._0
-          };
-  }
-  var result$1 = [];
-  result._0.forEach(function (triple) {
+function networkToJs(network) {
+  var result = [];
+  network.forEach(function (triple) {
         var e = triple.element;
         var element;
         element = e.TAG === "Element" ? ({
@@ -130,31 +159,30 @@ function toJs(result) {
                     RE_EXN_ID: "Match_failure",
                     _1: [
                       "Wander.res",
-                      96,
-                      20
+                      98,
+                      18
                     ],
                     Error: new Error()
                   };
           
         }
-        result$1.push({
+        result.push({
               type: "triple",
               element: element,
               role: role,
               value: value
             });
       });
-  return {
-          NAME: "Network",
-          VAL: result$1
-        };
+  return result;
 }
 
 export {
   executeAction ,
   $$eval ,
   run ,
+  readNetwork ,
+  printStack ,
   printResult ,
-  toJs ,
+  networkToJs ,
 }
 /* WanderParser Not a pure module */

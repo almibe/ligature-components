@@ -1,12 +1,11 @@
-import { printResult } from "@ligature/ligature"
+import { printValue } from "@ligature/ligature"
 
-export function showText(element, value) {
+export function appendText(element, value) {
     if (element != null) {
-        element.replaceChildren()
         const pre = document.createElement("pre")
         const code = document.createElement("code")
         pre.appendChild(code)
-        code.textContent = printResult(value)
+        code.textContent = printValue(value)
         element.appendChild(pre)
     }
 }
