@@ -49,26 +49,27 @@ var stdActions = Belt_MapString.fromArray([
                     };
             }
             var value = stack.hd;
-            if (value.TAG === "Network") {
-              return {
-                      TAG: "Ok",
-                      _0: [
-                        networks,
-                        {
-                          hd: {
-                            TAG: "Literal",
-                            _0: Ligature.Literal.literal(value._0.length.toString())
-                          },
-                          tl: stack.tl
-                        }
-                      ]
-                    };
-            } else {
+            if (value.TAG !== "Network") {
               return {
                       TAG: "Error",
                       _0: "count requires a network on top of the stack."
                     };
             }
+            var cnt = value._0.length.toString();
+            console.log(cnt);
+            return {
+                    TAG: "Ok",
+                    _0: [
+                      networks,
+                      {
+                        hd: {
+                          TAG: "Literal",
+                          _0: Ligature.Literal.literal(cnt)
+                        },
+                        tl: stack.tl
+                      }
+                    ]
+                  };
           })
       ]
     ]);

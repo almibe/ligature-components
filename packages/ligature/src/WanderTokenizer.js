@@ -7,7 +7,7 @@ const lexer = moo.compile({
     slot:         /\?[a-zA-Z_0-9]+/,
     variable:     /\$[a-zA-Z_0-9]+/,
     networkName:  /\*[a-zA-Z_0-9]+/,
-    literal:      { match: /"(?:\\["\\]|[^"\\])*"/, lineBreaks: true },
+    literal:      { match: /"(?:\\["\\]|[^"\\])*"/, lineBreaks: true, value: x => JSON.parse(x) },
     obrace:       '{',
     cbrace:       '}',
     oparen:       '(',

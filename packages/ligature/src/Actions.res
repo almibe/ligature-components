@@ -23,13 +23,8 @@ let stdActions: Belt.Map.String.t<Wander.action> = Belt.Map.String.fromArray([
     (networks, stack) => {
       switch stack {
       | list{Ligature.Network(value), ...tail} =>
-        Ok(
-          networks,
-          list{
-            Ligature.Literal(Ligature.Literal.literal(value->Array.length->Int.toString)),
-            ...tail,
-          },
-        )
+        let cnt: string = value->Array.length->Int.toString
+        Ok(networks, list{Ligature.Literal(Ligature.Literal.literal(cnt)), ...tail})
       | _ => Error("count requires a network on top of the stack.")
       }
     },

@@ -90,6 +90,10 @@ test("parse network name", t => {
   )
 })
 
+test("parse literal", t => {
+  t->Assert.deepEqual(WanderParser.parse("\"0\""), Ok([Literal(Ligature.Literal.literal("0"))]))
+})
+
 test("empty network", t => {
   t->Assert.deepEqual(WanderParser.parse("{}"), Ok([Network([])]))
 })
