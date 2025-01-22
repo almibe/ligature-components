@@ -15,25 +15,26 @@ var stdActions = Belt_MapString.fromArray([
                     };
             }
             var match = stack.tl;
-            if (match) {
-              if (Caml_obj.equal(stack.hd, match.hd)) {
-                return {
-                        TAG: "Ok",
-                        _0: [
-                          networks,
-                          match.tl
-                        ]
-                      };
-              } else {
-                return {
-                        TAG: "Error",
-                        _0: "Values not equal."
-                      };
-              }
-            } else {
+            if (!match) {
               return {
                       TAG: "Error",
                       _0: "assert-equal requires two values on stack."
+                    };
+            }
+            var right = match.hd;
+            var left = stack.hd;
+            if (Caml_obj.equal(left, right)) {
+              return {
+                      TAG: "Ok",
+                      _0: [
+                        networks,
+                        match.tl
+                      ]
+                    };
+            } else {
+              return {
+                      TAG: "Error",
+                      _0: "Values not equal.\n" + Ligature.printValue(left) + "!=" + Ligature.printValue(right)
                     };
             }
           })

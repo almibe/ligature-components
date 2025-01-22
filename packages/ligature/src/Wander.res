@@ -75,18 +75,16 @@ let printStack: stack => string = stack => {
 
 let printResult: wanderResult => string = value => {
   switch value {
-  | Ok(stack) => {
-    printStack(stack)
-  }
+  | Ok(stack) => printStack(stack)
   | Error(error) => error
   }
 }
 
 let networkToJs = (network: Ligature.wanderAtom) => {
-    switch network {
-    | Network(network) => {
-    let result = []
-    network->Array.forEach(triple => {
+  switch network {
+  | Network(network) => {
+      let result = []
+      network->Array.forEach(triple => {
         let element = switch triple.element {
         | Element(e) => {"type": "element", "value": e.value}
         | Slot(s) => {"type": "slot", "value": s.value}
@@ -107,6 +105,6 @@ let networkToJs = (network: Ligature.wanderAtom) => {
       })
       result
     }
-    | _ => raise(Failure("Unsupported."))
-    }
+  | _ => raise(Failure("Unsupported."))
+  }
 }

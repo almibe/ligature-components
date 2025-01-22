@@ -160,7 +160,7 @@ function networkToJs(network) {
                       RE_EXN_ID: "Match_failure",
                       _1: [
                         "Wander.res",
-                        100,
+                        98,
                         20
                       ],
                       Error: new Error()

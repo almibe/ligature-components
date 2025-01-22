@@ -1,24 +1,39 @@
 let stdActions: Belt.Map.String.t<Wander.action> = Belt.Map.String.fromArray([
-    ("assert-equal", (networks, stack) => {
-        switch stack {
-        | list{left, right, ...tail} => {
-            if left == right {
-                Ok(networks, tail)
-            } else {
-                Error("Values not equal.")
-            }
+  (
+    "assert-equal",
+    (networks, stack) => {
+      switch stack {
+      | list{left, right, ...tail} =>
+        if left == right {
+          Ok(networks, tail)
+        } else {
+          Error(
+            "Values not equal.\n" ++
+            Ligature.printValue(left) ++
+            "!=" ++
+            Ligature.printValue(right),
+          )
         }
-        | _ => Error("assert-equal requires two values on stack.")
-        }
-    }),
-    ("count", (networks, stack) => {
-        switch stack {
-        | list{ Ligature.Network(value), ...tail } => {
-            Ok(networks, list{Ligature.Literal(Ligature.Literal.literal((value->Array.length)->Int.toString)), ...tail })
-        }
-        | _ => Error("count requires a network on top of the stack.")
-        }
-    })
+      | _ => Error("assert-equal requires two values on stack.")
+      }
+    },
+  ),
+  (
+    "count",
+    (networks, stack) => {
+      switch stack {
+      | list{Ligature.Network(value), ...tail} =>
+        Ok(
+          networks,
+          list{
+            Ligature.Literal(Ligature.Literal.literal(value->Array.length->Int.toString)),
+            ...tail,
+          },
+        )
+      | _ => Error("count requires a network on top of the stack.")
+      }
+    },
+  ),
 ])
 
 // let coreModule = () => {
