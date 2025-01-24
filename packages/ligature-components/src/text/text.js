@@ -1,4 +1,4 @@
-import { printValue, printStack } from "@ligature/ligature"
+import { printValue, printResult } from "@ligature/ligature"
 
 export function appendText(element, value) {
     if (element != null) {
