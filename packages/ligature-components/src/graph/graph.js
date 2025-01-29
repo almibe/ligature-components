@@ -6,9 +6,9 @@ function translateNetwork(network) {
     let id = 0
 
     network.forEach((triple) => {
-            results.push({data: {id: "id" + (++id), label: triple.role.value, source: triple.element.value, target: triple.value.value}})
-            nodes.add(triple.element.value)
-            nodes.add(triple.value.value)
+            results.push({data: {id: "id" + (++id), label: triple[1].value, source: triple[0].value, target: triple[2].value}})
+            nodes.add(triple[0].value)
+            nodes.add(triple[2].value)
     })
 
     nodes.forEach((node) => {

@@ -4,23 +4,22 @@ import  "tabulator-tables/dist/css/tabulator.min.css"
 function networkToTableData(network) {
     const columns = {}
     const data = new Map()
-    console.log(network)
     for (let triple of network) {
-        columns[triple.role.value] = []
-        if (data.has(triple.element.value)) {
-            const entry = data.get(triple.element.value)
-            if (entry.has(triple.role.value)) {
-                const values = entry.get(triple.role.value)
-                values.push(triple.value.value)
+        columns[triple[1].value] = []
+        if (data.has(triple[0].value)) {
+            const entry = data.get(triple[0].value)
+            if (entry.has(triple[1].value)) {
+                const values = entry.get(triple[1].value)
+                values.push(triple[2].value)
             } else {
-                const values = [triple.value.value]
-                entry.set(triple.role.value, values)
+                const values = [triple[2].value]
+                entry.set(triple[1].value, values)
             }
         } else {
             const entry = new Map()
-            const values = [triple.value.value]
-            entry.set(triple.role.value, values)
-            data.set(triple.element.value, entry)
+            const values = [triple[2].value]
+            entry.set(triple[1].value, values)
+            data.set(triple[0].value, entry)
         }
     }
     let result = []

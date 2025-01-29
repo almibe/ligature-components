@@ -1,40 +1,48 @@
-type sideEffect = Ligature.wanderAtom => unit
+import { ok, networkToJs } from "@ligature/ligature";
+import { appendStackText, appendText } from "./text/text"
+import { headTail } from "@ligature/ligature"
+import { appendGraph } from "./graph/graph";
+import { appendTable } from "./table/table";
 
-type stackSideEffect = list<Ligature.wanderAtom> => unit
+export function createComponentActions(div) {
+  let actions = new Map()
 
-let textAction: sideEffect => Wander.action = textCb => (networks, stack) => {
-  textCb(List.head(stack)->Option.getUnsafe)
-  Ok(networks, List.tail(stack)->Option.getUnsafe)
-}
+  actions.set("display-text", (stack) => {
+    let [head, tail] = headTail(stack)
+    if (head != undefined) {
+      appendText(div, head)
+      return ok(tail)
+    } else {
+      throw "display-text requires a value on the stack"
+    }
+  })
 
-let tableAction: sideEffect => Wander.action = textCb => (networks, stack) => {
-  textCb(List.head(stack)->Option.getUnsafe)
-  Ok(networks, List.tail(stack)->Option.getUnsafe)
-}
+  actions.set("display-table", (stack) => {
+    let [head, tail] = headTail(stack)
+    if (head != undefined) {
+      let network = networkToJs(head)
+      appendTable(div, network)
+      return ok(tail)
+    } else {
+      throw "display-table requires a network value on top of the stack"
+    }
+  })
 
-let graphAction: sideEffect => Wander.action = textCb => (networks, stack) => {
-  textCb(List.head(stack)->Option.getUnsafe)
-  Ok(networks, List.tail(stack)->Option.getUnsafe)
-}
+  actions.set("display-graph", (stack) => {
+    let [head, tail] = headTail(stack)
+    if (head != undefined) {
+      let network = networkToJs(head)
+      appendGraph(div, network)
+      return ok(tail)
+    } else {
+      throw "display-graph requires a network value on top of the stack"
+    }
+  })
 
-let displayStackAction: stackSideEffect => Wander.action = textCb => (networks, stack) => {
-  textCb(stack)
-  Ok(networks, stack)
-}
+  actions.set("display-stack", (stack) => {
+    appendStackText(div, stack)
+    return ok(stack)  
+  })
 
-let componentActions: (
-  stackSideEffect,
-  sideEffect,
-  sideEffect,
-  sideEffect,
-) => Belt.Map.String.t<Wander.action> = (stackCb, textCb, tableCb, graphCb) => {
-  Belt.Map.String.fromArray(
-    [
-      ("display-stack", displayStackAction(stackCb)),
-      ("display-text", textAction(textCb)),
-      ("display-table", tableAction(tableCb)),
-      ("display-graph", graphAction(graphCb)),
-      ...Belt.Map.String.toArray(Actions.stdActions),
-    ],
-  )
+  return actions
 }
