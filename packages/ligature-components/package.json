@@ -1,6 +1,6 @@
 {
   "name": "@ligature/ligature-components",
-  "version": "0.15.0",
+  "version": "0.16.0",
   "private": true,
   "type": "module",
   "scripts": {
@@ -8,11 +8,11 @@
     "build": "vite build",
     "preview": "vite preview"
   },
-  "main": "./actions.js",
-  "module": "./actions.js",
+  "main": "./src/actions.js",
+  "module": "./src/actions.js",
   "exports": {
     ".": {
-      "import": "./actions.js"
+      "import": "./src/actions.js"
     }
   },
   "license": "MPL-2.0",
@@ -20,7 +20,7 @@
     "@codemirror/commands": "^6.7.0",
     "@codemirror/state": "^6.4.1",
     "@codemirror/view": "^6.34.1",
-    "@ligature/ligature": "^0.17.0",
+    "@ligature/ligature": "^0.18.0",
     "codemirror": "^6.0.1",
     "cytoscape": "^3.30.2",
     "tabulator-tables": "^6.3.0"

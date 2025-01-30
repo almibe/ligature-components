@@ -8,7 +8,7 @@ open Fable.Core.JsInterop
 let runWithActions (actions: Dictionary<string, Stack -> Result<Stack, LigatureError>>) (script: string) =
     let mutable resActions = stdActions
     for entry in actions do
-        resActions <- Map.add (Element entry.Key) (Action.Stack entry.Value) resActions
+        resActions <- Map.add (Element entry.Key) (Action.Stack ({doc = ""},entry.Value)) resActions
     run resActions Map.empty List.empty script
 
 let run = runWithDefaults

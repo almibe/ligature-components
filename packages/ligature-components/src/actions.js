@@ -3,6 +3,9 @@ import { appendStackText, appendText } from "./text/text"
 import { headTail } from "@ligature/ligature"
 import { appendGraph } from "./graph/graph";
 import { appendTable } from "./table/table";
+import { showEditor } from "./editor/editor";
+
+export {showEditor};
 
 export function createComponentActions(div) {
   let actions = new Map()
