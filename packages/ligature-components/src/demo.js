@@ -1,5 +1,5 @@
 import './style.css'
-import { runWithActions } from "@ligature/ligature"
+import { runWithActions, topOfStack } from "@ligature/ligature"
 import { showEditor } from './editor/editor.js'
 //import { appendStackText, appendText } from './text/text'
 import { appendTable } from './table/table.js'
@@ -14,6 +14,5 @@ let actions = createComponentActions(document.querySelector("#results"))
 
 document.querySelector("#runButton")?.addEventListener("click", () => {
     document.querySelector("#results").innerHTML = ""
-
     runWithActions(actions, editor.state.doc.toString())
 })

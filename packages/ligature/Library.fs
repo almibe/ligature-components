@@ -97,3 +97,29 @@ let readNetwork (networkName: string) (result: Result<Networks * Stack, string>)
         | Some(network) -> networkToJs (Any.Network network)
         | None -> failwith "Network not found."
     | Error err -> failwith err
+
+let rec anyToJs (any: Any) =
+    match any with
+    | Any.Literal l -> 
+        let obj = createEmpty
+        obj?``type`` <- "literal"
+        obj?value <- l
+        obj
+    | Any.Network n -> networkToJs (Any.Network n)
+    | Any.Quote q ->
+        let res = 
+            List.map (fun any -> anyToJs any) q
+            |> List.toArray
+        let obj = createEmpty
+        obj?``type`` <- "quote"
+        obj?value <- res
+        obj
+    | _ -> failwith "TODO"
+
+let topOfStack (result: Result<Networks * Stack, LigatureError>) =
+    match result with
+    | Ok(_, stack) -> 
+        match stack with
+        | head :: _ -> anyToJs head
+        | _ -> failwith "TODO"
+    | _ -> failwith "TODO"
