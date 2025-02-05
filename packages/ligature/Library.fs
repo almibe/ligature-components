@@ -8,7 +8,7 @@ open Fable.Core.JsInterop
 let runWithActions (actions: Dictionary<string, Stack -> Result<Stack, LigatureError>>) (script: string) =
     let mutable resActions = stdActions
     for entry in actions do
-        resActions <- Map.add (Element entry.Key) (Action.Stack ({doc = ""},entry.Value)) resActions
+        resActions <- Map.add (Element entry.Key) (Action.Stack ({doc = ""; examples = []},entry.Value)) resActions
     run resActions Map.empty List.empty script
 
 let run = runWithDefaults
@@ -122,4 +122,4 @@ let topOfStack (result: Result<Networks * Stack, LigatureError>) =
         match stack with
         | head :: _ -> anyToJs head
         | _ -> failwith "TODO"
-    | _ -> failwith "TODO"
+    | Error err -> failwith err.UserMessage
