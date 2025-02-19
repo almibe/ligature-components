@@ -1,4 +1,5 @@
 ﻿open Wander.Main
+open Wander.Interpreter
 open Ligature.Model
 open Wander.Model
 open System.Collections.Generic
@@ -8,8 +9,8 @@ open Fable.Core.JsInterop
 let runWithActions (actions: Dictionary<string, Stack -> Result<Stack, LigatureError>>) (script: string) =
     let mutable resActions = stdActions
     for entry in actions do
-        resActions <- Map.add (Element entry.Key) (Action.Stack ({doc = ""; examples = []},entry.Value)) resActions
-    run resActions Map.empty List.empty script
+        resActions <- Map.add (Element entry.Key) (Action.Stack ({doc = ""; examples = []; pre = ""; post = ""},entry.Value)) resActions
+    run resActions List.empty script
 
 let run = runWithDefaults
 
@@ -19,10 +20,10 @@ let printStack = printStack
 
 let printAny = printAny
 
-let resultToStack (result: Result<Networks * Stack, string>) =
+let resultToStack (result: Result<Stack, string>) =
     let mutable res = [||]
     match result with
-    | Ok(_, stack) -> 
+    | Ok(stack) -> 
         res <- Array.ofList stack
     | _ -> ()
     result
@@ -70,33 +71,20 @@ let networkToJs (value: Any) =
 
                     let v =
                         match v with
-                        | Value.Element(Element e) ->
+                        | ElementPattern.Element(Element e) ->
                             let obj = createEmpty
                             obj?``type`` <- "element"
                             obj?value <- e
                             obj
-                        | Value.Variable(Variable v) ->
+                        | ElementPattern.Variable(Variable v) ->
                             let obj = createEmpty
                             obj?``type`` <- "variable"
                             obj?value <- v
-                            obj
-                        | Value.Literal l ->
-                            let obj = createEmpty
-                            obj?``type`` <- "literal"
-                            obj?value <- l
                             obj
                     [| e; a; v |])
                 network
         Array.ofSeq network
     | _ -> failwith "Unexpected value."
-
-let readNetwork (networkName: string) (result: Result<Networks * Stack, string>) =
-    match result with
-    | Ok(networks, _) ->
-        match Map.tryFind (NetworkName networkName) networks with
-        | Some(network) -> networkToJs (Any.Network network)
-        | None -> failwith "Network not found."
-    | Error err -> failwith err
 
 let rec anyToJs (any: Any) =
     match any with
@@ -116,9 +104,9 @@ let rec anyToJs (any: Any) =
         obj
     | _ -> failwith "TODO"
 
-let topOfStack (result: Result<Networks * Stack, LigatureError>) =
+let topOfStack (result: Result<Stack, LigatureError>) =
     match result with
-    | Ok(_, stack) -> 
+    | Ok(stack) -> 
         match stack with
         | head :: _ -> anyToJs head
         | _ -> failwith "TODO"
