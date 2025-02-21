@@ -24,8 +24,8 @@ importers:
         specifier: ^6.34.1
         version: 6.34.1
       '@ligature/ligature':
-        specifier: link:..\ligature
-        version: link:../ligature
+        specifier: link:..\ligature-fable
+        version: link:../ligature-fable
       codemirror:
         specifier: ^6.0.1
         version: 6.0.1(@lezer/common@1.2.3)
@@ -35,6 +35,12 @@ importers:
       tabulator-tables:
         specifier: ^6.3.0
         version: 6.3.0
+    devDependencies:
+      vite:
+        specifier: ^5.0.6
+        version: 5.4.9(@types/node@22.10.7)
+
+  packages/ligature-fable:
     devDependencies:
       vite:
         specifier: ^5.0.6

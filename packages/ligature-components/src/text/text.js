@@ -1,4 +1,4 @@
-import { printAny, printStack } from "@ligature/ligature"
+import { printAny } from "@ligature/ligature"
 
 export function appendText(element, value) {
     if (element != null) {
@@ -10,12 +10,12 @@ export function appendText(element, value) {
     }
 }
 
-export function appendStackText(element, stack) {
-    if (element != null) {
-        const pre = document.createElement("pre")
-        const code = document.createElement("code")
-        pre.appendChild(code)
-        code.textContent = printStack(stack)
-        element.appendChild(pre)
-    }
-}
+// export function appendStackText(element, stack) {
+//     if (element != null) {
+//         const pre = document.createElement("pre")
+//         const code = document.createElement("code")
+//         pre.appendChild(code)
+//         code.textContent = printStack(stack)
+//         element.appendChild(pre)
+//     }
+// }

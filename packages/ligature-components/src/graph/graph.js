@@ -14,7 +14,6 @@ function translateNetwork(network) {
     nodes.forEach((node) => {
         results.push({data: {id: node}})
     })
-
     return results
 }
 
