@@ -1,18 +1,13 @@
-import './style.css'
-import { runWithFns } from "@ligature/ligature"
-import { showEditor } from './editor/editor.js'
-//import { appendStackText, appendText } from './text/text'
-import { appendTable } from './table/table.js'
-import { appendGraph } from './graph/graph.js'
-import { createComponentFns } from './actions.js'
+import { runScript, showEditor } from './lib'
 
-let initalScript = `display-text {a b c}`
+import './style.css'
+
+let initalScript = `{a b c}`
 
 let editor = showEditor(document.querySelector("#editor"), initalScript)
 
-let actions = createComponentFns(document.querySelector("#results"))
-
 document.querySelector("#runButton")?.addEventListener("click", () => {
-    document.querySelector("#results").innerHTML = ""
-    runWithFns(actions, editor.state.doc.toString())
+//    document.querySelector("#results").innerHTML = ""
+    runScript(editor.state.doc.toString(), document.querySelector("#results"))
+//    document.querySelector("#results").innerHTML = printResult(res)
 })

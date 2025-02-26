@@ -8,11 +8,11 @@
     "build": "vite build",
     "preview": "vite preview"
   },
-  "main": "./src/actions.js",
-  "module": "./src/actions.js",
+  "main": "./src/lib.js",
+  "module": "./src/lib.js",
   "exports": {
     ".": {
-      "import": "./src/actions.js"
+      "import": "./src/lib.js"
     }
   },
   "license": "MPL-2.0",

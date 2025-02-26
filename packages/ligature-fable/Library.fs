@@ -7,12 +7,13 @@ open Wander.Library
 open Fable.Core.JsInterop
 
 let runWithFns (fns: Dictionary<string, Any array -> Result<Any, LigatureError>>) (script: string) =
-    let mutable resFns = stdFns
-    for entry in fns do
-        resFns <- Map.add (Term entry.Key) (Fn({doc = ""; examples = []; pre = ""; post = ""}, 
-            fun _ _ args -> 
-                entry.Value (List.toArray args))) resFns
-    run resFns Map.empty script
+    failwith "TODO"
+    // let mutable resFns = stdFns
+    // for entry in fns do
+    //     resFns <- Map.add (Term entry.Key) (Fn({doc = ""; examples = []; pre = ""; post = ""}, 
+    //         fun _ _ args -> 
+    //             entry.Value (List.toArray args))) resFns
+    // run resFns Map.empty script
 
 let run = runWithDefaults
 
@@ -62,4 +63,4 @@ let rec anyToJs (any: Any) =
         obj?``type`` <- "quote"
         obj?value <- res
         obj
-    | _ -> failwith "TODO"
+    | _ -> failwith "Invalid call to anyToJs"
