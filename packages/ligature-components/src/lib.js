@@ -8,8 +8,20 @@ export {showEditor};
 
 export function runScript(script, element) {
   let res = run(script)
-  console.log(JSON.stringify(resultToJs(res)))
-  appendText(element, res)
+  let resJs = resultToJs(res)
+  if (resJs.type == "record" && resJs.value != undefined && resJs.value.get('display') != undefined) {
+    let display = resJs.value.get('display')
+    let value = resJs.value.get('network')
+    if (display.type == 'term' && display.value == 'table') {
+      appendTable(element, value.value)
+    } else if (display.type == 'term' && display.value == 'graph') {
+      appendGraph(element, value.value)
+    } else {
+      appendText(element, res)
+    }
+  } else {
+    appendText(element, res)
+  }
 }
 
 // export function createComponentFns(div) {

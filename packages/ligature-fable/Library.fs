@@ -25,36 +25,53 @@ let ok value = Ok value
 
 let error value = Error value
 
-let networkToJs (value: Any) =
-    match value with
-    | Any.Network network ->
-        let network = 
-            Set.map
-                (fun (Term e, Term a, v) ->
-                    let element = createEmpty
-                    element?``type`` <- "term"
-                    element?value <- e
+let networkToJs (network : Network) =
+    let network = 
+        Set.map
+            (fun (Term e, Term a, v) ->
+                let element = createEmpty
+                element?``type`` <- "term"
+                element?value <- e
 
-                    let role = createEmpty
-                    role?``type`` <- "term"
-                    role?value <- a
+                let role = createEmpty
+                role?``type`` <- "term"
+                role?value <- a
 
-                    let value = createEmpty
-                    value?``type`` <- 
-                        match v with
-                        | Value.Term _ -> "term"
-                        | Value.Literal _ -> "literal"
-                    value?value <- v
-                    [| element; role; value |])
-                network
-        let network = Array.ofSeq network
-        let obj = createEmpty
-        obj?``type`` <- "network"
-        obj?value <- network
-        obj
-    | _ -> failwith "Unexpected value."
+                let value = createEmpty
+                value?``type`` <- 
+                    match v with
+                    | Value.Term _ -> "term"
+                    | Value.Literal _ -> "literal"
+                value?value <-
+                    match v with
+                    | Value.Term (Term t) -> t
+                    | Value.Literal (Literal l) -> l
+                    | _ -> failwith "TODO"
+                [| element; role; value |])
+            network
+    let network = Array.ofSeq network
+    let obj = createEmpty
+    obj?``type`` <- "network"
+    obj?value <- network
+    obj
 
-let rec anyToJs (any: Any) =
+let rec recordToJs (record: Record) =
+    let record =
+        Seq.fold
+            (fun state (key, value) ->
+                match key with
+                | Any.Term (Term t) ->
+                    emitJsExpr (t, anyToJs value) "state.set($0, $1)"
+                    state
+                | _ -> failwith "Unsupported record key.")
+            (emitJsExpr () "new Map()")
+            (Map.toSeq record)
+    let obj = createEmpty
+    obj?``type`` <- "record"
+    obj?value <- record
+    obj
+
+and anyToJs (any: Any) =
     match any with
     | Any.Term (Term t) -> 
         let obj = createEmpty
@@ -66,7 +83,7 @@ let rec anyToJs (any: Any) =
         obj?``type`` <- "literal"
         obj?value <- l
         obj
-    | Any.Network n -> networkToJs (Any.Network n)
+    | Any.Network n -> networkToJs n
     | Any.Quote q ->
         let res = 
             List.map (fun any -> anyToJs any) q
@@ -75,7 +92,8 @@ let rec anyToJs (any: Any) =
         obj?``type`` <- "quote"
         obj?value <- res
         obj
-    | _ -> failwith "Invalid call to anyToJs"
+    | Any.Record record -> recordToJs record
+    | x -> failwith $"Invalid call to anyToJs: {x}"
 
 let resultToJs (res: Result<Any, LigatureError>) =
     match res with
