@@ -1,5 +1,5 @@
 import { appendText } from "./text/text"
-import { run, printResult } from "@ligature/ligature"
+import { run, resultToJs } from "@ligature/ligature"
 import { showEditor } from './editor/editor.js'
 import { appendTable } from './table/table.js'
 import { appendGraph } from './graph/graph.js'
@@ -8,6 +8,7 @@ export {showEditor};
 
 export function runScript(script, element) {
   let res = run(script)
+  console.log(JSON.stringify(resultToJs(res)))
   appendText(element, res)
 }
 

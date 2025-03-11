@@ -7,4 +7,4 @@ actions.set("echo", (args) => {
     return ok(args[0])
 })
 
-console.log(JSON.stringify(runWithFns(actions, "echo {}")))
+console.log(JSON.stringify(runWithFns(actions, "echo [test]")))
