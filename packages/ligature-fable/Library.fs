@@ -61,14 +61,24 @@ let rec recordToJs (record: Record) =
             (fun state (key, value) ->
                 match key with
                 | Any.Term (Term t) ->
-                    emitJsExpr (t, anyToJs value) "state.set($0, $1)"
+                    emitJsExpr (t, anyToJs value) "state[$0] = $1"
                     state
                 | _ -> failwith "Unsupported record key.")
-            (emitJsExpr () "new Map()")
+            (emitJsExpr () "{}")
             (Map.toSeq record)
     let obj = createEmpty
     obj?``type`` <- "record"
     obj?value <- record
+    obj
+
+and setToJs (set: AnySet) =
+    let value = 
+        Array.map (fun value ->
+            anyToJs value)
+            (Set.toArray set)
+    let obj = createEmpty
+    obj?``type`` <- "set"
+    obj?value <- value
     obj
 
 and anyToJs (any: Any) =
@@ -93,6 +103,7 @@ and anyToJs (any: Any) =
         obj?value <- res
         obj
     | Any.Record record -> recordToJs record
+    | Any.AnySet set -> setToJs set
     | x -> failwith $"Invalid call to anyToJs: {x}"
 
 let resultToJs (res: Result<Any, LigatureError>) =
