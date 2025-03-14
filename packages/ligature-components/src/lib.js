@@ -9,9 +9,9 @@ export {showEditor};
 export function runScript(script, element) {
   let res = run(script)
   let resJs = resultToJs(res)
-  if (resJs.type == "record" && resJs.value != undefined && resJs.value.get('display') != undefined) {
-    let display = resJs.value.get('display')
-    let value = resJs.value.get('network')
+  if (resJs.type == "record" && resJs.value != undefined && resJs.value.display != undefined) {
+    let display = resJs.value.display
+    let value = resJs.value.network
     if (display.type == 'term' && display.value == 'table') {
       appendTable(element, value.value)
     } else if (display.type == 'term' && display.value == 'graph') {
