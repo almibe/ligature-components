@@ -11,9 +11,9 @@ let runWithFns (fns: Dictionary<string, Any array -> Result<Any, LigatureError>>
     let mutable resFns = stdFns (new InMemoryStore())
     for entry in fns do
         resFns <- Map.add (Term entry.Key) (Fn({doc = ""; examples = []; args = ""; result = ""}, 
-            fun _ _ args -> 
+            fun _ _ _ args -> 
                 entry.Value (List.toArray args))) resFns
-    run resFns Map.empty script
+    run resFns Map.empty Map.empty script
 
 let run = runWithDefaults
 
@@ -94,12 +94,12 @@ and anyToJs (any: Any) =
         obj?value <- l
         obj
     | Any.Network n -> networkToJs n
-    | Any.Quote q ->
+    | Any.Tuple t ->
         let res = 
-            List.map (fun any -> anyToJs any) q
+            List.map (fun any -> anyToJs any) t
             |> List.toArray
         let obj = createEmpty
-        obj?``type`` <- "quote"
+        obj?``type`` <- "tuple"
         obj?value <- res
         obj
     | Any.Record record -> recordToJs record
