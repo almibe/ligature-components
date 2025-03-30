@@ -1,5 +1,5 @@
 import { appendText } from "./text/text"
-import { run, resultToJs, appendCanvas } from "@ligature/ligature"
+import { run, resultToJs, appendCanvas, drawNetwork } from "@ligature/ligature"
 import { showEditor } from './editor/editor.js'
 import { appendTable } from './table/table.js'
 import { appendGraph } from './graph/graph.js'
@@ -16,6 +16,8 @@ export function runScript(script, element) {
       appendTable(element, value.value)
     } else if (display.type == 'term' && display.value == 'graph') {
       appendGraph(element, value.value)
+    } else if (display.type == 'term' && display.value == 'draw') {
+      drawNetwork(element, res)
     } else if (display.type == 'term' && display.value == 'canvas') {
       appendCanvas(element, res)
     } else {
