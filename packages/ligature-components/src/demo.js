@@ -12,11 +12,11 @@ import './style.css'
 
 let initalScript = `
 { display draw 
-  network (network [a b c])}`
+  network (network [a b c] [a d e] [w e e])}`
 
 let editor = showEditor(document.querySelector("#editor"), initalScript)
 
 document.querySelector("#runButton")?.addEventListener("click", () => {
-//    document.querySelector("#results").innerHTML = ""
+    document.querySelector("#results").innerHTML = ""
     runScript(editor.state.doc.toString(), document.querySelector("#results"))
 })

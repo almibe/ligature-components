@@ -3,7 +3,7 @@ import { run, resultToJs, appendCanvas } from "@ligature/ligature"
 import { showEditor } from './editor/editor.js'
 import { appendTable } from './table/table.js'
 import { appendGraph } from './graph/graph.js'
-import { drawNetwork } from "./draw/draw.js"
+import { drawNetwork } from "./draw/draw.ts"
 
 export {showEditor};
 
