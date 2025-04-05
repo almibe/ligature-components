@@ -14,4 +14,4 @@ pnpm run dev
 
 ## Credits
 
-This project uses https://codemirror.net/, https://tabulator.info/, and https://js.cytoscape.org/.
+This project uses https://codemirror.net/, https://tabulator.info/, and https://konvajs.org.
