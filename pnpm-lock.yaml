@@ -23,9 +23,6 @@ importers:
       codemirror:
         specifier: ^6.0.1
         version: 6.0.1(@lezer/common@1.2.3)
-      cytoscape:
-        specifier: ^3.30.2
-        version: 3.30.2
       konva:
         specifier: ^9.3.20
         version: 9.3.20
@@ -304,10 +301,6 @@ packages:
   crelt@1.0.6:
     resolution: {integrity: sha512-VQ2MBenTq1fWZUH9DJNGti7kKv6EeAuYr3cLwxUWhIu1baTaXh4Ib5W2CqHVqib4/MqbYGJqiL3Zb8GJZr3l4g==}
 
-  cytoscape@3.30.2:
-    resolution: {integrity: sha512-oICxQsjW8uSaRmn4UK/jkczKOqTrVqt5/1WL0POiJUT2EKNc9STM4hYFHv917yu55aTBMFNRzymlJhVAiWPCxw==}
-    engines: {node: '>=0.10'}
-
   esbuild@0.21.5:
     resolution: {integrity: sha512-mg3OPMV4hXywwpoDxu3Qda5xCKQi+vCTZq8S9J/EpkhB2HzKXq4SNFZE3+NK93JYxc8VMSep+lOUSC/RVKaBqw==}
     engines: {node: '>=12'}
@@ -577,8 +570,6 @@ snapshots:
       - '@lezer/common'
 
   crelt@1.0.6: {}
-
-  cytoscape@3.30.2: {}
 
   esbuild@0.21.5:
     optionalDependencies:
