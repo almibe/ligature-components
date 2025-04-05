@@ -1,16 +1,18 @@
 import Konva from "konva"
 import { Arrow } from "konva/lib/shapes/Arrow"
 import { Circle } from "konva/lib/shapes/Circle"
+import { Text } from "konva/lib/shapes/Text"
 
 type Vertex = {
     shape: Circle,
+    label: Text,
     dx: number,
     dy: number
 }
 
 type Edge = {
     source: Vertex,
-    label: string,
+//    label: Text,
     target: Vertex,
     shape: Arrow
 }
@@ -31,34 +33,43 @@ function initialize(network): Graph {
         const value = valueType + triple[2].value
 
         if (!vertices.has(sourceName)) {
-            // const text = new Konva.Text({
-            //     x: position.x + 5,
-            //     y: position.y + 5,
-            //     text: name
-            // })
-            // layer.add(layer.circle);  
-            // layer.add(text);  
+            const x = Math.random() * 400
+            const y = Math.random() * 400
+            const text = new Konva.Text({
+                x: x + 5,
+                y: y + 5,
+                text: triple[0].value
+            })
     
             const circle = new Konva.Circle({
-                x: Math.random() * 400, 
-                y: Math.random() * 400,
-                radius: 5,
-                fill: 'black',
-                stroke: 'black',
-                strokeWidth: 4,
+                x: x, 
+                y: y,
+                radius: 3,
+                fill: 'gray',
+                stroke: 'gray',
+                strokeWidth: 3,
             });
-            vertices.set(sourceName, { shape: circle, dx: 0, dy: 0 })
+            vertices.set(sourceName, { shape: circle, label: text, dx: 0, dy: 0 })
         }
         if (!vertices.has(value)) {
+            const x = Math.random() * 400
+            const y = Math.random() * 400
+            const text = new Konva.Text({
+                x: x + 5,
+                y: y + 5,
+                text: triple[2].value
+            })
+
             const circle = new Konva.Circle({
                 x: Math.random() * 400, 
                 y: Math.random() * 400,
-                radius: 5,
-                fill: 'black',
-                stroke: 'black',
-                strokeWidth: 4,
+                radius: 3,
+                fill: 'gray',
+                stroke: 'gray',
+                strokeWidth: 3,
             });
-            vertices.set(value, { shape: circle, dx: 0, dy: 0 })
+
+            vertices.set(value, { shape: circle, label: text, dx: 0, dy: 0 })
         }
 
         const source = vertices.get(sourceName)!
@@ -68,17 +79,23 @@ function initialize(network): Graph {
             x: 0,
             y: 0,
             points: [source.shape.x(), source.shape.y(), target.shape.x(), target.shape.y()],
-            pointerLength: 20,
-            pointerWidth: 20,
-            fill: 'black',
-            stroke: 'black',
-            strokeWidth: 4
+            pointerLength: 10,
+            pointerWidth: 10,
+            fill: 'gray',
+            stroke: 'gray',
+            strokeWidth: 3
         })
+
+        // const text = new Konva.Text({
+        //     x: x + 5,
+        //     y: y + 5,
+        //     text: role
+        // })
 
         edges.push({
             source: source,
             target: target,
-            label: role,
+//            label: text,
             shape: arrow,
         })
     }
@@ -145,24 +162,28 @@ function layoutStep(graph: Graph, width: number, height: number) {
             info.dx = 0
             info.shape.y(info.shape.y() + info.dy)
             info.dy = 0
-            if (info.shape.x() < 0) {
-                info.shape.x(0)
+            const padding = 25
+            if (info.shape.x() < padding) {
+                info.shape.x(padding)
             }
-            if (info.shape.x() > width) {
-                info.shape.x(width)
+            if (info.shape.x() > (width - padding)) {
+                info.shape.x(width - padding)
             }
-            if (info.shape.y() < 0) {
-                info.shape.y(0)
+            if (info.shape.y() < padding) {
+                info.shape.y(padding)
             }
-            if (info.shape.y() > height) {
-                info.shape.y(height)
+            if (info.shape.y() > (height - padding)) {
+                info.shape.y(height - padding)
             }
+            info.label.x(info.shape.x() + 5)
+            info.label.y(info.shape.y() + 5)
         }
 
         //adjust edges
         for (const edge of graph.edges) {
             edge.shape.points([edge.source.shape.x(), edge.source.shape.y(), edge.target.shape.x(), edge.target.shape.y()])
         }
+
         temp = cool(temp)
     }
 }
@@ -182,17 +203,21 @@ export function drawNetwork(element, network) {
     });
     const layer = new Konva.Layer();
   
-    for (const [name, vertx] of graph.vertices.entries()) {
-        layer.add(vertx.shape)
-    }
-
     for (const edge of graph.edges) {
         layer.add(edge.shape)
+//        layer.add(edge.label)
     }
   
+    for (const [name, vertx] of graph.vertices.entries()) {
+        layer.add(vertx.shape)
+        layer.add(vertx.label)
+    }
+
     stage.on('click', () => {
         layoutStep(graph, 400, 400)
     })
+
+    layoutStep(graph, 400, 400)
 
     stage.add(layer);
     element.appendChild(newElement)
