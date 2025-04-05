@@ -61,8 +61,8 @@ function initialize(network): Graph {
             vertices.set(value, { shape: circle, dx: 0, dy: 0 })
         }
 
-        const source = vertices.get(sourceName)
-        const target = vertices.get(value)
+        const source = vertices.get(sourceName)!
+        const target = vertices.get(value)!
 
         const arrow = new Konva.Arrow({
             x: 0,
@@ -85,85 +85,90 @@ function initialize(network): Graph {
     return { vertices: vertices, edges: edges }
 }
 
-function layoutStep(graph: Graph, width, height) {
-    const vertexNumber = graph.vertices.keys.length
-    const numIterations = 1000
+function layoutStep(graph: Graph, width: number, height: number) {
+    const vertexNumber = graph.vertices.size
+    const numIterations = 100
     const area = width * height
     const k = Math.sqrt(area / vertexNumber)
     const attract = (x: number) => x * x / k
     const repulse = (x: number) => k * k / x    
-    let temp = 100
-    const cool = (t: number) => t * 0.9
+    let temp = 50
+    const cool = (t: number) => t * 0.8
     
-    // for (let iter = 0; iter < numIterations; iter++) {
-    //     //repulsion force
-    //     for (const [name, info] of Object.entries(layout)) {
-    //         for (const [innerName, innerInfo] of Object.entries(layout)) {
-    //             if (name != innerName) {
-    //                 const deltaX = info.shape.x - innerInfo.shape.x
-    //                 const deltaY = info.shape.y - innerInfo.shape.y
+    for (let iter = 0; iter < numIterations; iter++) {
+        //repulsion force
+        for (const [name, info] of graph.vertices.entries()) {
+            for (const [innerName, innerInfo] of graph.vertices.entries()) {
+                if (name != innerName) {
+                    const deltaX = info.shape.x() - innerInfo.shape.x()
+                    const deltaY = info.shape.y() - innerInfo.shape.y()
 
-    //                 info.dx = info.dx + (deltaX/Math.abs(deltaX)) * repulse(Math.abs(deltaX))
-    //                 info.dy = info.dy + (deltaY/Math.abs(deltaY)) * repulse(Math.abs(deltaY))
-    //             }
-    //         }    
-    //     } 
+                    info.dx = info.dx + (deltaX/Math.abs(deltaX)) * repulse(Math.abs(deltaX))
+                    info.dy = info.dy + (deltaY/Math.abs(deltaY)) * repulse(Math.abs(deltaY))
 
-    //     //attraction force
-    //     for (const [name, info] of Object.entries(layout)) {
-    //         for (const link of info.links) {
-    //             const other = layout[link.to]
-    //             const deltaX = info.shape.x - other.shape.x
-    //             const deltaY = info.shape.y - other.shape.y
+                    console.log(name, info.dx, info.dy)
 
-    //             info.dx = info.dx - (deltaX / Math.abs(deltaX)) * attract(Math.abs(deltaX))
-    //             info.dy = info.dy - (deltaY / Math.abs(deltaY)) * attract(Math.abs(deltaY))
-                
-    //             other.dx = other.dx + (deltaX / Math.abs(deltaX)) * attract(Math.abs(deltaX))
-    //             other.dy = other.dy + (deltaY / Math.abs(deltaY)) * attract(Math.abs(deltaY))
-    //         }
-    //     }
+                }
+            }    
+        } 
 
-    //     //adjust values
-    //     for (const [name, info] of Object.entries(layout)) {
-    //         console.log(info)
-    //         if (info.dx < -temp) {
-    //             info.dx = -temp
-    //         }
-    //         if (info.dx > temp) {
-    //             info.dx = temp
-    //         }
-    //         if (info.dy < -temp) {
-    //             info.dy = -temp
-    //         }
-    //         if (info.dy > temp) {
-    //             info.dy = temp
-    //         }
-    //         info.shape.x = info.shape.x + info.dx
-    //         info.dx = 0
-    //         info.shape.y = info.shape.y + info.dy
-    //         info.dy = 0
-    //         if (info.shape.x < 0) {
-    //             info.shape.x = 0
-    //         }
-    //         if (info.shape.x > width) {
-    //             info.shape.x = width
-    //         }
-    //         if (info.shape.y < 0) {
-    //             info.shape.y = 0
-    //         }
-    //         if (info.shape.y > height) {
-    //             info.shape.y = height
-    //         }
-    //     }
-    //     temp = cool(temp)
-    // }
+        // attraction force
+        for (const edge of graph.edges) {
+            const source = edge.source
+            const target = edge.target
+            const deltaX = source.shape.x() - target.shape.x()
+            const deltaY = source.shape.y() - target.shape.y()
+
+            source.dx = source.dx - (deltaX / Math.abs(deltaX)) * attract(Math.abs(deltaX))
+            source.dy = source.dy - (deltaY / Math.abs(deltaY)) * attract(Math.abs(deltaY))
+            
+            target.dx = target.dx + (deltaX / Math.abs(deltaX)) * attract(Math.abs(deltaX))
+            target.dy = target.dy + (deltaY / Math.abs(deltaY)) * attract(Math.abs(deltaY))
+        }
+
+        //adjust values
+        for (const [name, info] of graph.vertices.entries()) {
+            console.log("debug", name, info)
+            if (info.dx < -temp) {
+                info.dx = -temp
+            }
+            if (info.dx > temp) {
+                info.dx = temp
+            }
+            if (info.dy < -temp) {
+                info.dy = -temp
+            }
+            if (info.dy > temp) {
+                info.dy = temp
+            }
+            info.shape.x(info.shape.x() + info.dx)
+            info.dx = 0
+            info.shape.y(info.shape.y() + info.dy)
+            info.dy = 0
+            if (info.shape.x() < 0) {
+                info.shape.x(0)
+            }
+            if (info.shape.x() > width) {
+                info.shape.x(width)
+            }
+            if (info.shape.y() < 0) {
+                info.shape.y(0)
+            }
+            if (info.shape.y() > height) {
+                info.shape.y(height)
+            }
+        }
+
+        //adjust edges
+        for (const edge of graph.edges) {
+            edge.shape.points([edge.source.shape.x(), edge.source.shape.y(), edge.target.shape.x(), edge.target.shape.y()])
+        }
+        temp = cool(temp)
+    }
 }
 
 function processNetwork(network) {
-    let res = initialize(network)    
-    layoutStep(res, 400, 400)
-
+    let res = initialize(network)
     return res
 }
 
@@ -185,6 +190,10 @@ export function drawNetwork(element, network) {
         layer.add(edge.shape)
     }
   
+    stage.on('click', () => {
+        layoutStep(graph, 400, 400)
+    })
+
     stage.add(layer);
     element.appendChild(newElement)
 }
