@@ -11,7 +11,7 @@ import './style.css'
 //     [fill-rect 10 10 150 100]]}`
 
 let initalScript = `
-{ display draw 
+{ display table 
   network (network [a b c] [a d e] [w e e])}`
 
 let editor = showEditor(document.querySelector("#editor"), initalScript)

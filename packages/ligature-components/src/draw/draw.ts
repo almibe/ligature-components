@@ -12,7 +12,7 @@ type Vertex = {
 
 type Edge = {
     source: Vertex,
-//    label: Text,
+    label: Text,
     target: Vertex,
     shape: Arrow
 }
@@ -86,16 +86,16 @@ function initialize(network): Graph {
             strokeWidth: 3
         })
 
-        // const text = new Konva.Text({
-        //     x: x + 5,
-        //     y: y + 5,
-        //     text: role
-        // })
+        const text = new Konva.Text({
+            x: 0,
+            y: 0,
+            text: role
+        })
 
         edges.push({
             source: source,
             target: target,
-//            label: text,
+            label: text,
             shape: arrow,
         })
     }
@@ -176,12 +176,16 @@ function layoutStep(graph: Graph, width: number, height: number) {
                 info.shape.y(height - padding)
             }
             info.label.x(info.shape.x() + 5)
-            info.label.y(info.shape.y() + 5)
+            info.label.y(info.shape.y() + 5)            
         }
 
         //adjust edges
         for (const edge of graph.edges) {
             edge.shape.points([edge.source.shape.x(), edge.source.shape.y(), edge.target.shape.x(), edge.target.shape.y()])
+            const x = (edge.source.shape.x() + edge.target.shape.x()) / 2
+            const y = (edge.source.shape.y() + edge.target.shape.y()) / 2
+            edge.label.x(x + 5)
+            edge.label.y(y + 5)
         }
 
         temp = cool(temp)
@@ -205,7 +209,7 @@ export function drawNetwork(element, network) {
   
     for (const edge of graph.edges) {
         layer.add(edge.shape)
-//        layer.add(edge.label)
+        layer.add(edge.label)
     }
   
     for (const [name, vertx] of graph.vertices.entries()) {

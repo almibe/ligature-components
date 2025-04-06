@@ -1,11 +1,31 @@
 import {TabulatorFull as Tabulator} from 'tabulator-tables'
 import  "tabulator-tables/dist/css/tabulator.min.css"
 
-function networkToTableData(network) {
-    const columns = {}
+function createTable(tableData) {
+    const table = document.createElement('table')
+    const head = table.createTHead()
+    const body = table.createTBody()
+    const hRow = head.insertRow()
+    for (const header of tableData.headers) {
+        const th = document.createElement("th")
+        th.textContent = header
+        hRow.appendChild(th)    
+    }
+    for (const row of tableData.data) {
+        const tr = body.insertRow()
+        for (const value of row) {
+            const td = tr.insertCell()
+            td.appendChild(document.createTextNode(value))
+        }
+    }
+    return table
+}
+
+function processNetwork(network) {
+    const columns = new Set();
     const data = new Map()
     for (let triple of network) {
-        columns[triple[1].value] = []
+        columns.add(triple[1].value)
         if (data.has(triple[0].value)) {
             const entry = data.get(triple[0].value)
             if (entry.has(triple[1].value)) {
@@ -22,20 +42,31 @@ function networkToTableData(network) {
             data.set(triple[0].value, entry)
         }
     }
+    let headers = ["element", ...columns]
     let result = []
-    data.forEach((entries, element) => {
-        const id = {id : element }
-        const e = Object.fromEntries(entries)
-        result.push({...id, ...columns, ...e})
-    })
-    return result
+
+    for (const [name, values] of data) {
+        let row = [name]
+        for (const header of headers) {
+            if (header != "element") {
+                if (values.has(header)) {
+                    row.push(values.get(header))    
+                } else {
+                    row.push("")
+                }
+            }
+        }
+        result.push(row)
+    }
+
+    return { headers: headers, data: result }
 }
 
 export function appendTable(element, network) {
+    let tableData = processNetwork(network)
     let newElement = document.createElement("div")
     element.appendChild(newElement)
-    return new Tabulator(newElement, {
-        data: networkToTableData(network),
-        autoColumns: true
-    })    
+    let table = createTable(tableData)
+    newElement.appendChild(table)
+    return new Tabulator(table)
 }
