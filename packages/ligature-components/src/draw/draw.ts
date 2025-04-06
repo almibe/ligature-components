@@ -25,7 +25,7 @@ type Graph = {
 function initialize(network): Graph {
     let vertices: Map<string, Vertex> = new Map()
     let edges: Array<Edge> = []
-
+    let graph: Graph = { vertices: vertices, edges: edges }
     for (const triple of network) {
         const sourceName = "term:" + triple[0].value
         const role = triple[1].value
@@ -48,7 +48,11 @@ function initialize(network): Graph {
                 fill: 'gray',
                 stroke: 'gray',
                 strokeWidth: 3,
+                draggable: true,
             });
+            circle.on('dragend', () => {
+                layoutStep(graph, 400, 400)
+            })
             vertices.set(sourceName, { shape: circle, label: text, dx: 0, dy: 0 })
         }
         if (!vertices.has(value)) {
@@ -67,8 +71,11 @@ function initialize(network): Graph {
                 fill: 'gray',
                 stroke: 'gray',
                 strokeWidth: 3,
+                draggable: true,
             });
-
+            circle.on('dragend', () => {
+                layoutStep(graph, 400, 400)
+            })
             vertices.set(value, { shape: circle, label: text, dx: 0, dy: 0 })
         }
 
@@ -99,7 +106,7 @@ function initialize(network): Graph {
             shape: arrow,
         })
     }
-    return { vertices: vertices, edges: edges }
+    return graph
 }
 
 function layoutStep(graph: Graph, width: number, height: number) {
