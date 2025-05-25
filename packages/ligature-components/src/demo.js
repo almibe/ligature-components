@@ -10,9 +10,13 @@ import './style.css'
 //     [fill-style blue]
 //     [fill-rect 10 10 150 100]]}`
 
+// let initalScript = `
+// { display table 
+//   network (assertions [a b c] [a d e] [w e e])}`
+
 let initalScript = `
-{ display table 
-  network (network [a b c] [a d e] [w e e])}`
+{ display html 
+  { div { p class = "test" "Hello" } { p class = "test2" "Hello 2" } } }`
 
 let editor = showEditor(document.querySelector("#editor"), initalScript)
 
