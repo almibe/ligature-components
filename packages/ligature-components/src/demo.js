@@ -14,13 +14,20 @@ import './style.css'
 // { display table 
 //   network (assertions [a b c] [a d e] [w e e])}`
 
+// let initalScript = `
+// { display html 
+//   { div { p class = "test" "Hello" } { p class = "test2" "Hello 2" } } }`
+
 let initalScript = `
-{ display html 
-  { div { p class = "test" "Hello" } { p class = "test2" "Hello 2" } } }`
+{ display test-results 
+  (test-group
+  "Main test group."
+  (expect-equal "true == true" true true)) }
+`.trim()
 
 let editor = showEditor(document.querySelector("#editor"), initalScript)
 
 document.querySelector("#runButton")?.addEventListener("click", () => {
     document.querySelector("#results").innerHTML = ""
-    runScript(editor.state.doc.toString(), document.querySelector("#results"))
+    runScript(editor.getValue(), document.querySelector("#results"))
 })

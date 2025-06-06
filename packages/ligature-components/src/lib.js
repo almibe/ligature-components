@@ -20,6 +20,9 @@ export function runScript(script, element) {
       appendCanvas(element, res)
     } else if (display.type == 'term' && display.value == 'html') {
       appendHtml(element, res)
+    } else if (display.type == 'term' && display.value == 'test-results') {
+      throw "todo"
+      //appendTestResults(element, res)
     } else {
       appendText(element, res)
     }

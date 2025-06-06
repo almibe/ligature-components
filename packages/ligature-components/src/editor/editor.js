@@ -1,12 +1,7 @@
-import {EditorView, basicSetup} from "codemirror"
+import * as ace from "ace-builds/src/ace.js"
 
 export function showEditor(element, content) {
-    const view = new EditorView({
-        extensions: [basicSetup],
-        parent: element
-    })
-    view.dispatch({
-        changes: {from: 0, to: view.state.doc.length, insert: content}
-    });
-    return view
+    var editor = ace.edit(element)
+    editor.setValue(content)
+    return editor
 }
