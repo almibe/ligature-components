@@ -18,16 +18,15 @@ import './style.css'
 // { display html 
 //   { div { p class = "test" "Hello" } { p class = "test2" "Hello 2" } } }`
 
-let initalScript = `
-{ display test-results 
+let initalScript = ` 
   (test-group
   "Main test group."
-  (expect-equal "true == true" true true)) }
-`.trim()
+  (expect-equal "true == true" true true))`.trim()
 
 let editor = showEditor(document.querySelector("#editor"), initalScript)
 
 document.querySelector("#runButton")?.addEventListener("click", () => {
     document.querySelector("#results").innerHTML = ""
-    runScript(editor.getValue(), document.querySelector("#results"))
+    let displayResult = document.querySelector("#display").value
+    runScript(editor.getValue(), displayResult, document.querySelector("#results"))
 })
