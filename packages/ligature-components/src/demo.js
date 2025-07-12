@@ -19,9 +19,9 @@ import './style.css'
 //   { div { p class = "test" "Hello" } { p class = "test2" "Hello 2" } } }`
 
 let initalScript = ` 
-  (test-group
+  test-group(
   "Main test group."
-  (expect-equal "true == true" true true))`.trim()
+  expect-equal ("true == true" true true))`.trim()
 
 let editor = showEditor(document.querySelector("#editor"), initalScript)
 

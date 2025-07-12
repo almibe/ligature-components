@@ -1,26 +1,32 @@
-import { appendText } from "./text/text"
-import { run, resultToJs, appendCanvas, appendHtml } from "@ligature/ligature"
+import { runAndAppendHtml, runAndPrint } from "@ligature/ligature"
 import { showEditor } from './editor/editor.js'
-import { appendTable } from './table/table.js'
 import { drawNetwork } from "./draw/draw.ts"
 
 export {showEditor};
 
 export function runScript(script, display, element) {
-  let res = run(script)
-  let resJs = resultToJs(res)
-  if (display == 'table') {
-    appendTable(element, resJs.value)
-  } else if (display == 'network') {
-    drawNetwork(element, resJs.value)
-  } else if (display == 'canvas') {
-    appendCanvas(element, res)
+  if (display == 'network') {
+    let res = run(script)
+    drawNetwork(element, res.value)
+  // } else if (display == 'canvas') {
+  //   let res = run(script)
+  //   appendCanvas(element, res)
   } else if (display == 'html') {
-    appendHtml(element, res)
-  } else if (display == 'test-results') {
-    throw "todo"
-    //appendTestResults(element, res)
+    runAndAppendHtml(element, script)
+    // console.log("res", JSON.stringify(res))
+    // appendHtml(element, res)
   } else {
+    let res = runAndPrint(script)
     appendText(element, res)
   }
+}
+
+export function appendText(element, value) {
+    if (element != null) {
+        const pre = document.createElement("pre")
+        const code = document.createElement("code")
+        pre.appendChild(code)
+        code.textContent = value
+        element.appendChild(pre)
+    }
 }
