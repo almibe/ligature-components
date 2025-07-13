@@ -1,6 +1,6 @@
 {
   "name": "@ligature/ligature-components",
-  "version": "0.17.0",
+  "version": "0.18.0",
   "private": true,
   "type": "module",
   "scripts": {
@@ -17,7 +17,7 @@
   },
   "license": "MPL-2.0",
   "dependencies": {
-    "@ligature/ligature": "link:..\\..\\..\\ligature-fs\\src\\LigatureFable",
+    "@ligature/ligature": "^0.20.0",
     "ace-builds": "^1.42.0",
     "konva": "^9.3.20",
     "tabulator-tables": "^6.3.0"

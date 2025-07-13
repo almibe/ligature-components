@@ -12,7 +12,7 @@ export function runScript(script, display, element) {
   }
 }
 
-export function appendText(element, value) {
+function appendText(element, value) {
     if (element != null) {
         const pre = document.createElement("pre")
         const code = document.createElement("code")

@@ -14,4 +14,4 @@ pnpm run dev
 
 ## Credits
 
-This project uses https://codemirror.net/, https://tabulator.info/, and https://konvajs.org.
+This project uses https://ace.c9.io/, https://tabulator.info/, and https://konvajs.org.
