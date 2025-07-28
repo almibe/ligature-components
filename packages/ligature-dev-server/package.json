@@ -1,0 +1,23 @@
+{
+  "name": "ligature-dev-server",
+  "version": "1.0.0",
+  "description": "",
+  "main": "index.js",
+  "type": "module",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1",
+    "start": "tsx server.ts",
+    "dev": "tsx watch server.ts"
+  },
+  "keywords": [],
+  "author": "",
+  "license": "MPL-2.0",
+  "packageManager": "pnpm@10.11.1",
+  "dependencies": {
+    "koa": "^3.0.1"
+  },
+  "devDependencies": {
+    "@types/koa": "^2.15.0",
+    "tsx": "^4.20.3"
+  }
+}
