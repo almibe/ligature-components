@@ -1,6 +1,8 @@
 import { run } from "@ligature/ligature"
 import { showEditor } from './editor/editor.js'
 import markdownit from 'markdown-it'
+import { appendNetwork } from "./network/network.js";
+import { appendTable } from "./table/table.js";
 
 export {showEditor};
 
@@ -15,14 +17,14 @@ export function runScript(script, element) {
             resultEl.innerHTML = result
             element.appendChild(resultEl)
         } else {
-            throw "Unexpected value."
+            throw "Unexpected value passed to append-md."
         }
     }],
     ["append-network", (arg) => {
-        throw "TODO"
+        appendNetwork(arg, element)
     }],
     ["append-table", (arg) => {
-        throw "TODO"
+        appendTable(arg, element)
     }]])
 
     run(script, element, fns)
