@@ -22,27 +22,27 @@ function createTable(tableData) {
     return table
 }
 
-function processNetwork(network) {
+function processNetwork(network: ElementView[]) {
     const columns = new Set();
     const data = new Map()
-    for (let triple of network) {
-        columns.add(triple[1].value)
-        if (data.has(triple[0].value)) {
-            const entry = data.get(triple[0].value)
-            if (entry.has(triple[1].value)) {
-                const values = entry.get(triple[1].value)
-                values.push(triple[2].value)
-            } else {
-                const values = [triple[2].value]
-                entry.set(triple[1].value, values)
-            }
-        } else {
-            const entry = new Map()
-            const values = [triple[2].value]
-            entry.set(triple[1].value, values)
-            data.set(triple[0].value, entry)
-        }
-    }
+    // for (let triple of network) {
+    //     columns.add(triple[1].value)
+    //     if (data.has(triple[0].value)) {
+    //         const entry = data.get(triple[0].value)
+    //         if (entry.has(triple[1].value)) {
+    //             const values = entry.get(triple[1].value)
+    //             values.push(triple[2].value)
+    //         } else {
+    //             const values = [triple[2].value]
+    //             entry.set(triple[1].value, values)
+    //         }
+    //     } else {
+    //         const entry = new Map()
+    //         const values = [triple[2].value]
+    //         entry.set(triple[1].value, values)
+    //         data.set(triple[0].value, entry)
+    //     }
+    // }
     let headers = ["element", ...columns]
     let result = []
 
