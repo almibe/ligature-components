@@ -10,6 +10,10 @@ let initalScript = `
 let editor = showEditor(document.querySelector("#editor"), initalScript)
 
 document.querySelector("#runButton")?.addEventListener("click", () => {
-    document.querySelector("#results").innerHTML = ""
-    runScript(editor.getValue(), document.querySelector("#results"))
+    if(document.querySelector("#webSocket").getAttribute("checked")) {
+      let address = document.querySelector()
+    } else {
+      document.querySelector("#results").innerHTML = ""
+      runScript(editor.getValue(), document.querySelector("#results"))
+    }
 })
