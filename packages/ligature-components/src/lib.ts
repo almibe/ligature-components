@@ -1,5 +1,5 @@
 import { run } from "@ligature/ligature"
-import { showEditor } from './editor/editor.js'
+import { showEditor } from '../../ligature-stencil/src/components/wander-editor/editor.js'
 import markdownit from 'markdown-it'
 import { appendNetwork } from "./network/network.js";
 import { appendTable } from "./table/table.js";
