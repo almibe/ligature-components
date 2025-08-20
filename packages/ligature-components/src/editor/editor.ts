@@ -1,7 +1,6 @@
 import * as ace from "ace-builds/src/ace.js"
 
-export function showEditor(element, content) {
+export function showEditor(element) {
     var editor = ace.edit(element)
-    editor.setValue(content)
     return editor
 }
