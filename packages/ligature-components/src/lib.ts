@@ -1,10 +1,11 @@
-import { run } from "@ligature/ligature"
+import { run, printResult } from "@ligature/ligature"
 import { showEditor } from "./editor/editor.js";
 import markdownit from 'markdown-it'
 import { appendNetwork } from "./network/network.js";
 import { appendTable } from "./table/table.js";
+import { tableauDebug } from "./debug/debug.js";
 
-export {showEditor};
+export {showEditor, printResult};
 
 const md = markdownit()
 
@@ -25,7 +26,10 @@ export function runScript(script, element) {
     }],
     ["append-table", (arg) => {
         appendTable(arg, element)
-    }]])
+    }],
+    ["tableau-debug", (arg) => {
+        tableauDebug(arg, element)
+    }],])
 
-    run(script, element, fns)
+    return run(script, element, fns)
 }
